@@ -297,7 +297,7 @@ Anno = (function() {
   };
 
   Anno.prototype.emphasiseTarget = function($target) {
-    var _oldTargetCSS;
+    var ppos, tpos, _oldTargetCSS;
     if ($target == null) {
       $target = this.targetFn();
     }
@@ -318,6 +318,14 @@ Anno = (function() {
       }
       if ($target.outerHeight() !== this._placeholder.outerHeight()) {
         $target.css('height', this._placeholder.outerHeight());
+      }
+      ppos = this._placeholder.position();
+      tpos = $target.position();
+      if (tpos.top !== ppos.top) {
+        $target.css('top', ppos.top);
+      }
+      if (tpos.left !== ppos.left) {
+        $target.css('left', ppos.left);
       }
     }
     if ($target.css('background') === 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box') {
