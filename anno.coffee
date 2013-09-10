@@ -31,7 +31,7 @@
 
 
 class Anno
-  @version: '1.4.6' 
+  @version: '1.4.7' 
 # @version: BreakingAPIChange.NewCompatibleFeatures.Bugfix 
 
 
@@ -366,9 +366,9 @@ class Anno
       $target.css( position:'absolute' )
 
       # if switching to position absolute has caused a dimension collapse, manually set H/W.
-      if $target.outerWidth() < @_placeholder.outerWidth() 
+      if $target.outerWidth() isnt @_placeholder.outerWidth() 
         $target.css('width', @_placeholder.outerWidth())
-      if $target.outerHeight() < @_placeholder.outerHeight() 
+      if $target.outerHeight() isnt @_placeholder.outerHeight() 
         $target.css('height', @_placeholder.outerHeight())
 
     if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
