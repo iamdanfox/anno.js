@@ -1,0 +1,138 @@
+/* Version 1.1.1 (LESS compiled) */
+
+.anno {
+  position: absolute;
+  padding: 15px;
+  z-index: 5000;
+  width: 300px;
+  cursor: default;
+  text-transform: none;
+  -webkit-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  -moz-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  -ms-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  -o-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+}
+.anno .anno-arrow {
+  position: absolute;
+  border: 8px solid #ffffff;
+}
+.anno .anno-arrow.anno-arrow-left,
+.anno .anno-arrow.anno-arrow-center-left {
+  right: 100%;
+  top: 15px;
+  border-left: none;
+  border-color: transparent #ffffff;
+}
+.anno .anno-arrow.anno-arrow-right,
+.anno .anno-arrow.anno-arrow-center-right {
+  left: 100%;
+  top: 15px;
+  border-right: none;
+  border-color: transparent #ffffff;
+}
+.anno .anno-arrow.anno-arrow-center-left,
+.anno .anno-arrow.anno-arrow-center-right {
+  top: 50%;
+  margin-top: -8px;
+}
+.anno .anno-arrow.anno-arrow-bottom,
+.anno .anno-arrow.anno-arrow-center-bottom {
+  top: 100%;
+  left: 20px;
+  border-bottom: none;
+  border-color: #ffffff transparent;
+}
+.anno .anno-arrow.anno-arrow-top,
+.anno .anno-arrow.anno-arrow-center-top {
+  bottom: 100%;
+  left: 20px;
+  border-top: none;
+  border-color: #ffffff transparent;
+}
+.anno .anno-arrow.anno-arrow-center-bottom,
+.anno .anno-arrow.anno-arrow-center-top {
+  left: 50%;
+  margin-left: -8px;
+}
+.anno .anno-inner {
+  position: relative;
+  background: #ffffff;
+  -webkit-box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
+}
+.anno .anno-inner .anno-content {
+  padding: 15px 20px;
+  font-family: sans-serif;
+  font-weight: normal;
+  font-size: 15px;
+  color: #474747;
+}
+.anno .anno-inner .anno-btn-container {
+  text-align: right;
+}
+.anno .anno-inner .anno-btn-container .anno-btn {
+  margin: 0 20px 15px -10px;
+  padding: 7px 14px;
+  height: auto;
+  width: auto;
+  background: #11a2dc;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
+  border-radius: 0px;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  color: #ffffff;
+  -webkit-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
+  -moz-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
+  -ms-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
+  -o-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
+  transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
+}
+.anno .anno-inner .anno-btn-container .anno-btn.anno-btn-low-importance {
+  background: none;
+  color: #bbbbbd;
+}
+.anno .anno-inner .anno-btn-container .anno-btn.anno-btn-low-importance:hover {
+  color: #78787b;
+}
+.anno.anno-hidden {
+  opacity: 0;
+}
+.anno.anno-width-250 {
+  width: 250px;
+}
+.anno.anno-width-200 {
+  width: 200px;
+}
+.anno.anno-width-175 {
+  width: 175px;
+}
+.anno.anno-width-150 {
+  width: 150px;
+}
+.anno-overlay {
+  position: absolute;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  /*pointer-events:none; // allows clickthrough*/
+
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  -moz-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  -ms-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  -o-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+  transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
+}
+.anno-overlay.anno-hidden {
+  pointer-events: none;
+  opacity: 0;
+}
+/*.anno-emphasise-target {
+  z-index: 1001 !important !important;
+}*/
