@@ -113,15 +113,19 @@
 <script src="anno.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function(){
-  firstAnno = new Anno({
-    target: '.jumbotron',
-    position: 'bottom',
+  firstAnno = Anno.chain([{
+    target: 'h1',
+    position: 'center-top',
     content: 'This is the title'
-  }).chainTo({
+  }, {
     target: '#signupbutton',
     position: 'bottom',
     content: 'Click the lovely signup button'
-  })
+  }, {
+    target: 'ul.nav',
+    content: 'Navigation bar',
+    position: 'left'
+  }])
 
   $('#signupbutton').click(function(){
     firstAnno.show()
