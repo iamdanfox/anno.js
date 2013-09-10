@@ -1,5 +1,4 @@
-/* Version 1.1.1 (LESS compiled) */
-
+/* Anno.js version 1.1.2 */
 .anno {
   position: absolute;
   padding: 15px;
@@ -65,7 +64,7 @@
   font-family: sans-serif;
   font-weight: normal;
   font-size: 15px;
-  color: #474747;
+  color: #56565a;
 }
 .anno .anno-inner .anno-btn-container {
   text-align: right;
@@ -76,6 +75,7 @@
   height: auto;
   width: auto;
   background: #11a2dc;
+  border: none;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   -ms-border-radius: 0px;
@@ -133,6 +133,6 @@
   pointer-events: none;
   opacity: 0;
 }
-/*.anno-emphasise-target {
+.anno-emphasise-target {
   z-index: 1001 !important !important;
-}*/
+}

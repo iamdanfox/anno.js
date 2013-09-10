@@ -1,0 +1,175 @@
+/* Anno.js version 1.1.2 */
+
+@blue: #11A2DC;
+
+@black: #000000;
+@grey-1: #2A2A2D;
+@grey-2: #3A3A3D;
+@grey-3: #56565A;
+@grey-4: #78787B;
+@grey-5: #9A9A9C;
+@grey-6: #BBBBBD;
+@grey-7: #DDDDDE;
+@grey-8: #EEEEEF;
+@white: #FFFFFF;
+
+.rounded-corners (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.font (@weight: normal, @size: 14px, @color: @darkFontColor) {
+  font-family: sans-serif;
+  font-weight: @weight;
+  font-size: @size;
+  color: @color;
+}
+
+.transition-all (@duration) {
+  -webkit-transition: all @duration cubic-bezier(0.680, 0, 0.265, 1);
+  -moz-transition: all @duration cubic-bezier(0.680, 0, 0.265, 1);
+  -ms-transition: all @duration cubic-bezier(0.680, 0, 0.265, 1);
+  -o-transition: all @duration cubic-bezier(0.680, 0, 0.265, 1);
+  transition: all @duration cubic-bezier(0.680, 0, 0.265, 1);
+}
+
+
+@padh:15px;
+@padv:20px;
+@contentWidth: 300px;
+@innerBackground: white;
+@arrowSize: 8px;
+
+.anno{
+  position:absolute;
+  padding:15px;
+  z-index:5000;
+  width:@contentWidth;
+  cursor:default;
+  text-transform:none;
+  .transition-all(300ms);
+
+  .anno-arrow {
+    position:absolute;
+    border:@arrowSize solid @innerBackground;
+
+    &.anno-arrow-left, &.anno-arrow-center-left {
+      right:100%;
+      top:@padh;
+      border-left:none;
+      border-color:transparent @innerBackground;
+    }
+
+    &.anno-arrow-right, &.anno-arrow-center-right {
+      left:100%;
+      top:@padh;
+      border-right:none;
+      border-color:transparent @innerBackground;
+    }
+
+    &.anno-arrow-center-left,&.anno-arrow-center-right {
+      top:50%;
+      margin-top: -@arrowSize;
+    }
+
+    &.anno-arrow-bottom, &.anno-arrow-center-bottom {
+      top:100%;
+      left:@padv;
+      border-bottom:none;
+      border-color:@innerBackground transparent;
+    }
+
+    &.anno-arrow-top, &.anno-arrow-center-top{
+      bottom:100%;
+      left:@padv;
+      border-top:none;
+      border-color:@innerBackground transparent;
+    }
+
+    &.anno-arrow-center-bottom,&.anno-arrow-center-top {
+      left:50%;
+      margin-left: -@arrowSize;
+    }
+  }
+
+  .anno-inner {
+    position:relative;
+    background: @innerBackground;
+    -webkit-box-shadow: 0 5px 20px 0px rgba(0,0,0,0.35); // TODO: make this cross browser.
+
+    .anno-content{
+      padding: @padh @padv;
+      .font(normal,15px,@grey-3);
+    }
+
+    .anno-btn-container{
+      text-align:right;
+
+      .anno-btn {
+        margin: 0 @padv @padh -10px;
+        padding: 7px 14px;
+        height: auto;
+        width: auto;
+        background: @blue;
+        border:none;
+        .rounded-corners(0px);
+        .font(bold, 12px, white);
+        .transition-all(200ms);
+
+        &.anno-btn-low-importance {
+          background:none;
+          color:@grey-6;
+
+          &:hover{
+            color:@grey-4
+          }
+        }
+      }
+    }
+  }
+
+
+  &.anno-hidden{
+    opacity:0;
+  }
+
+  &.anno-width-250 {
+    width:250px;
+  }
+
+  &.anno-width-200 {
+    width:200px;
+  }
+
+  &.anno-width-175 {
+    width:175px;
+  }
+
+  &.anno-width-150 {
+    width:150px;
+  }
+}
+
+.anno-overlay {
+  position:absolute;
+  z-index:1000;
+  height:100%;
+  width:100%;
+  top:0;
+  left:0;
+  /*pointer-events:none; // allows clickthrough*/
+  background:rgba(0,0,0,0.7);
+  .transition-all(300ms);
+
+  &.anno-hidden {
+    pointer-events:none;
+    opacity:0;
+  }
+}
+
+.anno-emphasise-target{
+  z-index:1001 !important !important;
+}
