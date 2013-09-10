@@ -371,6 +371,12 @@ class Anno
       if $target.outerHeight() isnt @_placeholder.outerHeight() 
         $target.css('height', @_placeholder.outerHeight())
 
+      # if switching to position absolute has caused a position change, manually set it too
+      ppos = @_placeholder.position()
+      tpos = $target.position()
+      $target.css('top', ppos.top)   if tpos.top  isnt ppos.top 
+      $target.css('left', ppos.left) if tpos.left isnt ppos.left
+
     if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
       $target.css( background: 'white')
 
