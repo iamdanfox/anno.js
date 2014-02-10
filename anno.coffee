@@ -196,13 +196,15 @@ class Anno
 # value you return from the `onShow` function will get passed to the `onHide` callback.  You can use this 
 # to unbind event listeners.
 #
-# Both `target` and `annoElem` are already jQuery objects
+# Both `$target` and `$annoElem` are already jQuery objects
 
-  onShow: (anno, target, annoElem) -> # TODO: replace target with $target.
+  onShow: (anno, $target, $annoElem) ->
+
+# Note: whatever you return from your `onShow` function will be passed into the `onHide` function as the fourth argument.
 
   _returnFromOnShow = null
 
-# Hiding is done in two functions so that you can re-use one overlay for a long chain of Anno's.
+# Hiding is done in two stages so that you can re-use one overlay element for a long chain of Anno's.
 
   hide: () ->
     @hideAnno()
@@ -210,7 +212,7 @@ class Anno
     return this
 
 # `hideAnno()` hides the Anno element and restores the `target` element, leaving the overlay behind.
-# It also calls the `onHide` listener and passes in whatever value `onShow` returned as the fourth argument.
+# It also calls the `onHide` listener and passes in the result of the `onShow` method.
 
   hideAnno: () ->
     @deemphasiseTarget()
@@ -228,14 +230,14 @@ class Anno
 
     return this
 
-  onHide: (anno, target, annoElem, returnFromOnShow) ->
+  onHide: (anno, $target, $annoElem, returnFromOnShow) ->
 
 # `switchTo` hides the current Anno and displays the next one in the chain without animating out the old overlay.
-# Note. `otherAnno.show()` will probably replace the overlay, but it won't do a weird fade flicker.
+# Note: `otherAnno.show()` will probably replace the overlay, but it won't do a weird fade flicker.
 
   switchTo: (otherAnno) -> 
     if otherAnno?
-      @hideAnno() # This may call hideAnno when it isnt shown
+      @hideAnno() # TODO: prevent this calling `hideAnno()` if the current Anno isn't currently shown. 
       otherAnno.show()
     else 
       console.warn "Can't switchTo a null object. Hiding completely instead. "
@@ -317,7 +319,7 @@ class Anno
     if @buttons instanceof Array
       @buttons.map (b) -> new AnnoButton(b)
     else 
-      [new AnnoButton(@buttons)]
+      [new AnnoButton(@buttons)] # in the else branch `@buttons` is a single hash
 
 # By default, Anno will construct a single button for you, using defaults provided by the `AnnoButton` class.
 # You can supply a single object, a list of objects or even a list of `AnnoButtons`.
