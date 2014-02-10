@@ -1,7 +1,7 @@
 all: anno.js anno.css
 
-anno.js: src/anno.coffee
-	coffee -bc -o . src/anno.coffee
+anno.js: src/anno.litcoffee
+	coffee -bl -o . src/anno.litcoffee
 
 anno.css: src/anno.less
 	lessc src/anno.less > anno.css
