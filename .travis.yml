@@ -3,4 +3,5 @@ node_js:
   - 0.10
 before_install:
   - npm install coffee-script
-script: make anno.js
+  - npm install less
+script: make
