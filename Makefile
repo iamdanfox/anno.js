@@ -1,10 +1,10 @@
 all: anno.js anno.css
 
-anno.js: anno.coffee
-	coffee -bc anno.coffee
+anno.js: src/anno.coffee
+	coffee -bc -o . src/anno.coffee
 
-anno.css: anno.less
-	lessc anno.less > anno.css
+anno.css: src/anno.less
+	lessc src/anno.less > anno.css
 
 clean:
 	rm anno.js anno.css
