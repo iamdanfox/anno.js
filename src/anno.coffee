@@ -30,8 +30,9 @@
 
 
 
-class Anno
-  @version: '1.4.7' 
+    class Anno
+      @version: '1.4.7' 
+      
 # @version: BreakingAPIChange.NewCompatibleFeatures.Bugfix 
 
 
@@ -50,16 +51,16 @@ class Anno
 # This creates a plain Anno object and overrides the `target` and `content` properties.  It uses defaults
 # for everything else.
 
-  constructor: (options) ->
-    if options instanceof Anno
-      console.warn 'Anno constructor parameter is already an Anno object.'
-    if not options?
-      console.warn "new Anno() created with no options.  It's recommended to supply at least target and content." 
-    for key,val of options when key in ['chainTo', 'start', 'show', 'hide', 'hideAnno', 'chainSize', 'chainIndex', 'version']
-      console.warn "Anno: Overriding '#{key}' is not recommended.  Can you override a delegated function instead?"
-    
-    for key,val of options
-      this[key]=val
+      constructor: (options) ->
+        if options instanceof Anno
+          console.warn 'Anno constructor parameter is already an Anno object.'
+        if not options?
+          console.warn "new Anno() created with no options.  It's recommended to supply at least target and content." 
+        for key,val of options when key in ['chainTo', 'start', 'show', 'hide', 'hideAnno', 'chainSize', 'chainIndex', 'version']
+          console.warn "Anno: Overriding '#{key}' is not recommended.  Can you override a delegated function instead?"
+        
+        for key,val of options
+          this[key]=val
 
 # Note, you can customize *anything* in your Anno object by overriding the method or property when you construct it.
 # In addition to `target` and `content`, I usually like to specify `buttons` and `position`.  You might
@@ -82,22 +83,22 @@ class Anno
 # The `pizzaAnno` object now has a `_chainNext` property and will switch to the 
 # `deliveryAnno` when you click Next.
 
-  chainTo: (obj) ->
-    if obj?
-      if not @_chainNext? # this is the end of the chain, add obj to the end.  
-        @_chainNext = if obj instanceof Anno then obj else new Anno(obj)
-        @_chainNext._chainPrev = this
-      else # pass the obj further along
-        @_chainNext.chainTo(obj)
-    else
-      console.error "Can't chainTo a null object."
-    return this
+      chainTo: (obj) ->
+        if obj?
+          if not @_chainNext? # this is the end of the chain, add obj to the end.  
+            @_chainNext = if obj instanceof Anno then obj else new Anno(obj)
+            @_chainNext._chainPrev = this
+          else # pass the obj further along
+            @_chainNext.chainTo(obj)
+        else
+          console.error "Can't chainTo a null object."
+        return this
 
 # Anything that starts with an underscore is probably a bad idea to change. By all means read 
 # these, but don't come crying to me if you overwrote something and your entire website blew up.
 
-  _chainNext: null 
-  _chainPrev: null
+      _chainNext: null 
+      _chainPrev: null
 
 # You can also make long Anno chains without having to write `chainTo` every time using
 # `Anno.chain()`. We can rewrite the two step example above like this:
@@ -117,37 +118,37 @@ class Anno
 # Note, the `annoTour` variable still only points to the single Anno object (for `.pizza-list`), 
 # we've just chained another one onto it anonymously.
 
-  @chain: (array) ->
-    head = new Anno( array.shift() )
-    if array.length >= 1 # array is now the tail.
-      head.chainTo( Anno.chain(array) ) 
-    return head
-  
-  chainSize: () -> 
-    if @_chainNext? then @_chainNext.chainSize() else 1+@chainIndex()
+      @chain: (array) ->
+        head = new Anno( array.shift() )
+        if array.length >= 1 # array is now the tail.
+          head.chainTo( Anno.chain(array) ) 
+        return head
+      
+      chainSize: () -> 
+        if @_chainNext? then @_chainNext.chainSize() else 1+@chainIndex()
 
-  chainIndex: (index) ->
-    # anno.chainIndex(x) gets the xth object in the chain
-    if index?
-      (find = (curr, i, u) ->
-        if curr?
-          ci = curr.chainIndex()
-          if      0 <= ci < i  then find(curr._chainNext, i, u)
-          else if i <  ci <= u then find(curr._chainPrev, i, u)
-          else if   ci is i    then curr
-        else console.error "Couldn't switch to index '#{i}'. Chain size is '#{u}'"
-      )(this, index, @chainSize())
-    # anno.chainIndex() gets the current index; 
-    else
-      if @_chainPrev? then 1+@_chainPrev.chainIndex() else 0
+      chainIndex: (index) ->
+        # anno.chainIndex(x) gets the xth object in the chain
+        if index?
+          (find = (curr, i, u) ->
+            if curr?
+              ci = curr.chainIndex()
+              if      0 <= ci < i  then find(curr._chainNext, i, u)
+              else if i <  ci <= u then find(curr._chainPrev, i, u)
+              else if   ci is i    then curr
+            else console.error "Couldn't switch to index '#{i}'. Chain size is '#{u}'"
+          )(this, index, @chainSize())
+        # anno.chainIndex() gets the current index; 
+        else
+          if @_chainPrev? then 1+@_chainPrev.chainIndex() else 0
 
 
 # If you find yourself setting the same property on every Anno object you create, you can
 # set default values at the top of your script that will apply to every Anno object from then onwards. 
 
-  @setDefaults: (options) ->
-    for key,val of options
-      Anno::[key] = val
+      @setDefaults: (options) ->
+        for key,val of options
+          Anno::[key] = val
       
 
 
@@ -157,37 +158,37 @@ class Anno
 #
 # Animations are all done with 300ms CSS transitions, so you can change your UI without touching any javascript.
 
-  start: () -> @show()
+      start: () -> @show()
 
-  show: () ->
-    # TODO warn if this Anno has already been shown.
-    $target = @targetFn()
-    if @_annoElem? then console.warn "Anno elem for '#{@target}' has already been generated.  Did you call show() twice?"
-    @_annoElem = @annoElem()
-    lastButton = @_annoElem.find('button').last()
+      show: () ->
+        # TODO warn if this Anno has already been shown.
+        $target = @targetFn()
+        if @_annoElem? then console.warn "Anno elem for '#{@target}' has already been generated.  Did you call show() twice?"
+        @_annoElem = @annoElem()
+        lastButton = @_annoElem.find('button').last()
 
-    @showOverlay()
-    @emphasiseTarget()
+        @showOverlay()
+        @emphasiseTarget()
 
-    $target.after(@_annoElem) # TODO: be more intelligent.
-    setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
-      
-    @positionAnnoElem()
-    @positionArrow(@_annoElem.find('.anno-arrow').first())
+        $target.after(@_annoElem) # TODO: be more intelligent.
+        setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
+          
+        @positionAnnoElem()
+        @positionArrow(@_annoElem.find('.anno-arrow').first())
 
-    $target.scrollintoview()
-    setTimeout (() => @_annoElem.scrollintoview()) , 300
+        $target.scrollintoview()
+        setTimeout (() => @_annoElem.scrollintoview()) , 300
 
-    if @rightArrowClicksLastButton 
-      lastButton.keydown( (evt) -> if evt.keyCode is 39 then $(this).click()  ) # right arrow    
-    if @autoFocusLastButton
-      lastButton.focus() if $target.find(':focus').length is 0 # don't steal focus from inside target element
+        if @rightArrowClicksLastButton 
+          lastButton.keydown( (evt) -> if evt.keyCode is 39 then $(this).click()  ) # right arrow    
+        if @autoFocusLastButton
+          lastButton.focus() if $target.find(':focus').length is 0 # don't steal focus from inside target element
 
-    @_returnFromOnShow = @onShow(this, $target, @_annoElem)
-    return this
+        @_returnFromOnShow = @onShow(this, $target, @_annoElem)
+        return this
 
-  rightArrowClicksLastButton: true
-  autoFocusLastButton: true
+      rightArrowClicksLastButton: true
+      autoFocusLastButton: true
 
 # The onShow callback is incredibly useful.  By default, it does nothing, but you can override it to set 
 # up click listeners, adjust your page html and generally provide lots of interactivity.  
@@ -198,79 +199,79 @@ class Anno
 #
 # Both `$target` and `$annoElem` are already jQuery objects
 
-  onShow: (anno, $target, $annoElem) ->
+      onShow: (anno, $target, $annoElem) ->
 
 # Note: whatever you return from your `onShow` function will be passed into the `onHide` function as the fourth argument.
 
-  _returnFromOnShow = null
+      _returnFromOnShow = null
 
 # Hiding is done in two stages so that you can re-use one overlay element for a long chain of Anno's.
 
-  hide: () ->
-    @hideAnno()
-    @hideOverlay()
-    return this
+      hide: () ->
+        @hideAnno()
+        @hideOverlay()
+        return this
 
 # `hideAnno()` hides the Anno element and restores the `target` element, leaving the overlay behind.
 # It also calls the `onHide` listener and passes in the result of the `onShow` method.
 
-  hideAnno: () ->
-    @deemphasiseTarget()
+      hideAnno: () ->
+        @deemphasiseTarget()
 
-    if @_annoElem? 
-      @_annoElem.addClass('anno-hidden')
-      setTimeout () => 
-        @_annoElem.remove() # this method causes hideAnno to get called twice sometimes -> bad.
-        @_annoElem = null
-      , 300
+        if @_annoElem? 
+          @_annoElem.addClass('anno-hidden')
+          setTimeout () => 
+            @_annoElem.remove() # this method causes hideAnno to get called twice sometimes -> bad.
+            @_annoElem = null
+          , 300
 
-      @onHide(this, @targetFn(), @_annoElem, @_returnFromOnShow)
-    else
-      console.warn "Can't hideAnno() for '#{@target}' when @_annoElem is null.  Did you call hideAnno() twice?"
+          @onHide(this, @targetFn(), @_annoElem, @_returnFromOnShow)
+        else
+          console.warn "Can't hideAnno() for '#{@target}' when @_annoElem is null.  Did you call hideAnno() twice?"
 
-    return this
+        return this
 
-  onHide: (anno, $target, $annoElem, returnFromOnShow) ->
+      onHide: (anno, $target, $annoElem, returnFromOnShow) ->
 
 # `switchTo` hides the current Anno and displays the next one in the chain without animating out the old overlay.
 # Note: `otherAnno.show()` will probably replace the overlay, but it won't do a weird fade flicker.
 
-  switchTo: (otherAnno) -> 
-    if otherAnno?
-      @hideAnno() # TODO: prevent this calling `hideAnno()` if the current Anno isn't currently shown. 
-      otherAnno.show()
-    else 
-      console.warn "Can't switchTo a null object. Hiding completely instead. "
-      @hide() # end of the line, need to remove the overlay too
+      switchTo: (otherAnno) -> 
+        if otherAnno?
+          @hideAnno() # TODO: prevent this calling `hideAnno()` if the current Anno isn't currently shown. 
+          otherAnno.show()
+        else 
+          console.warn "Can't switchTo a null object. Hiding completely instead. "
+          @hide() # end of the line, need to remove the overlay too
 
-  switchToChainNext: () -> @switchTo @_chainNext
+      switchToChainNext: () -> @switchTo @_chainNext
 
-  switchToChainPrev: () -> @switchTo @_chainPrev
+      switchToChainPrev: () -> @switchTo @_chainPrev
 
 
 # `targetFn()` is used to access the DOM element that you want to annotate (as a jQuery object). 
 # It will try to make sense of whatever you put in the `target` property, so you'll probably never
 # need to override this function.
 
-  targetFn: () ->
-    if typeof @target is 'string'
-      r = $(@target).filter(':not(.anno-placeholder)')
-      if r.length is 0 then console.error "Couldn't find Anno.target '#{@target}'."
-      if r.length > 1 then console.warn "Anno target '#{@target}' matched #{r.length} elements. Targeting the first one."
-      r.first()
-    else if @target instanceof jQuery
-      if @target.length > 1 then console.warn "Anno jQuery target matched #{@target.length} elements. Targeting the first one."
-      return @target.first()
-    else if @target instanceof HTMLElement
-      $(@target)
-    else if typeof @target is 'function'
-      @target()
-    else 
-      console.error "Unrecognised Anno.target. Please supply a jQuery selector string, a jQuery "+
-          "object, a raw DOM element or a function returning a jQuery element. target:"
-      console.error @target
+      targetFn: () ->
+        if typeof @target is 'string'
+          r = $(@target).filter(':not(.anno-placeholder)')
+          if r.length is 0 then console.error "Couldn't find Anno.target '#{@target}'."
+          if r.length > 1 then console.warn "Anno target '#{@target}' matched #{r.length} elements. Targeting the first one."
+          r.first()
+        else if @target instanceof jQuery
+          if @target.length > 1 then console.warn "Anno jQuery target matched #{@target.length} elements. Targeting the first one."
+          return @target.first()
+        else if @target instanceof HTMLElement
+          $(@target)
+        else if typeof @target is 'function'
+          @target()
+        else 
+          console.error "Unrecognised Anno.target. Please supply a jQuery selector string, a jQuery "+
+              "object, a raw DOM element or a function returning a jQuery element. target:"
+          console.error @target
 
-  target: 'h1'
+      target: 'h1'
 
 
 # `annoElem()` generates the jQuery object that will be inserted into the DOM.  It relies on 
@@ -279,52 +280,52 @@ class Anno
 # This method is ripe for overriding. Just copy the code below and tinker with the HTML. For example
 # you could add some extra `div`s to display the current step number (by calling `chainIndex() + 1`).
 
-  annoElem: () -> 
-    @_annoElem = $("""<div class='anno anno-hidden #{@className}'>
-                <div class='anno-inner'>  <div class='anno-arrow'></div>  </div>
-              </div>""")
-    @_annoElem.find('.anno-inner').
-      append( @contentElem() ).
-      append( @buttonsElem() ) # these a jquery elements, not HTML strings.
-    return @_annoElem # NB: returning the original pointer each time breaks button click events...
+      annoElem: () -> 
+        @_annoElem = $("""<div class='anno anno-hidden #{@className}'>
+                    <div class='anno-inner'>  <div class='anno-arrow'></div>  </div>
+                  </div>""")
+        @_annoElem.find('.anno-inner').
+          append( @contentElem() ).
+          append( @buttonsElem() ) # these a jquery elements, not HTML strings.
+        return @_annoElem # NB: returning the original pointer each time breaks button click events...
 
 # TODO: evaluate how easy it would be to change Anno content while its displayed.
 
-  _annoElem: null
+      _annoElem: null
 
-  className: '' # TODO useful classes .anno-width-150, 175, 200, 250 (default 300)
+      className: '' # TODO useful classes .anno-width-150, 175, 200, 250 (default 300)
 
 # `contentElem()` is called by `annoElem()` to produce a jQuery object.  
 
-  contentElem: () -> $("<div class='anno-content'>"+@contentFn()+"</div>")
+      contentElem: () -> $("<div class='anno-content'>"+@contentFn()+"</div>")
 
 # Most of the time it will suffice to override the `content` property when you construct your Anno.  
 # However, if you want to generate the content when `showAnno()` is called (perhaps the text you display
 # depends on an earlier step) you can override `contentFn()` instead.
 
-  contentFn: () -> @content
-  content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      contentFn: () -> @content
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
 
 
 # `buttonsElem()` produces the HTML for all those buttons (as a jQuery object).  Just like `contentElem()`
 # above, it delegates to `buttonFn()`.
 
-  buttonsElem: () ->
-    return $("<div class='anno-btn-container'></div>").
-      append (b.buttonElem(this) for b in @buttonsFn())
+      buttonsElem: () ->
+        return $("<div class='anno-btn-container'></div>").
+          append (b.buttonElem(this) for b in @buttonsFn())
 
 # `buttonsFn()` returns a list of `AnnoButton` objects based on whatever you put in the `buttons` parameter.
 
-  buttonsFn: () -> 
-    if @buttons instanceof Array
-      @buttons.map (b) -> new AnnoButton(b)
-    else 
-      [new AnnoButton(@buttons)] # in the else branch `@buttons` is a single hash
+      buttonsFn: () -> 
+        if @buttons instanceof Array
+          @buttons.map (b) -> new AnnoButton(b)
+        else 
+          [new AnnoButton(@buttons)] # in the else branch `@buttons` is a single hash
 
 # By default, Anno will construct a single button for you, using defaults provided by the `AnnoButton` class.
 # You can supply a single object, a list of objects or even a list of `AnnoButtons`.
 
-  buttons:  [ {} ] 
+      buttons:  [ {} ] 
 
 
 
@@ -332,68 +333,68 @@ class Anno
 
 # TODO: write about pointer-events: none
 
-  showOverlay: () ->
-    if $('.anno-overlay').length is 0
-      $('body').append(e = @overlayElem().addClass 'anno-hidden')
-      setTimeout (() -> e.removeClass 'anno-hidden'), 10
-    else
-      # TODO try to mutate classNames & listeners rather than replacing the DOM node -> smooth animation
-      $('.anno-overlay').replaceWith @overlayElem()
+      showOverlay: () ->
+        if $('.anno-overlay').length is 0
+          $('body').append(e = @overlayElem().addClass 'anno-hidden')
+          setTimeout (() -> e.removeClass 'anno-hidden'), 10
+        else
+          # TODO try to mutate classNames & listeners rather than replacing the DOM node -> smooth animation
+          $('.anno-overlay').replaceWith @overlayElem()
 
-  overlayElem: () -> 
-    $("<div class='anno-overlay #{@overlayClassName}'></div>").
-      click( (evt) => @overlayClick.call(this, this, evt) )
+      overlayElem: () -> 
+        $("<div class='anno-overlay #{@overlayClassName}'></div>").
+          click( (evt) => @overlayClick.call(this, this, evt) )
 
-  overlayClassName: '' # TODO talk about .anno-hidden
-  overlayClick: (anno, evt) -> anno.hide()
+      overlayClassName: '' # TODO talk about .anno-hidden
+      overlayClick: (anno, evt) -> anno.hide()
 
-  hideOverlay: () ->
-    $('.anno-overlay').addClass 'anno-hidden'
-    setTimeout (() -> $('.anno-overlay').remove()), 300
-
-
+      hideOverlay: () ->
+        $('.anno-overlay').addClass 'anno-hidden'
+        setTimeout (() -> $('.anno-overlay').remove()), 300
 
 
 
-  emphasiseTarget: ($target = @targetFn()) ->
-    if $target.attr('style')? then _oldTargetCSS = $target.attr('style')
 
-    # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
-    $target.closest(':scrollable').on 'mousewheel', (evt) -> 
-      evt.preventDefault()
-      evt.stopPropagation()
 
-    if $target.css('position')  is 'static'
-      $target.after(@_placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
-      $target.css( position:'absolute' )
+      emphasiseTarget: ($target = @targetFn()) ->
+        if $target.attr('style')? then _oldTargetCSS = $target.attr('style')
 
-      # if switching to position absolute has caused a dimension collapse, manually set H/W.
-      if $target.outerWidth() isnt @_placeholder.outerWidth() 
-        $target.css('width', @_placeholder.outerWidth())
-      if $target.outerHeight() isnt @_placeholder.outerHeight() 
-        $target.css('height', @_placeholder.outerHeight())
+        # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
+        $target.closest(':scrollable').on 'mousewheel', (evt) -> 
+          evt.preventDefault()
+          evt.stopPropagation()
 
-      # if switching to position absolute has caused a position change, manually set it too
-      ppos = @_placeholder.position()
-      tpos = $target.position()
-      $target.css('top', ppos.top)   if tpos.top  isnt ppos.top 
-      $target.css('left', ppos.left) if tpos.left isnt ppos.left
+        if $target.css('position')  is 'static'
+          $target.after(@_placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
+          $target.css( position:'absolute' )
 
-    if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
-      $target.css( background: 'white')
+          # if switching to position absolute has caused a dimension collapse, manually set H/W.
+          if $target.outerWidth() isnt @_placeholder.outerWidth() 
+            $target.css('width', @_placeholder.outerWidth())
+          if $target.outerHeight() isnt @_placeholder.outerHeight() 
+            $target.css('height', @_placeholder.outerHeight())
 
-    $target.css( zIndex:'1001' ) 
+          # if switching to position absolute has caused a position change, manually set it too
+          ppos = @_placeholder.position()
+          tpos = $target.position()
+          $target.css('top', ppos.top)   if tpos.top  isnt ppos.top 
+          $target.css('left', ppos.left) if tpos.left isnt ppos.left
 
-    return $target
+        if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
+          $target.css( background: 'white')
 
-  _oldTargetCSS: ''
-  _placeholder: null
+        $target.css( zIndex:'1001' ) 
 
-  deemphasiseTarget: () ->
-    @_placeholder?.remove()
-    $target = @targetFn()
-    $target.closest(':scrollable').off('mousewheel')
-    return $target.attr('style',@_oldTargetCSS)
+        return $target
+
+      _oldTargetCSS: ''
+      _placeholder: null
+
+      deemphasiseTarget: () ->
+        @_placeholder?.remove()
+        $target = @targetFn()
+        $target.closest(':scrollable').off('mousewheel')
+        return $target.attr('style',@_oldTargetCSS)
 
 
 
@@ -401,89 +402,89 @@ class Anno
 # It positions the Anno element based on a string from `positionFn()`. It can also use a hash containing any
 # of the properties `top`, `left`, `right` or `bottom`.
 
-  positionAnnoElem: (annoEl = @_annoElem) ->
-    pos = @positionFn()
+      positionAnnoElem: (annoEl = @_annoElem) ->
+        pos = @positionFn()
 
-    $targetEl = @targetFn()
-    offset = $targetEl.position() 
-    switch pos 
-      when 'top', 'bottom'
-        annoEl.css(left: offset.left+'px')
-      when 'center-top', 'center-bottom'
-        annoEl.css(left: offset.left+($targetEl.outerWidth()/2 - annoEl.outerWidth()/2)+'px')
-      when 'left', 'right'
-        annoEl.css(top: offset.top+'px')
-      when 'center-left', 'center-right'
-        annoEl.css(top: offset.top+($targetEl.outerHeight()/2 - annoEl.outerHeight()/2)+'px')
+        $targetEl = @targetFn()
+        offset = $targetEl.position() 
+        switch pos 
+          when 'top', 'bottom'
+            annoEl.css(left: offset.left+'px')
+          when 'center-top', 'center-bottom'
+            annoEl.css(left: offset.left+($targetEl.outerWidth()/2 - annoEl.outerWidth()/2)+'px')
+          when 'left', 'right'
+            annoEl.css(top: offset.top+'px')
+          when 'center-left', 'center-right'
+            annoEl.css(top: offset.top+($targetEl.outerHeight()/2 - annoEl.outerHeight()/2)+'px')
 
-    switch pos 
-      when 'top', 'center-top'
-        annoEl.css( top: offset.top-annoEl.outerHeight()+'px')
-      when 'bottom', 'center-bottom'
-        annoEl.css( top: offset.top+$targetEl.outerHeight()+'px')
-      when 'left', 'center-left'
-        annoEl.css(left: offset.left-annoEl.outerWidth()+'px')
-      when 'right', 'center-right'
-        annoEl.css(left: offset.left+$targetEl.outerWidth()+'px')
-      else 
-        if pos.left? or pos.right? or pos.top? or pos.bottom?
-         annoEl.css(pos)
-        else 
-          console.error "Unrecognised position: '#{pos}'"
+        switch pos 
+          when 'top', 'center-top'
+            annoEl.css( top: offset.top-annoEl.outerHeight()+'px')
+          when 'bottom', 'center-bottom'
+            annoEl.css( top: offset.top+$targetEl.outerHeight()+'px')
+          when 'left', 'center-left'
+            annoEl.css(left: offset.left-annoEl.outerWidth()+'px')
+          when 'right', 'center-right'
+            annoEl.css(left: offset.left+$targetEl.outerWidth()+'px')
+          else 
+            if pos.left? or pos.right? or pos.top? or pos.bottom?
+             annoEl.css(pos)
+            else 
+              console.error "Unrecognised position: '#{pos}'"
 
-    return annoEl
+        return annoEl
 
 # `positionFn()` simply returns whatever you put in the `position` property (see below for options).  
 # If you left it blank, `positionFn()` will try to guess which side of your target you would like your
 # annotation to be displayed on (based on `Anno.preferredPositions`). 
 
-  positionFn: () -> 
-    if @position? 
-      @position
-    else if @_annoElem?
-      # time to guess!!
-      $target = @targetFn()
+      positionFn: () -> 
+        if @position? 
+          @position
+        else if @_annoElem?
+          # time to guess!!
+          $target = @targetFn()
 
-      $container = $target.closest(':scrollable')
-      $container = $('body') if $container.length is 0
+          $container = $target.closest(':scrollable')
+          $container = $('body') if $container.length is 0
 
-      targetOffset = $target.offset()         # both relative to document
-      containerOffset = $container.offset() 
-      targetBounds = 
-        left: targetOffset.left - containerOffset.left
-        top:  targetOffset.top - containerOffset.top
-      targetBounds.right = targetBounds.left + $target.outerWidth() # dist from left edge of $container to right of elem
-      targetBounds.bottom = targetBounds.top + $target.outerHeight()
+          targetOffset = $target.offset()         # both relative to document
+          containerOffset = $container.offset() 
+          targetBounds = 
+            left: targetOffset.left - containerOffset.left
+            top:  targetOffset.top - containerOffset.top
+          targetBounds.right = targetBounds.left + $target.outerWidth() # dist from left edge of $container to right of elem
+          targetBounds.bottom = targetBounds.top + $target.outerHeight()
 
-      viewBounds = 
-        w: $container.width() or $container.width()
-        h: $container.height() or $container.height()
+          viewBounds = 
+            w: $container.width() or $container.width()
+            h: $container.height() or $container.height()
 
-      annoBounds = 
-        w: @_annoElem.outerWidth()
-        h: @_annoElem.outerHeight()
+          annoBounds = 
+            w: @_annoElem.outerWidth()
+            h: @_annoElem.outerHeight()
 
-      bad = []
+          bad = []
 
-      if annoBounds.w > targetBounds.left then bad = bad.concat ['left', 'center-left']
-      if annoBounds.h > targetBounds.top  then bad = bad.concat ['top', 'center-top']
-      if annoBounds.w + targetBounds.right  > viewBounds.w  then bad = bad.concat ['right', 'center-right']
-      if annoBounds.h + targetBounds.bottom > viewBounds.h then bad = bad.concat ['bottom', 'center-bottom']
+          if annoBounds.w > targetBounds.left then bad = bad.concat ['left', 'center-left']
+          if annoBounds.h > targetBounds.top  then bad = bad.concat ['top', 'center-top']
+          if annoBounds.w + targetBounds.right  > viewBounds.w  then bad = bad.concat ['right', 'center-right']
+          if annoBounds.h + targetBounds.bottom > viewBounds.h then bad = bad.concat ['bottom', 'center-bottom']
 
-      allowed = Anno.preferredPositions.filter (p) -> p not in bad 
-      if allowed.length is 0
-        console.error "Anno couldn't guess a position for '#{@target}'. Please supply one in the constructor."
-      else
-        console.warn "Anno: guessing position:'#{allowed[0]}' for '#{@target}'. "+
-          "Possible Anno.preferredPositions: [#{allowed}]."
-      @position = allowed[0] # store this value for later - saves recomputing.
+          allowed = Anno.preferredPositions.filter (p) -> p not in bad 
+          if allowed.length is 0
+            console.error "Anno couldn't guess a position for '#{@target}'. Please supply one in the constructor."
+          else
+            console.warn "Anno: guessing position:'#{allowed[0]}' for '#{@target}'. "+
+              "Possible Anno.preferredPositions: [#{allowed}]."
+          @position = allowed[0] # store this value for later - saves recomputing.
 
 # When there are several different positions that the Anno element could by displayed, `positionFn()` chooses
 # the first one available in `Anno.preferredPositions`.  Feel free to override this if you like your annotations 
 # to appear on top by default.
 
-  @preferredPositions = ['bottom', 'right', 'left', 'top',  
-          'center-bottom', 'center-right', 'center-left', 'center-top'] # TODO order these based on research.
+      @preferredPositions = ['bottom', 'right', 'left', 'top',  
+              'center-bottom', 'center-right', 'center-left', 'center-top'] # TODO order these based on research.
 
 # The `position` property decides where your annotation will be displayed. You should supply
 # any of `top`, `left`, `bottom`, `right`, `center-top`, `center-left`, `center-bottom` or `center-right`.
@@ -494,15 +495,15 @@ class Anno
 # You may omit the `position` attribute entirely and Anno will use its best guess, however, this is not recommended
 # (and you'll get a warning on the console as punishment).
 
-  position: null
+      position: null
 
 
 
 # `positionArrow()` ensures that the little pointy arrow is actually aiming at your `target` element. It does this
 # based on a string it gets from `arrowPositionFn()`.
 
-  positionArrow: ($arrowElem = @_annoElem.find('.anno-arrow').first()) ->
-    $arrowElem.addClass('anno-arrow-'+@arrowPositionFn()) # enables some different CSS
+      positionArrow: ($arrowElem = @_annoElem.find('.anno-arrow').first()) ->
+        $arrowElem.addClass('anno-arrow-'+@arrowPositionFn()) # enables some different CSS
 
 # 90% of the time, `arrowPositionFn()` will just make sure that your arrow is appears closest to your `target` 
 # element by returning the opposite string to whatever `positionFn()` sent.  (If your annotation appears on the
@@ -512,34 +513,34 @@ class Anno
 # will attempt to guess which way you want to the arrow to point.  If you'd rather not leave it to chance,
 # simply override the `arrowPosition` when you construct your Anno object.
 
-  arrowPositionFn: () -> 
-    if @arrowPosition? 
-      return @arrowPosition
-    else if typeof @positionFn() is 'string'
-      return {
-        'top': 'bottom'
-        'center-top': 'center-bottom'
-        'left': 'right'
-        'center-left' : 'center-right'
-        'right' : 'left'
-        'center-right' : 'center-left'
-        'bottom': 'top'
-        'center-bottom' : 'center-top'
-      }[@positionFn()]
-    else
-      # guess! # TODO: base this of distance to target.
-      pos = l : parseInt(@positionFn().left, 10) ,  t : parseInt(@positionFn().top, 10) 
-      if Math.abs(pos.l) > Math.abs(pos.t)
-        r = if pos.l < 0 then 'center-right' else 'center-left'
-      else
-        r = if pos.t < 0 then 'center-bottom' else 'center-top'
-      console.warn "Guessing arrowPosition='#{r}' for #{@target}. Include this in your constructor for consistency."
-      return r
+      arrowPositionFn: () -> 
+        if @arrowPosition? 
+          return @arrowPosition
+        else if typeof @positionFn() is 'string'
+          return {
+            'top': 'bottom'
+            'center-top': 'center-bottom'
+            'left': 'right'
+            'center-left' : 'center-right'
+            'right' : 'left'
+            'center-right' : 'center-left'
+            'bottom': 'top'
+            'center-bottom' : 'center-top'
+          }[@positionFn()]
+        else
+          # guess! # TODO: base this of distance to target.
+          pos = l : parseInt(@positionFn().left, 10) ,  t : parseInt(@positionFn().top, 10) 
+          if Math.abs(pos.l) > Math.abs(pos.t)
+            r = if pos.l < 0 then 'center-right' else 'center-left'
+          else
+            r = if pos.t < 0 then 'center-bottom' else 'center-top'
+          console.warn "Guessing arrowPosition='#{r}' for #{@target}. Include this in your constructor for consistency."
+          return r
 
 # `arrowPosition` definitively decides which direction you want the arrow to point.  The only reason you should 
 # ever need to override this is if you've supplied a CSS hash as the `position` property.
 
-  arrowPosition: null # TODO replace 'arrowPosition' with 'arrowDirection'
+      arrowPosition: null # TODO replace 'arrowPosition' with 'arrowDirection'
 
 
 
@@ -549,47 +550,47 @@ class Anno
 
 
 
-class AnnoButton
-  @version: '1.1.0'
+    class AnnoButton
+      @version: '1.1.0'
 
-  constructor: (options) ->
-    for key,val of options
-      this[key]=val
+      constructor: (options) ->
+        for key,val of options
+          this[key]=val
 
 
-  buttonElem: (anno) ->
-    return $("<button class='anno-btn'></button>").
-      html( @textFn(anno) ).
-      addClass( @className ).
-      click( (evt) => @click.call(anno, anno, evt) )
+      buttonElem: (anno) ->
+        return $("<button class='anno-btn'></button>").
+          html( @textFn(anno) ).
+          addClass( @className ).
+          click( (evt) => @click.call(anno, anno, evt) )
 
-  textFn: (anno) -> 
-    if @text? then @text
-    else if anno._chainNext? then 'Next' else 'Done'
+      textFn: (anno) -> 
+        if @text? then @text
+        else if anno._chainNext? then 'Next' else 'Done'
 
-  text: null
+      text: null
 
-  className: ''
+      className: ''
 
 # `click` is called when your button is clicked.  Note, the `this` keyword is bound to the parent
 # Anno object.  If you really want to access `AnnoButton` properties, you could always use CoffeeScript's 
 # fat arrow.
 
-  click: (anno, evt) -> 
-    if anno._chainNext?
-      anno.switchToChainNext()
-    else
-      anno.hide()
+      click: (anno, evt) -> 
+        if anno._chainNext?
+          anno.switchToChainNext()
+        else
+          anno.hide()
 
 # These are some handy presets that you can use by adding `AnnoButton.NextButton` to your Anno object's 
 # `buttons` list.
 
-  @NextButton: new AnnoButton({ text: 'Next' , click: () -> @switchToChainNext()  })
+      @NextButton: new AnnoButton({ text: 'Next' , click: () -> @switchToChainNext()  })
 
-  @DoneButton: new AnnoButton({ text: 'Done' , click: () -> @hide()  })
+      @DoneButton: new AnnoButton({ text: 'Done' , click: () -> @hide()  })
 
-  @BackButton: new AnnoButton(
-      text: 'Back'
-      className: 'anno-btn-low-importance'
-      click: () -> @switchToChainPrev()
-    )
+      @BackButton: new AnnoButton(
+          text: 'Back'
+          className: 'anno-btn-low-importance'
+          click: () -> @switchToChainPrev()
+        )
