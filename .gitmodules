@@ -1,0 +1,3 @@
+[submodule "scrollintoview"]
+	path = scrollintoview
+	url = git://github.com/litera/jquery-scrollintoview.git
