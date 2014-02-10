@@ -1,4 +1,4 @@
-anno.js
+anno.js [![Build Status](https://travis-ci.org/iamdanfox/anno.js.png?branch=master)](https://travis-ci.org/iamdanfox/anno.js)
 =======
 
 Anno.js lets you add powerful step-by-step guides, interactive tutorials or just plain ol' annotations to your webapp.
