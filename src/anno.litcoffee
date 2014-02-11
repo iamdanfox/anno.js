@@ -151,6 +151,8 @@ set default values at the top of your script that will apply to every Anno objec
           Anno::[key] = val
       
 
+Hiding and showing annotations
+------------------------------
 
 When you call `anno.show()`, your annotation is displayed on top of a nice overlay and a callback is executed.
 All of the methods used here can be overridden in the same way we changed the `content` property.  This makes
@@ -160,8 +162,7 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
 
       start: () -> @show()
 
-      show: () ->
-        # TODO warn if this Anno has already been shown.
+      show: () -> # TODO warn if this Anno has already been shown.
         $target = @targetFn()
         if @_annoElem? then console.warn "Anno elem for '#{@target}' has already been generated.  Did you call show() twice?"
         @_annoElem = @annoElem()
@@ -190,16 +191,14 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
       rightArrowClicksLastButton: true
       autoFocusLastButton: true
 
-The onShow callback is incredibly useful.  By default, it does nothing, but you can override it to set 
+The `onShow` callback is incredibly useful; by default, it does nothing, but you can override it to set 
 up click listeners, adjust your page html and generally provide lots of interactivity.  
 
 The most common use of this method is to register a click listener on the target element.  Whatever 
 value you return from the `onShow` function will get passed to the `onHide` callback.  You can use this 
 to unbind event listeners.
 
-Both `$target` and `$annoElem` are already jQuery objects
-
-      onShow: (anno, $target, $annoElem) ->
+      onShow: (anno, $target, $annoElem) -> # Both `$target` and `$annoElem` are already jQuery objects
 
 Note: whatever you return from your `onShow` function will be passed into the `onHide` function as the fourth argument.
 
@@ -249,9 +248,13 @@ Note: `otherAnno.show()` will probably replace the overlay, but it won't do a we
       switchToChainPrev: () -> @switchTo @_chainPrev
 
 
-`targetFn()` is used to access the DOM element that you want to annotate (as a jQuery object). 
-It will try to make sense of whatever you put in the `target` property, so you'll probably never
-need to override this function.
+Customizing Anno and contents
+-----------------------------
+
+`targetFn()` is used internally to access the DOM element that you want to annotate (as a jQuery object). 
+It will try to make sense of whatever you put in the `target` property (jQuery selector, function, HTMLElement etc).
+      
+      target: 'h1'
 
       targetFn: () ->
         if typeof @target is 'string'
@@ -271,7 +274,6 @@ need to override this function.
               "object, a raw DOM element or a function returning a jQuery element. target:"
           console.error @target
 
-      target: 'h1'
 
 
 `annoElem()` generates the jQuery object that will be inserted into the DOM.  It relies on 
@@ -289,15 +291,13 @@ you could add some extra `div`s to display the current step number (by calling `
           append( @buttonsElem() ) # these a jquery elements, not HTML strings.
         return @_annoElem # NB: returning the original pointer each time breaks button click events...
 
-TODO: evaluate how easy it would be to change Anno content while its displayed.
-
       _annoElem: null
 
       className: '' # TODO useful classes .anno-width-150, 175, 200, 250 (default 300)
 
 `contentElem()` is called by `annoElem()` to produce a jQuery object.  
 
-      contentElem: () -> $("<div class='anno-content'>"+@contentFn()+"</div>")
+      contentElem: () -> $("<div class='anno-content'>"+@contentFn()+"</div>") # TODO: evaluate how easy it would be to change Anno content while its displayed.
 
 Most of the time it will suffice to override the `content` property when you construct your Anno.  
 However, if you want to generate the content when `showAnno()` is called (perhaps the text you display
@@ -329,17 +329,15 @@ You can supply a single object, a list of objects or even a list of `AnnoButtons
 
 
 
-
-
-TODO: write about pointer-events: none
+Semi-transparent overlay and other effects
+------------------------------------------
 
       showOverlay: () ->
         if $('.anno-overlay').length is 0
-          $('body').append(e = @overlayElem().addClass 'anno-hidden')
+          $('body').append(e = @overlayElem().addClass 'anno-hidden') # TODO: write about pointer-events: none
           setTimeout (() -> e.removeClass 'anno-hidden'), 10
         else
-          # TODO try to mutate classNames & listeners rather than replacing the DOM node -> smooth animation
-          $('.anno-overlay').replaceWith @overlayElem()
+          $('.anno-overlay').replaceWith @overlayElem() # TODO try to mutate classNames & listeners rather than replacing the DOM node -> smooth animation
 
       overlayElem: () -> 
         $("<div class='anno-overlay #{@overlayClassName}'></div>").
@@ -359,8 +357,7 @@ TODO: write about pointer-events: none
       emphasiseTarget: ($target = @targetFn()) ->
         if $target.attr('style')? then _oldTargetCSS = $target.attr('style')
 
-        # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
-        $target.closest(':scrollable').on 'mousewheel', (evt) -> 
+        $target.closest(':scrollable').on 'mousewheel', (evt) ->  # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
           evt.preventDefault()
           evt.stopPropagation()
 
@@ -397,6 +394,8 @@ TODO: write about pointer-events: none
         return $target.attr('style',@_oldTargetCSS)
 
 
+Positioning
+-----------
 
 `positionAnnoElem()` sets the CSS of the Anno element so that it appears next to your target in a sensible way.
 It positions the Anno element based on a string from `positionFn()`. It can also use a hash containing any
@@ -547,8 +546,8 @@ ever need to override this is if you've supplied a CSS hash as the `position` pr
 
 
 
-
-
+Buttons
+=======
 
     class AnnoButton
       @version: '1.1.0'
