@@ -10,4 +10,4 @@ docco: src/*.litcoffee
 	docco -o ./docco src/*.litcoffee
 
 clean:
-	rm anno.js anno.css
+	rm -rf anno.js anno.css docco
