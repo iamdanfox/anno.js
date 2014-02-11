@@ -1,55 +1,55 @@
 
-# Anno.js
-# =======
-# Powerful step-by-step guides, interactive tutorials or just plain ol' annotations.
-# 
-# Anno.js is built to be absurdly extensible, but still works great out of the box (and looks damn fine doing it). 
+Anno.js
+=======
+Powerful step-by-step guides, interactive tutorials or just plain ol' annotations.
+
+Anno.js is built to be absurdly extensible, but still works great out of the box (and looks damn fine doing it). 
 
 
-# The MIT License (MIT)
-# ---------------------
-# 
-# Copyright (c) 2013 Dan Fox
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy of
-# this software and associated documentation files (the "Software"), to deal in
-# the Software without restriction, including without limitation the rights to
-# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-# the Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The MIT License (MIT)
+---------------------
+
+Copyright (c) 2013 Dan Fox
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 
     class Anno
       @version: '1.4.7' 
       
-# @version: BreakingAPIChange.NewCompatibleFeatures.Bugfix 
+@version: BreakingAPIChange.NewCompatibleFeatures.Bugfix 
 
 
-# Constructing an Anno object
-# ---------------------------
-#
-# An Anno object represents a single annotation on your page.  Each Anno has a `target` jQuery selector
-# and a `content` string. For example:
-# 
-#     pizzaAnno = new Anno({
-#       target: '.pizza-list',
-#       content: 'Choose your pizza from the list below.'
-#     })
-#     pizzaAnno.show()
-#
-# This creates a plain Anno object and overrides the `target` and `content` properties.  It uses defaults
-# for everything else.
+Constructing an Anno object
+---------------------------
+
+An Anno object represents a single annotation on your page.  Each Anno has a `target` jQuery selector
+and a `content` string. For example:
+```
+  pizzaAnno = new Anno({
+    target: '.pizza-list',
+    content: 'Choose your pizza from the list below.'
+  })
+  pizzaAnno.show()
+```
+This creates a plain Anno object and overrides the `target` and `content` properties.  It uses defaults
+for everything else.
 
       constructor: (options) ->
         if options instanceof Anno
@@ -62,26 +62,26 @@
         for key,val of options
           this[key]=val
 
-# Note, you can customize *anything* in your Anno object by overriding the method or property when you construct it.
-# In addition to `target` and `content`, I usually like to specify `buttons` and `position`.  You might
-# also like to try specifying `onShow` or `onHide` callbacks, `className` or maybe `overlayElem()`.  
-#
-# Read on to find out more.
+Note, you can customize *anything* in your Anno object by overriding the method or property when you construct it.
+In addition to `target` and `content`, I usually like to specify `buttons` and `position`.  You might
+also like to try specifying `onShow` or `onHide` callbacks, `className` or maybe `overlayElem()`.  
 
-# Making step-by-step tours using chaining
-# ----------------------------------------
-#
-# Naturally, you can chain Anno objects together to make a sequential tour. For example: 
-#
-#     deliveryAnno = new Anno({
-#       target: '#address-form',
-#       content: "Enter your address and we'll deliver your pizza"
-#       position: 'left'
-#     })
-#     pizzaAnno.chainTo(deliveryAnno)
-#
-# The `pizzaAnno` object now has a `_chainNext` property and will switch to the 
-# `deliveryAnno` when you click Next.
+Read on to find out more.
+
+Making step-by-step tours using chaining
+----------------------------------------
+
+Naturally, you can chain Anno objects together to make a sequential tour. For example: 
+```
+  deliveryAnno = new Anno({
+    target: '#address-form',
+    content: "Enter your address and we'll deliver your pizza"
+    position: 'left'
+  })
+  pizzaAnno.chainTo(deliveryAnno)
+```
+The `pizzaAnno` object now has a `_chainNext` property and will switch to the 
+`deliveryAnno` when you click Next.
 
       chainTo: (obj) ->
         if obj?
@@ -94,29 +94,29 @@
           console.error "Can't chainTo a null object."
         return this
 
-# Anything that starts with an underscore is probably a bad idea to change. By all means read 
-# these, but don't come crying to me if you overwrote something and your entire website blew up.
+Anything that starts with an underscore is probably a bad idea to change. By all means read 
+these, but don't come crying to me if you overwrote something and your entire website blew up.
 
       _chainNext: null 
       _chainPrev: null
 
-# You can also make long Anno chains without having to write `chainTo` every time using
-# `Anno.chain()`. We can rewrite the two step example above like this:
-#
-#    annoTour = Anno.chain([
-#      {
-#        target: '.pizza-list',
-#        content: 'Choose your pizza from the list below.'
-#      }, 
-#      {
-#        target: '#address-form',
-#        content: "Enter your address and we'll deliver your pizza"
-#        position: 'left'
-#      }
-#    ])
-#
-# Note, the `annoTour` variable still only points to the single Anno object (for `.pizza-list`), 
-# we've just chained another one onto it anonymously.
+You can also make long Anno chains without having to write `chainTo` every time using
+`Anno.chain()`. We can rewrite the two step example above like this:
+```
+ annoTour = Anno.chain([
+   {
+     target: '.pizza-list',
+     content: 'Choose your pizza from the list below.'
+   }, 
+   {
+     target: '#address-form',
+     content: "Enter your address and we'll deliver your pizza"
+     position: 'left'
+   }
+ ])
+```
+Note, the `annoTour` variable still only points to the single Anno object (for `.pizza-list`), 
+we've just chained another one onto it anonymously.
 
       @chain: (array) ->
         head = new Anno( array.shift() )
@@ -128,7 +128,7 @@
         if @_chainNext? then @_chainNext.chainSize() else 1+@chainIndex()
 
       chainIndex: (index) ->
-        # anno.chainIndex(x) gets the xth object in the chain
+        # `anno.chainIndex(x)` gets the xth object in the chain
         if index?
           (find = (curr, i, u) ->
             if curr?
@@ -138,13 +138,13 @@
               else if   ci is i    then curr
             else console.error "Couldn't switch to index '#{i}'. Chain size is '#{u}'"
           )(this, index, @chainSize())
-        # anno.chainIndex() gets the current index; 
+        # `anno.chainIndex()` gets the current index; 
         else
           if @_chainPrev? then 1+@_chainPrev.chainIndex() else 0
 
 
-# If you find yourself setting the same property on every Anno object you create, you can
-# set default values at the top of your script that will apply to every Anno object from then onwards. 
+If you find yourself setting the same property on every Anno object you create, you can
+set default values at the top of your script that will apply to every Anno object from then onwards. 
 
       @setDefaults: (options) ->
         for key,val of options
@@ -152,11 +152,11 @@
       
 
 
-# When you call `anno.show()`, your annotation is displayed on top of a nice overlay and a callback is executed.
-# All of the methods used here can be overridden in the same way we changed the `content` property.  This makes
-# Anno.js really powerful.  You can configure it and replace all kinds of behaviour without resorting to nasty hacks.
-#
-# Animations are all done with 300ms CSS transitions, so you can change your UI without touching any javascript.
+When you call `anno.show()`, your annotation is displayed on top of a nice overlay and a callback is executed.
+All of the methods used here can be overridden in the same way we changed the `content` property.  This makes
+Anno.js really powerful.  You can configure it and replace all kinds of behaviour without resorting to nasty hacks.
+
+Animations are all done with 300ms CSS transitions, so you can change your UI without touching any javascript.
 
       start: () -> @show()
 
@@ -190,30 +190,30 @@
       rightArrowClicksLastButton: true
       autoFocusLastButton: true
 
-# The onShow callback is incredibly useful.  By default, it does nothing, but you can override it to set 
-# up click listeners, adjust your page html and generally provide lots of interactivity.  
-#
-# The most common use of this method is to register a click listener on the target element.  Whatever 
-# value you return from the `onShow` function will get passed to the `onHide` callback.  You can use this 
-# to unbind event listeners.
-#
-# Both `$target` and `$annoElem` are already jQuery objects
+The onShow callback is incredibly useful.  By default, it does nothing, but you can override it to set 
+up click listeners, adjust your page html and generally provide lots of interactivity.  
+
+The most common use of this method is to register a click listener on the target element.  Whatever 
+value you return from the `onShow` function will get passed to the `onHide` callback.  You can use this 
+to unbind event listeners.
+
+Both `$target` and `$annoElem` are already jQuery objects
 
       onShow: (anno, $target, $annoElem) ->
 
-# Note: whatever you return from your `onShow` function will be passed into the `onHide` function as the fourth argument.
+Note: whatever you return from your `onShow` function will be passed into the `onHide` function as the fourth argument.
 
       _returnFromOnShow = null
 
-# Hiding is done in two stages so that you can re-use one overlay element for a long chain of Anno's.
+Hiding is done in two stages so that you can re-use one overlay element for a long chain of Anno's.
 
       hide: () ->
         @hideAnno()
         @hideOverlay()
         return this
 
-# `hideAnno()` hides the Anno element and restores the `target` element, leaving the overlay behind.
-# It also calls the `onHide` listener and passes in the result of the `onShow` method.
+`hideAnno()` hides the Anno element and restores the `target` element, leaving the overlay behind.
+It also calls the `onHide` listener and passes in the result of the `onShow` method.
 
       hideAnno: () ->
         @deemphasiseTarget()
@@ -233,8 +233,8 @@
 
       onHide: (anno, $target, $annoElem, returnFromOnShow) ->
 
-# `switchTo` hides the current Anno and displays the next one in the chain without animating out the old overlay.
-# Note: `otherAnno.show()` will probably replace the overlay, but it won't do a weird fade flicker.
+`switchTo` hides the current Anno and displays the next one in the chain without animating out the old overlay.
+Note: `otherAnno.show()` will probably replace the overlay, but it won't do a weird fade flicker.
 
       switchTo: (otherAnno) -> 
         if otherAnno?
@@ -249,9 +249,9 @@
       switchToChainPrev: () -> @switchTo @_chainPrev
 
 
-# `targetFn()` is used to access the DOM element that you want to annotate (as a jQuery object). 
-# It will try to make sense of whatever you put in the `target` property, so you'll probably never
-# need to override this function.
+`targetFn()` is used to access the DOM element that you want to annotate (as a jQuery object). 
+It will try to make sense of whatever you put in the `target` property, so you'll probably never
+need to override this function.
 
       targetFn: () ->
         if typeof @target is 'string'
@@ -274,11 +274,11 @@
       target: 'h1'
 
 
-# `annoElem()` generates the jQuery object that will be inserted into the DOM.  It relies on 
-# `@contentElem()` and `buttonsElem()` to generate the interesting bits. 
-#
-# This method is ripe for overriding. Just copy the code below and tinker with the HTML. For example
-# you could add some extra `div`s to display the current step number (by calling `chainIndex() + 1`).
+`annoElem()` generates the jQuery object that will be inserted into the DOM.  It relies on 
+`@contentElem()` and `buttonsElem()` to generate the interesting bits. 
+
+This method is ripe for overriding. Just copy the code below and tinker with the HTML. For example
+you could add some extra `div`s to display the current step number (by calling `chainIndex() + 1`).
 
       annoElem: () -> 
         @_annoElem = $("""<div class='anno anno-hidden #{@className}'>
@@ -289,32 +289,32 @@
           append( @buttonsElem() ) # these a jquery elements, not HTML strings.
         return @_annoElem # NB: returning the original pointer each time breaks button click events...
 
-# TODO: evaluate how easy it would be to change Anno content while its displayed.
+TODO: evaluate how easy it would be to change Anno content while its displayed.
 
       _annoElem: null
 
       className: '' # TODO useful classes .anno-width-150, 175, 200, 250 (default 300)
 
-# `contentElem()` is called by `annoElem()` to produce a jQuery object.  
+`contentElem()` is called by `annoElem()` to produce a jQuery object.  
 
       contentElem: () -> $("<div class='anno-content'>"+@contentFn()+"</div>")
 
-# Most of the time it will suffice to override the `content` property when you construct your Anno.  
-# However, if you want to generate the content when `showAnno()` is called (perhaps the text you display
-# depends on an earlier step) you can override `contentFn()` instead.
+Most of the time it will suffice to override the `content` property when you construct your Anno.  
+However, if you want to generate the content when `showAnno()` is called (perhaps the text you display
+depends on an earlier step) you can override `contentFn()` instead.
 
       contentFn: () -> @content
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
 
 
-# `buttonsElem()` produces the HTML for all those buttons (as a jQuery object).  Just like `contentElem()`
-# above, it delegates to `buttonFn()`.
+`buttonsElem()` produces the HTML for all those buttons (as a jQuery object).  Just like `contentElem()`
+above, it delegates to `buttonFn()`.
 
       buttonsElem: () ->
         return $("<div class='anno-btn-container'></div>").
           append (b.buttonElem(this) for b in @buttonsFn())
 
-# `buttonsFn()` returns a list of `AnnoButton` objects based on whatever you put in the `buttons` parameter.
+`buttonsFn()` returns a list of `AnnoButton` objects based on whatever you put in the `buttons` parameter.
 
       buttonsFn: () -> 
         if @buttons instanceof Array
@@ -322,8 +322,8 @@
         else 
           [new AnnoButton(@buttons)] # in the else branch `@buttons` is a single hash
 
-# By default, Anno will construct a single button for you, using defaults provided by the `AnnoButton` class.
-# You can supply a single object, a list of objects or even a list of `AnnoButtons`.
+By default, Anno will construct a single button for you, using defaults provided by the `AnnoButton` class.
+You can supply a single object, a list of objects or even a list of `AnnoButtons`.
 
       buttons:  [ {} ] 
 
@@ -331,7 +331,7 @@
 
 
 
-# TODO: write about pointer-events: none
+TODO: write about pointer-events: none
 
       showOverlay: () ->
         if $('.anno-overlay').length is 0
@@ -398,9 +398,9 @@
 
 
 
-# `positionAnnoElem()` sets the CSS of the Anno element so that it appears next to your target in a sensible way.
-# It positions the Anno element based on a string from `positionFn()`. It can also use a hash containing any
-# of the properties `top`, `left`, `right` or `bottom`.
+`positionAnnoElem()` sets the CSS of the Anno element so that it appears next to your target in a sensible way.
+It positions the Anno element based on a string from `positionFn()`. It can also use a hash containing any
+of the properties `top`, `left`, `right` or `bottom`.
 
       positionAnnoElem: (annoEl = @_annoElem) ->
         pos = @positionFn()
@@ -434,9 +434,9 @@
 
         return annoEl
 
-# `positionFn()` simply returns whatever you put in the `position` property (see below for options).  
-# If you left it blank, `positionFn()` will try to guess which side of your target you would like your
-# annotation to be displayed on (based on `Anno.preferredPositions`). 
+`positionFn()` simply returns whatever you put in the `position` property (see below for options).  
+If you left it blank, `positionFn()` will try to guess which side of your target you would like your
+annotation to be displayed on (based on `Anno.preferredPositions`). 
 
       positionFn: () -> 
         if @position? 
@@ -479,39 +479,39 @@
               "Possible Anno.preferredPositions: [#{allowed}]."
           @position = allowed[0] # store this value for later - saves recomputing.
 
-# When there are several different positions that the Anno element could by displayed, `positionFn()` chooses
-# the first one available in `Anno.preferredPositions`.  Feel free to override this if you like your annotations 
-# to appear on top by default.
+When there are several different positions that the Anno element could by displayed, `positionFn()` chooses
+the first one available in `Anno.preferredPositions`.  Feel free to override this if you like your annotations 
+to appear on top by default.
 
       @preferredPositions = ['bottom', 'right', 'left', 'top',  
               'center-bottom', 'center-right', 'center-left', 'center-top'] # TODO order these based on research.
 
-# The `position` property decides where your annotation will be displayed. You should supply
-# any of `top`, `left`, `bottom`, `right`, `center-top`, `center-left`, `center-bottom` or `center-right`.
-#
-# Alternatively, you can supply a hash of CSS attributes to set. (e.g. `{ top: '10px', left: '57px' }`). This
-# is useful if you have a large `target` element and you want to point the arrow at something specific.
-#
-# You may omit the `position` attribute entirely and Anno will use its best guess, however, this is not recommended
-# (and you'll get a warning on the console as punishment).
+The `position` property decides where your annotation will be displayed. You should supply
+any of `top`, `left`, `bottom`, `right`, `center-top`, `center-left`, `center-bottom` or `center-right`.
+
+Alternatively, you can supply a hash of CSS attributes to set. (e.g. `{ top: '10px', left: '57px' }`). This
+is useful if you have a large `target` element and you want to point the arrow at something specific.
+
+You may omit the `position` attribute entirely and Anno will use its best guess, however, this is not recommended
+(and you'll get a warning on the console as punishment).
 
       position: null
 
 
 
-# `positionArrow()` ensures that the little pointy arrow is actually aiming at your `target` element. It does this
-# based on a string it gets from `arrowPositionFn()`.
+`positionArrow()` ensures that the little pointy arrow is actually aiming at your `target` element. It does this
+based on a string it gets from `arrowPositionFn()`.
 
       positionArrow: ($arrowElem = @_annoElem.find('.anno-arrow').first()) ->
         $arrowElem.addClass('anno-arrow-'+@arrowPositionFn()) # enables some different CSS
 
-# 90% of the time, `arrowPositionFn()` will just make sure that your arrow is appears closest to your `target` 
-# element by returning the opposite string to whatever `positionFn()` sent.  (If your annotation appears on the
-# left hand side of your target, it'll tell the arrow to point to the right.)
-#
-# If you manually positioned your annoElem (by supplying CSS `left` and `top` attributes), `arrowPositionFn()` 
-# will attempt to guess which way you want to the arrow to point.  If you'd rather not leave it to chance,
-# simply override the `arrowPosition` when you construct your Anno object.
+90% of the time, `arrowPositionFn()` will just make sure that your arrow is appears closest to your `target` 
+element by returning the opposite string to whatever `positionFn()` sent.  (If your annotation appears on the
+left hand side of your target, it'll tell the arrow to point to the right.)
+
+If you manually positioned your annoElem (by supplying CSS `left` and `top` attributes), `arrowPositionFn()` 
+will attempt to guess which way you want to the arrow to point.  If you'd rather not leave it to chance,
+simply override the `arrowPosition` when you construct your Anno object.
 
       arrowPositionFn: () -> 
         if @arrowPosition? 
@@ -537,8 +537,8 @@
           console.warn "Guessing arrowPosition='#{r}' for #{@target}. Include this in your constructor for consistency."
           return r
 
-# `arrowPosition` definitively decides which direction you want the arrow to point.  The only reason you should 
-# ever need to override this is if you've supplied a CSS hash as the `position` property.
+`arrowPosition` definitively decides which direction you want the arrow to point.  The only reason you should 
+ever need to override this is if you've supplied a CSS hash as the `position` property.
 
       arrowPosition: null # TODO replace 'arrowPosition' with 'arrowDirection'
 
@@ -572,9 +572,9 @@
 
       className: ''
 
-# `click` is called when your button is clicked.  Note, the `this` keyword is bound to the parent
-# Anno object.  If you really want to access `AnnoButton` properties, you could always use CoffeeScript's 
-# fat arrow.
+`click` is called when your button is clicked.  Note, the `this` keyword is bound to the parent
+Anno object.  If you really want to access `AnnoButton` properties, you could always use CoffeeScript's 
+fat arrow.
 
       click: (anno, evt) -> 
         if anno._chainNext?
@@ -582,8 +582,8 @@
         else
           anno.hide()
 
-# These are some handy presets that you can use by adding `AnnoButton.NextButton` to your Anno object's 
-# `buttons` list.
+These are some handy presets that you can use by adding `AnnoButton.NextButton` to your Anno object's 
+`buttons` list.
 
       @NextButton: new AnnoButton({ text: 'Next' , click: () -> @switchToChainNext()  })
 
