@@ -5,3 +5,6 @@ before_install:
   - npm install coffee-script
   - npm install less
 script: make
+notifications:
+  on_success: change # only get emails when the build status changes on the given branch
+  on_failure: change
