@@ -54,48 +54,6 @@
   line-height: 0.9em;
   .transition-all(300ms);
 
-  .anno-arrow {
-    position:absolute;
-    border:@arrowSize solid @innerBackground;
-
-    &.anno-arrow-left, &.anno-arrow-center-left {
-      right:100%;
-      top:@padh;
-      border-left:none;
-      border-color:transparent @innerBackground;
-    }
-
-    &.anno-arrow-right, &.anno-arrow-center-right {
-      left:100%;
-      top:@padh;
-      border-right:none;
-      border-color:transparent @innerBackground;
-    }
-
-    &.anno-arrow-center-left,&.anno-arrow-center-right {
-      top:50%;
-      margin-top: -@arrowSize;
-    }
-
-    &.anno-arrow-bottom, &.anno-arrow-center-bottom {
-      top:100%;
-      left:@padv;
-      border-bottom:none;
-      border-color:@innerBackground transparent;
-    }
-
-    &.anno-arrow-top, &.anno-arrow-center-top{
-      bottom:100%;
-      left:@padv;
-      border-top:none;
-      border-color:@innerBackground transparent;
-    }
-
-    &.anno-arrow-center-bottom,&.anno-arrow-center-top {
-      left:50%;
-      margin-left: -@arrowSize;
-    }
-  }
 
   .anno-inner {
     position:relative;
@@ -133,22 +91,80 @@
     }
   }
 
+  .anno-arrow {
+    position:absolute;
+    border:@arrowSize solid @innerBackground;
+  }
+
+  &.anno-target-center-bottom, &.anno-target-bottom {
+    .anno-arrow{
+      top:100%;
+      left:@padv;
+      border-bottom:none;
+      border-color:@innerBackground transparent;
+    }
+
+    &.anno-hidden{
+      margin-top:-20px;
+    }
+  }
+
+  &.anno-target-center-left, &.anno-target-left {
+    .anno-arrow{
+      right:100%;
+      top:@padh;
+      border-left:none;
+      border-color:transparent @innerBackground;
+    }
+
+    &.anno-hidden{
+      margin-left:20px;
+    }
+  }
+
+  &.anno-target-center-top, &.anno-target-top {
+    .anno-arrow{
+      bottom:100%;
+      left:@padv;
+      border-top:none;
+      border-color:@innerBackground transparent;
+    }
+
+    &.anno-hidden{
+      margin-top:20px; // positive offsets counteract the `top` and `left` position absolute.
+    }
+  }
+
+  &.anno-target-center-right, &.anno-target-right {
+    
+    .anno-arrow{
+      left:100%;
+      top:@padh;
+      border-right:none;
+      border-color:transparent @innerBackground;
+    }
+
+    &.anno-hidden{
+      margin-left:-20px;
+    }
+  }
+
+  &.anno-target-center-left,&.anno-target-center-right {
+    .anno-arrow{
+      top:50%;
+      margin-top: -@arrowSize;
+    }
+  }
+
+  &.anno-target-center-bottom,&.anno-target-center-top {
+    .anno-arrow{
+      left:50%;
+      margin-left: -@arrowSize;
+    }
+  }
 
   &.anno-hidden{
     opacity:0;
-
-    &.anno-arrow-center-bottom, &.anno-arrow-bottom {
-      margin-top:-20px;
-    }
-    &.anno-arrow-center-left, &.anno-arrow-left {
-      margin-left:20px;
-    }
-    &.anno-arrow-center-top, &.anno-arrow-top {
-      margin-top:20px; // positive offsets counteract the `top` and `left` position absolute.
-    }
-    &.anno-arrow-center-right, &.anno-arrow-right {
-      margin-left:-20px;
-    }
   }
 
   &.anno-width-250 {

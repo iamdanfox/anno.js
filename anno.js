@@ -114,9 +114,8 @@ Anno = (function() {
     this.showOverlay();
     this.emphasiseTarget();
     $target.after(this._annoElem);
-    this._annoElem.addClass('anno-arrow-' + this.arrowPositionFn());
+    this._annoElem.addClass('anno-target-' + this.arrowPositionFn());
     this.positionAnnoElem();
-    this.positionArrow(this._annoElem.find('.anno-arrow').first());
     setTimeout(((function(_this) {
       return function() {
         return _this._annoElem.removeClass('anno-hidden');
@@ -481,13 +480,6 @@ Anno = (function() {
   Anno.preferredPositions = ['bottom', 'right', 'left', 'top', 'center-bottom', 'center-right', 'center-left', 'center-top'];
 
   Anno.prototype.position = null;
-
-  Anno.prototype.positionArrow = function($arrowElem) {
-    if ($arrowElem == null) {
-      $arrowElem = this._annoElem.find('.anno-arrow').first();
-    }
-    return $arrowElem.addClass('anno-arrow-' + this.arrowPositionFn());
-  };
 
   Anno.prototype.arrowPositionFn = function() {
     var pos, r;

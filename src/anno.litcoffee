@@ -154,9 +154,8 @@ set default values at the top of your script that will apply to every Anno objec
 Hiding and showing annotations
 ------------------------------
 
-When you call `anno.show()`, your annotation is displayed on top of a nice overlay and a callback is executed.
-All of the methods used here can be overridden in the same way we changed the `content` property.  This makes
-Anno.js really powerful.  You can configure it and replace all kinds of behaviour without resorting to nasty hacks.
+`anno.show()` displays your annotation on top of a nice overlay and executes a callback.
+All methods used here can be overridden in the same way we changed the `content` property.
 
 Animations are all done with 300ms CSS transitions, so you can change your UI without touching any javascript.
 
@@ -173,9 +172,8 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
         
         $target.after(@_annoElem) # insert into DOM
         
-        @_annoElem.addClass('anno-arrow-'+@arrowPositionFn()) # add in effects
+        @_annoElem.addClass('anno-target-'+@arrowPositionFn())
         @positionAnnoElem()
-        @positionArrow(@_annoElem.find('.anno-arrow').first())
 
         setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
           
@@ -253,10 +251,11 @@ Note: `otherAnno.show()` will probably replace the overlay, but it won't do a we
 Customizing Anno and contents
 -----------------------------
 
-`targetFn()` is used internally to access the DOM element that you want to annotate (as a jQuery object). 
-It will try to make sense of whatever you put in the `target` property (jQuery selector, function, HTMLElement etc).
-      
+Specify a `target` jQuery selector to link your annotation to the DOM.
+
       target: 'h1'
+
+`targetFn()` returns the first DOM element it can find matching your `target` selector (wrapped as a jQuery object). 
 
       targetFn: () ->
         if typeof @target is 'string'
@@ -507,16 +506,6 @@ You may omit the `position` attribute entirely and Anno will use its best guess,
 
 
 
-`positionArrow()` ensures that the little pointy arrow is actually aiming at your `target` element. It does this
-based on a string it gets from `arrowPositionFn()`.
-
-      positionArrow: ($arrowElem = @_annoElem.find('.anno-arrow').first()) ->
-        $arrowElem.addClass('anno-arrow-'+@arrowPositionFn()) # enables some different CSS
-
-90% of the time, `arrowPositionFn()` will just make sure that your arrow is appears closest to your `target` 
-element by returning the opposite string to whatever `positionFn()` sent.  (If your annotation appears on the
-left hand side of your target, it'll tell the arrow to point to the right.)
-
 If you manually positioned your annoElem (by supplying CSS `left` and `top` attributes), `arrowPositionFn()` 
 will attempt to guess which way you want to the arrow to point.  If you'd rather not leave it to chance,
 simply override the `arrowPosition` when you construct your Anno object.
@@ -536,7 +525,6 @@ simply override the `arrowPosition` when you construct your Anno object.
             'center-bottom' : 'center-top'
           }[@positionFn()]
         else
-          # guess! # TODO: base this of distance to target.
           pos = l : parseInt(@positionFn().left, 10) ,  t : parseInt(@positionFn().top, 10) 
           if Math.abs(pos.l) > Math.abs(pos.t)
             r = if pos.l < 0 then 'center-right' else 'center-left'
