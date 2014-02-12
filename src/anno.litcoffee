@@ -172,6 +172,8 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
         @emphasiseTarget()
         
         $target.after(@_annoElem) # insert into DOM
+        
+        @_annoElem.addClass('anno-arrow-'+@arrowPositionFn()) # add in effects
         @positionAnnoElem()
         @positionArrow(@_annoElem.find('.anno-arrow').first())
 
@@ -407,9 +409,6 @@ Must be called after DOM insertion.
         pos = @positionFn()
 
         $targetEl = @targetFn()
-
-        # add in effects
-        annoEl.addClass('anno-arrow-'+@arrowPositionFn())
 
         offset = $targetEl.position() 
         switch pos 

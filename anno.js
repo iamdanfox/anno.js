@@ -114,6 +114,7 @@ Anno = (function() {
     this.showOverlay();
     this.emphasiseTarget();
     $target.after(this._annoElem);
+    this._annoElem.addClass('anno-arrow-' + this.arrowPositionFn());
     this.positionAnnoElem();
     this.positionArrow(this._annoElem.find('.anno-arrow').first());
     setTimeout(((function(_this) {
@@ -365,7 +366,6 @@ Anno = (function() {
     }
     pos = this.positionFn();
     $targetEl = this.targetFn();
-    annoEl.addClass('anno-arrow-' + this.arrowPositionFn());
     offset = $targetEl.position();
     switch (pos) {
       case 'top':

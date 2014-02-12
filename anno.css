@@ -109,11 +109,11 @@
 }
 .anno.anno-hidden.anno-arrow-center-left,
 .anno.anno-hidden.anno-arrow-left {
-  margin-right: -20px;
+  margin-left: 20px;
 }
 .anno.anno-hidden.anno-arrow-center-top,
 .anno.anno-hidden.anno-arrow-top {
-  margin-bottom: -20px;
+  margin-top: 20px;
 }
 .anno.anno-hidden.anno-arrow-center-right,
 .anno.anno-hidden.anno-arrow-right {
