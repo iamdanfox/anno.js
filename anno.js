@@ -113,7 +113,6 @@ Anno = (function() {
     lastButton = this._annoElem.find('button').last();
     this.showOverlay();
     this.emphasiseTarget();
-    this._annoElem.addClass('anno-slide-down');
     $target.after(this._annoElem);
     this.positionAnnoElem();
     this.positionArrow(this._annoElem.find('.anno-arrow').first());
@@ -121,7 +120,7 @@ Anno = (function() {
       return function() {
         return _this._annoElem.removeClass('anno-hidden');
       };
-    })(this)), 100);
+    })(this)), 10);
     $target.scrollintoview();
     setTimeout(((function(_this) {
       return function() {
@@ -366,6 +365,7 @@ Anno = (function() {
     }
     pos = this.positionFn();
     $targetEl = this.targetFn();
+    annoEl.addClass('anno-arrow-' + this.arrowPositionFn());
     offset = $targetEl.position();
     switch (pos) {
       case 'top':
