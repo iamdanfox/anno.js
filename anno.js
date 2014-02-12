@@ -113,14 +113,15 @@ Anno = (function() {
     lastButton = this._annoElem.find('button').last();
     this.showOverlay();
     this.emphasiseTarget();
+    this._annoElem.addClass('anno-slide-down');
     $target.after(this._annoElem);
+    this.positionAnnoElem();
+    this.positionArrow(this._annoElem.find('.anno-arrow').first());
     setTimeout(((function(_this) {
       return function() {
         return _this._annoElem.removeClass('anno-hidden');
       };
-    })(this)), 10);
-    this.positionAnnoElem();
-    this.positionArrow(this._annoElem.find('.anno-arrow').first());
+    })(this)), 100);
     $target.scrollintoview();
     setTimeout(((function(_this) {
       return function() {
@@ -194,6 +195,8 @@ Anno = (function() {
     return this.switchTo(this._chainPrev);
   };
 
+  Anno.prototype.target = 'h1';
+
   Anno.prototype.targetFn = function() {
     var r;
     if (typeof this.target === 'string') {
@@ -219,8 +222,6 @@ Anno = (function() {
       return console.error(this.target);
     }
   };
-
-  Anno.prototype.target = 'h1';
 
   Anno.prototype.annoElem = function() {
     this._annoElem = $("<div class='anno anno-hidden " + this.className + "'>\n  <div class='anno-inner'>  <div class='anno-arrow'></div>  </div>\n</div>");

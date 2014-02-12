@@ -171,14 +171,23 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
         @showOverlay()
         @emphasiseTarget()
 
-        $target.after(@_annoElem) # TODO: be more intelligent.
-        setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
-          
+        # add slide transition
+        @_annoElem.addClass('anno-slide-down')
+
+
+        $target.after(@_annoElem) # insert into DOM
+
         @positionAnnoElem()
+
+
+
+
         @positionArrow(@_annoElem.find('.anno-arrow').first())
 
+        setTimeout (() => @_annoElem.removeClass('anno-hidden')), 100 # hack to make Chrome render the opacity:0 state.
+          
         $target.scrollintoview()
-        setTimeout (() => @_annoElem.scrollintoview()) , 300
+        setTimeout (() => @_annoElem.scrollintoview()) , 300 #TODO fix jumpiness
 
         if @rightArrowClicksLastButton 
           lastButton.keydown( (evt) -> if evt.keyCode is 39 then $(this).click()  ) # right arrow    
