@@ -317,15 +317,17 @@ Anno.js really powerful.  You can configure it and replace all kinds of behaviou
 
     <span class="hljs-property">@showOverlay</span>()
     <span class="hljs-property">@emphasiseTarget</span>()
+    
+    $target.after(<span class="hljs-property">@_annoElem</span>) <span class="hljs-comment"># insert into DOM</span>
+    
+    <span class="hljs-property">@_annoElem</span>.addClass(<span class="hljs-string">'anno-arrow-'</span>+<span class="hljs-property">@arrowPositionFn</span>()) <span class="hljs-comment"># add in effects</span>
+    <span class="hljs-property">@positionAnnoElem</span>()
+    <span class="hljs-property">@positionArrow</span>(<span class="hljs-property">@_annoElem</span>.find(<span class="hljs-string">'.anno-arrow'</span>).first())
 
-    $target.after(<span class="hljs-property">@_annoElem</span>) <span class="hljs-comment"># TODO: be more intelligent.</span>
     setTimeout <span class="hljs-function"><span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.removeClass(<span class="hljs-string">'anno-hidden'</span>))</span>, 10 # <span class="hljs-title">hack</span> <span class="hljs-title">to</span> <span class="hljs-title">make</span> <span class="hljs-title">Chrome</span> <span class="hljs-title">render</span> <span class="hljs-title">the</span> <span class="hljs-title">opacity</span>:0 <span class="hljs-title">state</span>.
       
-    @<span class="hljs-title">positionAnnoElem</span><span class="hljs-params">()</span>
-    @<span class="hljs-title">positionArrow</span><span class="hljs-params">(<span class="hljs-property">@_annoElem</span>.find(<span class="hljs-string">'.anno-arrow'</span>).first())</span>
-
     <span class="hljs-title">$target</span>.<span class="hljs-title">scrollintoview</span><span class="hljs-params">()</span>
-    <span class="hljs-title">setTimeout</span> <span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.scrollintoview())</span> , 300
+    <span class="hljs-title">setTimeout</span> <span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.scrollintoview())</span> , 300 #<span class="hljs-title">TODO</span> <span class="hljs-title">fix</span> <span class="hljs-title">jumpiness</span>
 
     <span class="hljs-title">if</span> @<span class="hljs-title">rightArrowClicksLastButton</span> 
       <span class="hljs-title">lastButton</span>.<span class="hljs-title">keydown</span><span class="hljs-params">( (evt) -&gt; <span class="hljs-keyword">if</span> evt.keyCode <span class="hljs-keyword">is</span> <span class="hljs-number">39</span> <span class="hljs-keyword">then</span> $(<span class="hljs-keyword">this</span>).click()  )</span> # <span class="hljs-title">right</span> <span class="hljs-title">arrow</span>    
@@ -746,6 +748,7 @@ You can supply a single object, a list of objects or even a list of <code>AnnoBu
               <p><code>positionAnnoElem()</code> sets the CSS of the Anno element so that it appears next to your target in a sensible way.
 It positions the Anno element based on a string from <code>positionFn()</code>. It can also use a hash containing any
 of the properties <code>top</code>, <code>left</code>, <code>right</code> or <code>bottom</code>.</p>
+<p>Must be called after DOM insertion.</p>
 
             </div>
             
@@ -753,6 +756,7 @@ of the properties <code>top</code>, <code>left</code>, <code>right</code> or <co
     pos = <span class="hljs-property">@positionFn</span>()
 
     $targetEl = <span class="hljs-property">@targetFn</span>()
+
     offset = $targetEl.position() 
     <span class="hljs-keyword">switch</span> pos 
       <span class="hljs-keyword">when</span> <span class="hljs-string">'top'</span>, <span class="hljs-string">'bottom'</span>
@@ -779,6 +783,8 @@ of the properties <code>top</code>, <code>left</code>, <code>right</code> or <co
         <span class="hljs-keyword">else</span> 
           <span class="hljs-built_in">console</span>.error <span class="hljs-string">"Unrecognised position: '<span class="hljs-subst">#{pos}</span>'"</span>
 
+
+
     <span class="hljs-keyword">return</span> annoEl</pre></div></div>
             
         </li>
@@ -792,6 +798,7 @@ of the properties <code>top</code>, <code>left</code>, <code>right</code> or <co
               </div>
               <p><code>positionFn()</code> simply returns whatever you put in the <code>position</code> property (see below for options).<br>If you left it blank, <code>positionFn()</code> will try to guess which side of your target you would like your
 annotation to be displayed on (based on <code>Anno.preferredPositions</code>). </p>
+<p>Must be called after DOM insertion.</p>
 
             </div>
             

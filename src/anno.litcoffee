@@ -170,15 +170,17 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
 
         @showOverlay()
         @emphasiseTarget()
-
-        $target.after(@_annoElem) # TODO: be more intelligent.
-        setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
-          
+        
+        $target.after(@_annoElem) # insert into DOM
+        
+        @_annoElem.addClass('anno-arrow-'+@arrowPositionFn()) # add in effects
         @positionAnnoElem()
         @positionArrow(@_annoElem.find('.anno-arrow').first())
 
+        setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
+          
         $target.scrollintoview()
-        setTimeout (() => @_annoElem.scrollintoview()) , 300
+        setTimeout (() => @_annoElem.scrollintoview()) , 300 #TODO fix jumpiness
 
         if @rightArrowClicksLastButton 
           lastButton.keydown( (evt) -> if evt.keyCode is 39 then $(this).click()  ) # right arrow    
@@ -401,10 +403,13 @@ Positioning
 It positions the Anno element based on a string from `positionFn()`. It can also use a hash containing any
 of the properties `top`, `left`, `right` or `bottom`.
 
+Must be called after DOM insertion.
+
       positionAnnoElem: (annoEl = @_annoElem) ->
         pos = @positionFn()
 
         $targetEl = @targetFn()
+
         offset = $targetEl.position() 
         switch pos 
           when 'top', 'bottom'
@@ -431,11 +436,15 @@ of the properties `top`, `left`, `right` or `bottom`.
             else 
               console.error "Unrecognised position: '#{pos}'"
 
+
+
         return annoEl
 
 `positionFn()` simply returns whatever you put in the `position` property (see below for options).  
 If you left it blank, `positionFn()` will try to guess which side of your target you would like your
 annotation to be displayed on (based on `Anno.preferredPositions`). 
+
+Must be called after DOM insertion.
 
       positionFn: () -> 
         if @position? 

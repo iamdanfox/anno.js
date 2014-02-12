@@ -136,6 +136,19 @@
 
   &.anno-hidden{
     opacity:0;
+
+    &.anno-arrow-center-bottom, &.anno-arrow-bottom {
+      margin-top:-20px;
+    }
+    &.anno-arrow-center-left, &.anno-arrow-left {
+      margin-left:20px;
+    }
+    &.anno-arrow-center-top, &.anno-arrow-top {
+      margin-top:20px; // positive offsets counteract the `top` and `left` position absolute.
+    }
+    &.anno-arrow-center-right, &.anno-arrow-right {
+      margin-left:-20px;
+    }
   }
 
   &.anno-width-250 {

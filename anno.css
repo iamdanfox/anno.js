@@ -103,6 +103,22 @@
 .anno.anno-hidden {
   opacity: 0;
 }
+.anno.anno-hidden.anno-arrow-center-bottom,
+.anno.anno-hidden.anno-arrow-bottom {
+  margin-top: -20px;
+}
+.anno.anno-hidden.anno-arrow-center-left,
+.anno.anno-hidden.anno-arrow-left {
+  margin-left: 20px;
+}
+.anno.anno-hidden.anno-arrow-center-top,
+.anno.anno-hidden.anno-arrow-top {
+  margin-top: 20px;
+}
+.anno.anno-hidden.anno-arrow-center-right,
+.anno.anno-hidden.anno-arrow-right {
+  margin-left: -20px;
+}
 .anno.anno-width-250 {
   width: 250px;
 }
