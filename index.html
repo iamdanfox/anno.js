@@ -163,6 +163,46 @@ var anno6 = new Anno({
 
 
 
+<h2>Modals</h2>
+
+<script type="text/javascript">
+var anno7 = new Anno({
+  target: '#myModal .modal-content',
+  content: "lalala",
+  position:'right',
+  showOverlay: function(){}
+})
+</script>
+
+<!-- Button trigger modal -->
+<button class="btn btn-primary" onclick="$('#myModal').modal()">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="anno7.show()">Show Anno</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
     </div>
@@ -180,7 +220,7 @@ var anno6 = new Anno({
     <script type="text/javascript">
     $(function(){
 
-      $('.container script').each(function(i,item){
+      $('.container script:not(.invisible)').each(function(i,item){
         $pre = $('<pre>'+item.innerHTML+'</pre>')
         hljs.highlightBlock($pre[0])
         $(item).after($pre)
