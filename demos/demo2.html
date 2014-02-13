@@ -21,8 +21,8 @@
 
     <link href="../anno.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
-      .container-fluid {
-        background:red;
+      h2 {
+        margin-top:40px;
       }
     </style>
 
@@ -38,7 +38,7 @@
 
     </div>
     <div class="container">
-      <div class="col-md-6 col-md-offset-3">
+      <div class="col-md-8 col-md-offset-2">
 
 <h2>Basic usage</h2>
 <script type="text/javascript">
@@ -94,15 +94,15 @@ var anno3 = new Anno({
 
 <script type="text/javascript">
 var anno4 = new Anno({
-  target: 'button:eq(3)',
+  target: 'h2#buttons ~ p:eq(1) button:first',
   position:'top',
   content: "Alternatively, you can have loads of buttons!",
   autoFocusLastButton:false,
   buttons: [
     {
-      text: 'Open Google',
+      text: 'Open HN',
       click: function(anno, evt){
-        window.open('http://google.com')
+        window.open('http://news.ycombinator.com/')
       }
     },{
       text: 'Sweet',
@@ -121,16 +121,40 @@ var anno4 = new Anno({
 var anno5 =  Anno.chain([{
   target: 'pre:eq(4)',
   position:'left',
-  content: "There are a few default buttons that you can use",
+  content: "There are a few default buttons that you can use.",
   buttons: [AnnoButton.NextButton]
 }, {
   target: 'pre:eq(4)',
   position:'right',
-  content: "There are a few default buttons that you can use",
-  buttons: [AnnoButton.BackButton, AnnoButton.DoneButton]
+  content: "Try out the back button for example!",
+  buttons: [AnnoButton.BackButton]
 }])
 </script>
 <p><button type="button" class="btn btn-default" onclick="anno5.show()">anno5.show()</button></p>
+
+
+<h2>onShow, onHide</h2>
+<script type="text/javascript">
+var anno6 = new Anno({
+  target: 'pre:eq(5)',
+  content: "You can set up handlers for the duration of the Anno.",
+  onShow: function (anno, $target, $annoElem) {
+    var handler = function(){ alert('Hello!'); }
+    $target[0].addEventListener('click', handler)
+    return handler
+  }, 
+  onHide: function(anno, $target, $annoElem, returnFromOnShow) {
+    var handler = returnFromOnShow
+    $target[0].removeEventListener('click', handler)
+  }
+})
+</script>
+<p><button type="button" class="btn btn-default" onclick="anno6.show()">anno6.show()</button></p>
+
+
+
+
+
 
     </div>
     </div>
