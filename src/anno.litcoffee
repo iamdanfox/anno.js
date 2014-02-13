@@ -111,8 +111,8 @@ we've just chained another one onto it anonymously.
       chainSize: () -> 
         if @_chainNext? then @_chainNext.chainSize() else 1+@chainIndex()
 
+      # `anno.chainIndex(x)` gets the xth object in the chain, `anno.chainIndex()` gets the current index; 
       chainIndex: (index) ->
-        # `anno.chainIndex(x)` gets the xth object in the chain
         if index?
           (find = (curr, i, u) ->
             if curr?
@@ -122,7 +122,6 @@ we've just chained another one onto it anonymously.
               else if   ci is i    then curr
             else console.error "Couldn't switch to index '#{i}'. Chain size is '#{u}'"
           )(this, index, @chainSize())
-        # `anno.chainIndex()` gets the current index; 
         else
           if @_chainPrev? then 1+@_chainPrev.chainIndex() else 0
       
@@ -215,8 +214,8 @@ Hiding is done in two stages so that you can re-use one overlay element for a lo
       switchToChainPrev: () -> @switchTo @_chainPrev
 
 
-Customizing target and content
-------------------------------
+Customizing target
+------------------
 
 Specify a `target` jQuery selector to link your annotation to the DOM.
 
@@ -259,6 +258,9 @@ CSS classes can be included, e.g. .anno-width-150, 175, 200, 250 (default 300)
 
       className: ''
 
+Content
+-------
+
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
 
       # Override this instead of `content` if you don't know the content in advance
@@ -277,7 +279,7 @@ Semi-transparent overlay and other effects
           $('body').append(e = @overlayElem().addClass 'anno-hidden') # TODO: write about pointer-events: none
           setTimeout (() -> e.removeClass 'anno-hidden'), 10
         else
-          $('.anno-overlay').replaceWith @overlayElem() # TODO try to mutate classNames & listeners rather than replacing the DOM node -> smooth animation
+          $('.anno-overlay').replaceWith @overlayElem() 
 
       overlayElem: () -> 
         $("<div class='anno-overlay #{@overlayClassName}'></div>").
@@ -333,16 +335,18 @@ Semi-transparent overlay and other effects
 Positioning
 -----------
 
-The `position` property decides where your annotation will be displayed. You should supply
-any of `top`, `left`, `bottom`, `right`, `center-top`, `center-left`, `center-bottom` or `center-right`.
+The `position` property decides where your annotation will be displayed.
 
-Alternatively, you can supply a hash of CSS attributes to set. (e.g. `{ top: '10px', left: '57px' }`). This
-is useful if you have a large `target` element and you want to point the arrow at something specific.
+Alternatively, you can supply a hash of CSS attributes:
+```
+  position = { 
+    top: '10px', 
+    left: '57px' 
+  }
+```
+If you omit the `position` attribute entirely, Anno will use its best guess.
 
-You may omit the `position` attribute entirely and Anno will use its best guess, however, this is not recommended
-(and you'll get a warning on the console as punishment).
-
-      position: null
+      position: null # any of `top`, `left`, `bottom`, `right`, `center-top`, `center-left`, `center-bottom` or `center-right`.
 
 `positionAnnoElem()` sets the CSS of the Anno element so that it appears next to your target in a sensible way.
 
