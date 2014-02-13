@@ -167,16 +167,11 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
       rightArrowClicksLastButton: true
       autoFocusLastButton: true
 
-The `onShow` callback is incredibly useful; by default, it does nothing, but you can override it to set 
-up click listeners, adjust your page html and generally provide lots of interactivity.  
+The `onShow` callback does nothing by default, but can be very useful when overridden (e.g. to register a click 
+listener on the target element.)  Whatever value you return from the `onShow` function will get passed to the 
+`onHide` callback.  This can be used to unbind event listeners.
 
-The most common use of this method is to register a click listener on the target element.  Whatever 
-value you return from the `onShow` function will get passed to the `onHide` callback.  You can use this 
-to unbind event listeners.
-
-      onShow: (anno, $target, $annoElem) -> # Both `$target` and `$annoElem` are already jQuery objects
-
-Note: whatever you return from your `onShow` function will be passed into the `onHide` function as the fourth argument.
+      onShow: (anno, $target, $annoElem) -> 
 
       _returnFromOnShow = null
 
@@ -220,18 +215,18 @@ Hiding is done in two stages so that you can re-use one overlay element for a lo
       switchToChainPrev: () -> @switchTo @_chainPrev
 
 
-Customizing Anno and contents
------------------------------
+Customizing target and content
+------------------------------
 
 Specify a `target` jQuery selector to link your annotation to the DOM.
 
       target: 'h1'
 
-`targetFn()` returns the first DOM element it can find matching your `target` selector (wrapped as a jQuery object). 
+`targetFn()` is used internally to return the first element matching your `target` selector (wrapped as a jQuery object). 
 
       targetFn: () ->
         if typeof @target is 'string'
-          r = $(@target).filter(':not(.anno-placeholder)')
+          r = $(@target).filter(':not(.anno-placeholder)') # .anno-placeholder is a clone to prevent text wrapping
           if r.length is 0 then console.error "Couldn't find Anno.target '#{@target}'."
           if r.length > 1 then console.warn "Anno target '#{@target}' matched #{r.length} elements. Targeting the first one."
           r.first()
@@ -247,13 +242,9 @@ Specify a `target` jQuery selector to link your annotation to the DOM.
               "object, a raw DOM element or a function returning a jQuery element. target:"
           console.error @target
 
-`annoElem()` generates the jQuery object that will be inserted into the DOM.  It relies on 
-`@contentElem()` and `buttonsElem()` to generate the interesting bits. 
+`annoElem()` generates the jQuery object that will be inserted into the DOM.
 
-This method is ripe for overriding. Just copy the code below and tinker with the HTML. For example
-you could add some extra `div`s to display the current step number (by calling `chainIndex() + 1`).
-
-      annoElem: () -> 
+      annoElem: () -> # TODO: should `annoElem()` encapsulate the re-use of one object?
         @_annoElem = $("""<div class='anno anno-hidden #{@className}'>
                     <div class='anno-inner'>  <div class='anno-arrow'></div>  </div>
                   </div>""")
@@ -264,39 +255,17 @@ you could add some extra `div`s to display the current step number (by calling `
 
       _annoElem: null
 
-      className: '' # TODO useful classes .anno-width-150, 175, 200, 250 (default 300)
+CSS classes can be included, e.g. .anno-width-150, 175, 200, 250 (default 300)
 
-`contentElem()` is called by `annoElem()` to produce a jQuery object.  
+      className: ''
+
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+
+      # Override this instead of `content` if you don't know the content in advance
+      contentFn: () -> @content 
 
       contentElem: () -> $("<div class='anno-content'>"+@contentFn()+"</div>") # TODO: evaluate how easy it would be to change Anno content while its displayed.
 
-Most of the time it will suffice to override the `content` property when you construct your Anno.  
-However, if you want to generate the content when `showAnno()` is called (perhaps the text you display
-depends on an earlier step) you can override `contentFn()` instead.
-
-      contentFn: () -> @content
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-
-
-`buttonsElem()` produces the HTML for all those buttons (as a jQuery object).  Just like `contentElem()`
-above, it delegates to `buttonFn()`.
-
-      buttonsElem: () ->
-        return $("<div class='anno-btn-container'></div>").
-          append (b.buttonElem(this) for b in @buttonsFn())
-
-`buttonsFn()` returns a list of `AnnoButton` objects based on whatever you put in the `buttons` parameter.
-
-      buttonsFn: () -> 
-        if @buttons instanceof Array
-          @buttons.map (b) -> new AnnoButton(b)
-        else 
-          [new AnnoButton(@buttons)] # in the else branch `@buttons` is a single hash
-
-By default, Anno will construct a single button for you, using defaults provided by the `AnnoButton` class.
-You can supply a single object, a list of objects or even a list of `AnnoButtons`.
-
-      buttons:  [ {} ] 
 
 
 
@@ -320,10 +289,6 @@ Semi-transparent overlay and other effects
       hideOverlay: () ->
         $('.anno-overlay').addClass 'anno-hidden'
         setTimeout (() -> $('.anno-overlay').remove()), 300
-
-
-
-
 
       emphasiseTarget: ($target = @targetFn()) ->
         if $target.attr('style')? then _oldTargetCSS = $target.attr('style')
@@ -509,12 +474,29 @@ ever need to override this is if you've supplied a CSS hash as the `position` pr
       arrowPosition: null # TODO replace 'arrowPosition' with 'arrowDirection'
 
 
+Customizing Buttons
+-------------------
+
+By default, Annotations have a single button, filled with default values from the `AnnoButton` class.
+
+      buttons:  [ {} ] 
+
+      # returns a list of `AnnoButton` objects
+      buttonsFn: () -> 
+        if @buttons instanceof Array
+          @buttons.map (b) -> new AnnoButton(b)
+        else 
+          [new AnnoButton(@buttons)] # in the else branch `@buttons` is a single hash
+
+`buttonsElem()` produces the HTML for all those buttons (as a jQuery object).  
+
+      buttonsElem: () ->
+        return $("<div class='anno-btn-container'></div>").
+          append (b.buttonElem(this) for b in @buttonsFn())
 
 
-
-
-Buttons
-=======
+AnnoButton
+==========
 
     class AnnoButton
       @version: '1.1.0'

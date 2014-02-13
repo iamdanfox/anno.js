@@ -230,41 +230,15 @@ Anno = (function() {
 
   Anno.prototype.className = '';
 
-  Anno.prototype.contentElem = function() {
-    return $("<div class='anno-content'>" + this.contentFn() + "</div>");
-  };
+  Anno.prototype.content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
   Anno.prototype.contentFn = function() {
     return this.content;
   };
 
-  Anno.prototype.content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-
-  Anno.prototype.buttonsElem = function() {
-    var b;
-    return $("<div class='anno-btn-container'></div>").append((function() {
-      var _i, _len, _ref, _results;
-      _ref = this.buttonsFn();
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        b = _ref[_i];
-        _results.push(b.buttonElem(this));
-      }
-      return _results;
-    }).call(this));
+  Anno.prototype.contentElem = function() {
+    return $("<div class='anno-content'>" + this.contentFn() + "</div>");
   };
-
-  Anno.prototype.buttonsFn = function() {
-    if (this.buttons instanceof Array) {
-      return this.buttons.map(function(b) {
-        return new AnnoButton(b);
-      });
-    } else {
-      return [new AnnoButton(this.buttons)];
-    }
-  };
-
-  Anno.prototype.buttons = [{}];
 
   Anno.prototype.showOverlay = function() {
     var e;
@@ -510,6 +484,32 @@ Anno = (function() {
   };
 
   Anno.prototype.arrowPosition = null;
+
+  Anno.prototype.buttons = [{}];
+
+  Anno.prototype.buttonsFn = function() {
+    if (this.buttons instanceof Array) {
+      return this.buttons.map(function(b) {
+        return new AnnoButton(b);
+      });
+    } else {
+      return [new AnnoButton(this.buttons)];
+    }
+  };
+
+  Anno.prototype.buttonsElem = function() {
+    var b;
+    return $("<div class='anno-btn-container'></div>").append((function() {
+      var _i, _len, _ref, _results;
+      _ref = this.buttonsFn();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        b = _ref[_i];
+        _results.push(b.buttonElem(this));
+      }
+      return _results;
+    }).call(this));
+  };
 
   return Anno;
 
