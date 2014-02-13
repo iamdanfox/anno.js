@@ -62,24 +62,28 @@ var anno1 = new Anno({
 var anno2 = Anno.chain([{
   target: 'pre:eq(1)', // second block of code
   position: 'top',
-  content: '[content]'
+  content: 'You can specify where you want each anno to appear.'
 }, {
   target: 'pre:eq(1)', 
   position: 'left',
-  content: '[content]',
+  content: "Use 'top', 'left', 'bottom' and 'right', just like CSS.",
 }, {
   target: 'pre:eq(1)',
   position: 'center-bottom',
-  content: '[content]'
+  content: "You can also use 'center-bottom', 'center-right' etc"
 }, {
   target: 'pre:eq(1)',
   position: 'right',
   className: 'anno-width-200', // 150,175,200,250 (default 300)
-  content: '[content]'
+  content: 'Add CSS classes to customize each annotation.'
 }, {
   target: 'pre:eq(1)',
-  position: 'center-right',
-  content: '[content]'
+  position: {
+    top: '44em',
+    left: '14em'
+  },
+  arrowPosition: 'center-left',
+  content: 'You can even specify precise top and left values.'
 } ])
 </script>
 <p><button type="button" class="btn btn-default" onclick="anno2.show()">anno2.show()</button>
