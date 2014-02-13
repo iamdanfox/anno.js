@@ -339,7 +339,7 @@ listener on the target element.)  Whatever value you return from the <code>onSho
     <span class="hljs-keyword">if</span> <span class="hljs-property">@_annoElem</span>? 
       <span class="hljs-property">@_annoElem</span>.addClass(<span class="hljs-string">'anno-hidden'</span>)
       setTimeout <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> 
-        <span class="hljs-property">@_annoElem</span>.remove() <span class="hljs-comment"># this method causes hideAnno to get called twice sometimes -&gt; bad.</span>
+        <span class="hljs-property">@_annoElem</span>?.remove() <span class="hljs-comment"># this method causes hideAnno to get called twice sometimes -&gt; bad.</span>
         <span class="hljs-property">@_annoElem</span> = <span class="hljs-literal">null</span>
       , <span class="hljs-number">300</span>
 
@@ -807,7 +807,7 @@ the first one available in <code>Anno.preferredPositions</code>.  </p>
         r = <span class="hljs-keyword">if</span> pos.l &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-string">'center-right'</span> <span class="hljs-keyword">else</span> <span class="hljs-string">'center-left'</span>
       <span class="hljs-keyword">else</span>
         r = <span class="hljs-keyword">if</span> pos.t &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-string">'center-bottom'</span> <span class="hljs-keyword">else</span> <span class="hljs-string">'center-top'</span>
-      <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Guessing arrowPosition='<span class="hljs-subst">#{r}</span>' for <span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>. Include this in your constructor for consistency."</span>
+      <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Guessing arrowPosition:'<span class="hljs-subst">#{r}</span>' for <span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>. Include this in your constructor for consistency."</span>
       <span class="hljs-keyword">return</span> r</pre></div></div>
             
         </li>

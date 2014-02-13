@@ -163,21 +163,7 @@ var anno6 = new Anno({
 
 
 
-<h2>Modals</h2>
-
-<script type="text/javascript">
-var anno7 = new Anno({
-  target: '#myModal .modal-content',
-  content: "lalala",
-  position:'right',
-  showOverlay: function(){}
-})
-</script>
-
-<!-- Button trigger modal -->
-<button class="btn btn-primary" onclick="$('#myModal').modal()">
-  Launch demo modal
-</button>
+<h2>Bootstrap Modals</h2>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -188,20 +174,41 @@ var anno7 = new Anno({
         <h4 class="modal-title" id="myModalLabel">Modal title</h4>
       </div>
       <div class="modal-body">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        I am a modal.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="anno7.show()">Show Anno</button>
       </div>
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+var anno7 = new Anno({
+  target: '#myModal .modal-content',
+  content: "Because Anno is very flexible, you can make it work with all sorts of other libraries, e.g. Bootstrap",
+  position: { top:'auto', left:'145px' },
+  showOverlay: function(){}, // the modal already has one, so disable the anno.js one
+  buttons: {
+    text:'Done',
+    click: function(){  $('#myModal').modal('hide')  }
+  }
+})
+</script>
+
+
+
+<script type="text/javascript">
+// link the anno object to the modal
+$('#myModal').on('shown.bs.modal', function(){
+  anno7.show()
+}).on('hide.bs.modal', function(){
+  anno7.hide()
+})
+</script>
+<!-- Button trigger modal -->
+<p><button class="btn btn-primary" id="modalbutton" onclick="$('#myModal').modal('show')">$('#myModal').modal('show')</button></p>
+
 
 
 
