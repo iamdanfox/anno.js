@@ -3,6 +3,8 @@ anno.js [![Build Status](https://travis-ci.org/iamdanfox/anno.js.png?branch=mast
 
 Anno.js lets you add powerful step-by-step guides, interactive tutorials or just plain ol' annotations to your webapp.
 
+![Screencast of a single annotation](screencast.gif)
+
 Anno.js is built to be absurdly extensible, but still works great out of the box (and looks damn fine doing it). 
 
 
