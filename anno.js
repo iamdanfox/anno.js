@@ -5,8 +5,6 @@ var Anno, AnnoButton,
 Anno = (function() {
   var _returnFromOnShow;
 
-  Anno.version = '1.4.7';
-
   function Anno(options) {
     var key, val;
     if (options instanceof Anno) {
@@ -26,6 +24,16 @@ Anno = (function() {
       this[key] = val;
     }
   }
+
+  Anno.setDefaults = function(options) {
+    var key, val, _results;
+    _results = [];
+    for (key in options) {
+      val = options[key];
+      _results.push(Anno.prototype[key] = val);
+    }
+    return _results;
+  };
 
   Anno.prototype.chainTo = function(obj) {
     if (obj != null) {
@@ -89,20 +97,6 @@ Anno = (function() {
     }
   };
 
-  Anno.setDefaults = function(options) {
-    var key, val, _results;
-    _results = [];
-    for (key in options) {
-      val = options[key];
-      _results.push(Anno.prototype[key] = val);
-    }
-    return _results;
-  };
-
-  Anno.prototype.start = function() {
-    return this.show();
-  };
-
   Anno.prototype.show = function() {
     var $target, lastButton;
     $target = this.targetFn();
@@ -110,7 +104,6 @@ Anno = (function() {
       console.warn("Anno elem for '" + this.target + "' has already been generated.  Did you call show() twice?");
     }
     this._annoElem = this.annoElem();
-    lastButton = this._annoElem.find('button').last();
     this.showOverlay();
     this.emphasiseTarget();
     $target.after(this._annoElem);
@@ -127,6 +120,7 @@ Anno = (function() {
         return _this._annoElem.scrollintoview();
       };
     })(this)), 300);
+    lastButton = this._annoElem.find('button').last();
     if (this.rightArrowClicksLastButton) {
       lastButton.keydown(function(evt) {
         if (evt.keyCode === 39) {
@@ -141,6 +135,10 @@ Anno = (function() {
     }
     this._returnFromOnShow = this.onShow(this, $target, this._annoElem);
     return this;
+  };
+
+  Anno.prototype.start = function() {
+    return this.show();
   };
 
   Anno.prototype.rightArrowClicksLastButton = true;

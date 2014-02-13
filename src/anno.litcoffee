@@ -1,7 +1,7 @@
 
 Anno.js
 =======
-Powerful step-by-step guides, interactive tutorials or just plain ol' annotations.
+Interactive step-by-step guides for web apps.
 
 Anno.js is built to be absurdly extensible, but still works great out of the box (and looks damn fine doing it). 
 
@@ -31,25 +31,20 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
     class Anno
-      @version: '1.4.7' 
-      
-@version: BreakingAPIChange.NewCompatibleFeatures.Bugfix 
 
-
-Constructing an Anno object
----------------------------
+Creating an Anno object
+-----------------------
 
 An Anno object represents a single annotation on your page.  Each Anno has a `target` jQuery selector
-and a `content` string. For example:
+and a `content` string as well as many other properties. For example:
 ```
   pizzaAnno = new Anno({
-    target: '.pizza-list',
+    target: '#pizza-list',
     content: 'Choose your pizza from the list below.'
   })
   pizzaAnno.show()
 ```
-This creates a plain Anno object and overrides the `target` and `content` properties.  It uses defaults
-for everything else.
+This constructor lets you override these properties and uses defaults for anything you don't specify.
 
       constructor: (options) ->
         if options instanceof Anno
@@ -62,28 +57,22 @@ for everything else.
         for key,val of options
           this[key]=val
 
-Note, you can customize *anything* in your Anno object by overriding the method or property when you construct it.
-In addition to `target` and `content`, I usually like to specify `buttons` and `position`.  You might
-also like to try specifying `onShow` or `onHide` callbacks, `className` or maybe `overlayElem()`.  
+In practise, I usually like to specify `buttons` and `position`. You may also want to override `onShow` 
+and `onHide` callbacks, `className` and even `overlayElem()` for complete control.
 
-Read on to find out more.
+If you find yourself setting the same property on every Anno object you create, you can
+set default values at the top of your script that will apply to every Anno object from then onwards. 
 
-Making step-by-step tours using chaining
-----------------------------------------
+      @setDefaults: (options) ->
+        for key,val of options
+          Anno::[key] = val
 
-Naturally, you can chain Anno objects together to make a sequential tour. For example: 
-```
-  deliveryAnno = new Anno({
-    target: '#address-form',
-    content: "Enter your address and we'll deliver your pizza"
-    position: 'left'
-  })
-  pizzaAnno.chainTo(deliveryAnno)
-```
-The `pizzaAnno` object now has a `_chainNext` property and will switch to the 
-`deliveryAnno` when you click Next.
+Making a step-by-step tour
+--------------------------
 
-      chainTo: (obj) ->
+Anno objects can be chained together to make a sequential tour.
+
+      chainTo: (obj) -> 
         if obj?
           if not @_chainNext? # this is the end of the chain, add obj to the end.  
             @_chainNext = if obj instanceof Anno then obj else new Anno(obj)
@@ -94,23 +83,18 @@ The `pizzaAnno` object now has a `_chainNext` property and will switch to the
           console.error "Can't chainTo a null object."
         return this
 
-Anything that starts with an underscore is probably a bad idea to change. By all means read 
-these, but don't come crying to me if you overwrote something and your entire website blew up.
-
       _chainNext: null 
       _chainPrev: null
 
-You can also make long Anno chains without having to write `chainTo` every time using
-`Anno.chain()`. We can rewrite the two step example above like this:
+Long Anno chains can also be made using the `Anno.chain()` shorthand. 
 ```
- annoTour = Anno.chain([
+ var annoTour = Anno.chain([
    {
      target: '.pizza-list',
      content: 'Choose your pizza from the list below.'
-   }, 
-   {
+   }, {
      target: '#address-form',
-     content: "Enter your address and we'll deliver your pizza"
+     content: "Enter your address and we'll deliver your pizza",
      position: 'left'
    }
  ])
@@ -141,14 +125,6 @@ we've just chained another one onto it anonymously.
         # `anno.chainIndex()` gets the current index; 
         else
           if @_chainPrev? then 1+@_chainPrev.chainIndex() else 0
-
-
-If you find yourself setting the same property on every Anno object you create, you can
-set default values at the top of your script that will apply to every Anno object from then onwards. 
-
-      @setDefaults: (options) ->
-        for key,val of options
-          Anno::[key] = val
       
 
 Hiding and showing annotations
@@ -159,13 +135,10 @@ All methods used here can be overridden in the same way we changed the `content`
 
 Animations are all done with 300ms CSS transitions, so you can change your UI without touching any javascript.
 
-      start: () -> @show()
-
       show: () -> # TODO warn if this Anno has already been shown.
         $target = @targetFn()
         if @_annoElem? then console.warn "Anno elem for '#{@target}' has already been generated.  Did you call show() twice?"
         @_annoElem = @annoElem()
-        lastButton = @_annoElem.find('button').last()
 
         @showOverlay()
         @emphasiseTarget()
@@ -180,6 +153,7 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
         $target.scrollintoview()
         setTimeout (() => @_annoElem.scrollintoview()) , 300 #TODO fix jumpiness
 
+        lastButton = @_annoElem.find('button').last()
         if @rightArrowClicksLastButton 
           lastButton.keydown( (evt) -> if evt.keyCode is 39 then $(this).click()  ) # right arrow    
         if @autoFocusLastButton
@@ -187,6 +161,8 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
 
         @_returnFromOnShow = @onShow(this, $target, @_annoElem)
         return this
+
+      start: () -> @show() # alias because `tour.start()` sounds nicer than `tour.show()`
 
       rightArrowClicksLastButton: true
       autoFocusLastButton: true
@@ -211,9 +187,6 @@ Hiding is done in two stages so that you can re-use one overlay element for a lo
         @hideOverlay()
         return this
 
-`hideAnno()` hides the Anno element and restores the `target` element, leaving the overlay behind.
-It also calls the `onHide` listener and passes in the result of the `onShow` method.
-
       hideAnno: () ->
         @deemphasiseTarget()
 
@@ -232,16 +205,15 @@ It also calls the `onHide` listener and passes in the result of the `onShow` met
 
       onHide: (anno, $target, $annoElem, returnFromOnShow) ->
 
-`switchTo` hides the current Anno and displays the next one in the chain without animating out the old overlay.
-Note: `otherAnno.show()` will probably replace the overlay, but it won't do a weird fade flicker.
+`switchTo` displays another Anno and reuses the old overlay.
 
       switchTo: (otherAnno) -> 
         if otherAnno?
-          @hideAnno() # TODO: prevent this calling `hideAnno()` if the current Anno isn't currently shown. 
+          @hideAnno() # TODO: prevent this call to `hideAnno()` if the current Anno isn't shown
           otherAnno.show()
         else 
           console.warn "Can't switchTo a null object. Hiding completely instead. "
-          @hide() # end of the line, need to remove the overlay too
+          @hide() # this recovers from a programmer mistake by removing the overlay too
 
       switchToChainNext: () -> @switchTo @_chainNext
 
@@ -274,8 +246,6 @@ Specify a `target` jQuery selector to link your annotation to the DOM.
           console.error "Unrecognised Anno.target. Please supply a jQuery selector string, a jQuery "+
               "object, a raw DOM element or a function returning a jQuery element. target:"
           console.error @target
-
-
 
 `annoElem()` generates the jQuery object that will be inserted into the DOM.  It relies on 
 `@contentElem()` and `buttonsElem()` to generate the interesting bits. 
