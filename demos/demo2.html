@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anno.js Demo 2</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <link href="../anno.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+      h2 {
+        margin-top:40px;
+      }
+    </style>
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="../anno.js" type="text/javascript"></script>
+  </head>
+  <body>
+    
+
+    <div class="jumbotron" style="text-align:center;">
+      <h1>anno.js</h1>
+
+    </div>
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+
+<h2>Basic usage</h2>
+<script type="text/javascript">
+var anno1 = new Anno({
+  target : 'pre:first',
+  content: 'This is an annotation'
+})
+</script>
+<p><button type="button" class="btn btn-default" onclick="anno1.show()">anno1.show()</button></p>
+
+
+
+<h2 id="slightly-more">Size &amp; Positioning</h2>
+<script type="text/javascript">
+var anno2 = Anno.chain([{
+  target: 'pre:eq(1)', // second block of code
+  position: 'top',
+  content: '[content]'
+}, {
+  target: 'pre:eq(1)', 
+  position: 'left',
+  content: '[content]',
+}, {
+  target: 'pre:eq(1)',
+  position: 'center-bottom',
+  content: '[content]'
+}, {
+  target: 'pre:eq(1)',
+  position: 'right',
+  className: 'anno-width-200', // 150,175,200,250 (default 300)
+  content: '[content]'
+}, {
+  target: 'pre:eq(1)',
+  position: 'center-right',
+  content: '[content]'
+} ])
+</script>
+<p><button type="button" class="btn btn-default" onclick="anno2.show()">anno2.show()</button>
+  <button type="button" class="btn btn-default" onclick="anno2.chainIndex(3).show()">anno2.chainIndex(3).show()</button></p>
+
+
+
+<h2 id="buttons">Buttons</h2>
+<script type="text/javascript">
+var anno3 = new Anno({
+  target: 'pre:eq(2)',
+  position: 'center-top',
+  content: "You don't have to use the default buttons. Click anywhere to hide.",
+  buttons: []
+})
+</script>
+<p><button type="button" class="btn btn-default" onclick="anno3.show()">anno3.show()</button></p>
+
+<script type="text/javascript">
+var anno4 = new Anno({
+  target: 'h2#buttons ~ p:eq(1) button:first',
+  position:'top',
+  content: "Alternatively, you can have loads of buttons!",
+  autoFocusLastButton:false,
+  buttons: [
+    {
+      text: 'Open HN',
+      click: function(anno, evt){
+        window.open('http://news.ycombinator.com/')
+      }
+    },{
+      text: 'Sweet',
+      className: 'anno-btn-low-importance',
+      click: function(anno, evt){
+        anno.hide()
+      }
+    }
+  ]
+})
+</script>
+<p><button type="button" class="btn btn-default" onclick="anno4.show()">anno4.show()</button></p>
+
+
+<script type="text/javascript">
+var anno5 =  Anno.chain([{
+  target: 'pre:eq(4)',
+  position:'left',
+  content: "There are a few default buttons that you can use.",
+  buttons: [AnnoButton.NextButton]
+}, {
+  target: 'pre:eq(4)',
+  position:'right',
+  content: "Try out the back button for example!",
+  buttons: [AnnoButton.BackButton]
+}])
+</script>
+<p><button type="button" class="btn btn-default" onclick="anno5.show()">anno5.show()</button></p>
+
+
+<h2>onShow, onHide</h2>
+<script type="text/javascript">
+var anno6 = new Anno({
+  target: 'pre:eq(5)',
+  content: "You can set up handlers for the duration of the Anno.",
+  onShow: function (anno, $target, $annoElem) {
+    var handler = function(){ alert('Hello!'); }
+    $target[0].addEventListener('click', handler)
+    return handler
+  }, 
+  onHide: function(anno, $target, $annoElem, returnFromOnShow) {
+    var handler = returnFromOnShow
+    $target[0].removeEventListener('click', handler)
+  }
+})
+</script>
+<p><button type="button" class="btn btn-default" onclick="anno6.show()">anno6.show()</button></p>
+
+
+
+
+
+
+    </div>
+    </div>
+
+<div class="jumbotron" style="margin:40px 0 0 0;">
+
+</div>
+
+
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    <script src="../scrollintoview/jquery.scrollintoview.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(function(){
+
+      $('.container script').each(function(i,item){
+        $(item).after('<pre>'+item.innerHTML+'</pre>')
+      })
+
+      $('#getstarted').click(function(){
+        anno1.show()
+      })
+    })
+    </script>
+  </body>
+</html>
