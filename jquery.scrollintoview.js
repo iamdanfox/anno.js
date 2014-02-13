@@ -70,6 +70,15 @@
 		};
 	};
 
+	var twodims = function(d1, d2){
+		return {
+			top:    Math.min(d1.top,    d2.top),
+			bottom: Math.max(d1.bottom, d2.bottom),
+			left:   Math.min(d1.left,   d2.left),
+			right:  Math.max(d1.right,  d2.right)
+		}
+	};
+
 	$.fn.extend({
 		scrollintoview: function (options) {
 			/// <summary>Scrolls the first element in the set into view by scrolling its closest scrollable parent.</summary>
@@ -87,16 +96,24 @@
 			if (options.direction.x === true) dirStr = "horizontal";
 			if (options.direction.y === true) dirStr = dirStr ? "both" : "vertical";
 
-			var el = this.eq(0);
-			var scroller = el.closest(":scrollable(" + dirStr + ")");
+			var els = this;
+
+			// TODO: check something about common ancestors.
+			var scroller = els.eq(0).closest(":scrollable(" + dirStr + ")");
 
 			// check if there's anything to scroll in the first place
 			if (scroller.length > 0)
 			{
 				scroller = scroller.eq(0);
 
+				// TODO: take into account border differences too.
+				var e = dimensions(els.eq(0));
+				for (i=1;i<els.length;i++){
+					e.rect = twodims( e.rect, dimensions(els.eq(i)).rect  );
+				}
+
 				var dim = {
-					e: dimensions(el),
+					e: e,
 					s: dimensions(scroller)
 				};
 
