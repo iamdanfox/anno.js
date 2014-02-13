@@ -330,6 +330,8 @@ Anno = (function() {
     return $target.attr('style', this._oldTargetCSS);
   };
 
+  Anno.prototype.position = null;
+
   Anno.prototype.positionAnnoElem = function(annoEl) {
     var $targetEl, offset, pos;
     if (annoEl == null) {
@@ -451,8 +453,6 @@ Anno = (function() {
 
   Anno.preferredPositions = ['bottom', 'right', 'left', 'top', 'center-bottom', 'center-right', 'center-left', 'center-top'];
 
-  Anno.prototype.position = null;
-
   Anno.prototype.arrowPositionFn = function() {
     var pos, r;
     if (this.arrowPosition != null) {
@@ -516,8 +516,6 @@ Anno = (function() {
 })();
 
 AnnoButton = (function() {
-  AnnoButton.version = '1.1.0';
-
   function AnnoButton(options) {
     var key, val;
     for (key in options) {

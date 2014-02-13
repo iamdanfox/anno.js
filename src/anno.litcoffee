@@ -333,13 +333,20 @@ Semi-transparent overlay and other effects
 Positioning
 -----------
 
+The `position` property decides where your annotation will be displayed. You should supply
+any of `top`, `left`, `bottom`, `right`, `center-top`, `center-left`, `center-bottom` or `center-right`.
+
+Alternatively, you can supply a hash of CSS attributes to set. (e.g. `{ top: '10px', left: '57px' }`). This
+is useful if you have a large `target` element and you want to point the arrow at something specific.
+
+You may omit the `position` attribute entirely and Anno will use its best guess, however, this is not recommended
+(and you'll get a warning on the console as punishment).
+
+      position: null
+
 `positionAnnoElem()` sets the CSS of the Anno element so that it appears next to your target in a sensible way.
-It positions the Anno element based on a string from `positionFn()`. It can also use a hash containing any
-of the properties `top`, `left`, `right` or `bottom`.
 
-Must be called after DOM insertion.
-
-      positionAnnoElem: (annoEl = @_annoElem) ->
+      positionAnnoElem: (annoEl = @_annoElem) -> # Must be called after DOM insertion.
         pos = @positionFn()
 
         $targetEl = @targetFn()
@@ -370,21 +377,15 @@ Must be called after DOM insertion.
             else 
               console.error "Unrecognised position: '#{pos}'"
 
-
-
         return annoEl
 
-`positionFn()` simply returns whatever you put in the `position` property (see below for options).  
-If you left it blank, `positionFn()` will try to guess which side of your target you would like your
-annotation to be displayed on (based on `Anno.preferredPositions`). 
 
-Must be called after DOM insertion.
+`positionFn()` returns the `position` property or tries to guess one if you left it blank. 
 
-      positionFn: () -> 
+      positionFn: () -> # Must be called after DOM insertion.
         if @position? 
-          @position
+          return @position
         else if @_annoElem?
-          # time to guess!!
           $target = @targetFn()
 
           $container = $target.closest(':scrollable')
@@ -399,7 +400,7 @@ Must be called after DOM insertion.
           targetBounds.bottom = targetBounds.top + $target.outerHeight()
 
           viewBounds = 
-            w: $container.width() or $container.width()
+            w: $container.width() or $container.width() # TODO: what is this???
             h: $container.height() or $container.height()
 
           annoBounds = 
@@ -419,31 +420,16 @@ Must be called after DOM insertion.
           else
             console.warn "Anno: guessing position:'#{allowed[0]}' for '#{@target}'. "+
               "Possible Anno.preferredPositions: [#{allowed}]."
-          @position = allowed[0] # store this value for later - saves recomputing.
+          return @position = allowed[0] # store this value for later - saves recomputing.
 
 When there are several different positions that the Anno element could by displayed, `positionFn()` chooses
-the first one available in `Anno.preferredPositions`.  Feel free to override this if you like your annotations 
-to appear on top by default.
+the first one available in `Anno.preferredPositions`.  
 
-      @preferredPositions = ['bottom', 'right', 'left', 'top',  
+      @preferredPositions = ['bottom', 'right', 'left', 'top',  # TODO: would it ever guess center-*?
               'center-bottom', 'center-right', 'center-left', 'center-top'] # TODO order these based on research.
 
-The `position` property decides where your annotation will be displayed. You should supply
-any of `top`, `left`, `bottom`, `right`, `center-top`, `center-left`, `center-bottom` or `center-right`.
 
-Alternatively, you can supply a hash of CSS attributes to set. (e.g. `{ top: '10px', left: '57px' }`). This
-is useful if you have a large `target` element and you want to point the arrow at something specific.
-
-You may omit the `position` attribute entirely and Anno will use its best guess, however, this is not recommended
-(and you'll get a warning on the console as punishment).
-
-      position: null
-
-
-
-If you manually positioned your annoElem (by supplying CSS `left` and `top` attributes), `arrowPositionFn()` 
-will attempt to guess which way you want to the arrow to point.  If you'd rather not leave it to chance,
-simply override the `arrowPosition` when you construct your Anno object.
+`arrowPositionFn()` returns which way the arrow should point. (Normally just the opposite of the anno position.)
 
       arrowPositionFn: () -> 
         if @arrowPosition? 
@@ -468,8 +454,7 @@ simply override the `arrowPosition` when you construct your Anno object.
           console.warn "Guessing arrowPosition='#{r}' for #{@target}. Include this in your constructor for consistency."
           return r
 
-`arrowPosition` definitively decides which direction you want the arrow to point.  The only reason you should 
-ever need to override this is if you've supplied a CSS hash as the `position` property.
+Override this if you've supplied a CSS hash as the `position` property. Can be any of `top`, `left`, etc.
 
       arrowPosition: null # TODO replace 'arrowPosition' with 'arrowDirection'
 
@@ -499,12 +484,10 @@ AnnoButton
 ==========
 
     class AnnoButton
-      @version: '1.1.0'
 
       constructor: (options) ->
         for key,val of options
           this[key]=val
-
 
       buttonElem: (anno) ->
         return $("<button class='anno-btn'></button>").
@@ -521,8 +504,7 @@ AnnoButton
       className: ''
 
 `click` is called when your button is clicked.  Note, the `this` keyword is bound to the parent
-Anno object.  If you really want to access `AnnoButton` properties, you could always use CoffeeScript's 
-fat arrow.
+Anno object. 
 
       click: (anno, evt) -> 
         if anno._chainNext?
