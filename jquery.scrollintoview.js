@@ -124,6 +124,8 @@
 					right: dim.s.rect.right - dim.s.border.right - dim.s.scrollbar.right - dim.e.rect.right
 				};
 
+				// TODO: try computing lots of different `rel` objects, then taking twodims of them
+
 				var animOptions = {};
 
 				// vertical scroll
