@@ -62,24 +62,28 @@ var anno1 = new Anno({
 var anno2 = Anno.chain([{
   target: 'pre:eq(1)', // second block of code
   position: 'top',
-  content: '[content]'
+  content: 'You can specify where you want each anno to appear.'
 }, {
   target: 'pre:eq(1)', 
   position: 'left',
-  content: '[content]',
+  content: "Use 'top', 'left', 'bottom' and 'right', just like CSS.",
 }, {
   target: 'pre:eq(1)',
   position: 'center-bottom',
-  content: '[content]'
+  content: "You can also use 'center-bottom', 'center-right' etc"
 }, {
   target: 'pre:eq(1)',
   position: 'right',
   className: 'anno-width-200', // 150,175,200,250 (default 300)
-  content: '[content]'
+  content: 'Add CSS classes to customize each annotation.'
 }, {
   target: 'pre:eq(1)',
-  position: 'center-right',
-  content: '[content]'
+  position: {
+    top: '44em',
+    left: '14em'
+  },
+  arrowPosition: 'center-left',
+  content: 'You can even specify precise top and left values.'
 } ])
 </script>
 <p><button type="button" class="btn btn-default" onclick="anno2.show()">anno2.show()</button>
@@ -92,7 +96,7 @@ var anno2 = Anno.chain([{
 var anno3 = new Anno({
   target: 'pre:eq(2)',
   position: 'center-top',
-  content: "You don't have to use the default buttons. Click anywhere to hide.",
+  content: "The buttons are completely customizable.",
   buttons: []
 })
 </script>
@@ -102,7 +106,7 @@ var anno3 = new Anno({
 var anno4 = new Anno({
   target: 'h2#buttons ~ p:eq(1) button:first',
   position:'top',
-  content: "Alternatively, you can have loads of buttons!",
+  content: "Anno.js provides defaults, but you can easily make your own:",
   autoFocusLastButton:false,
   buttons: [
     {
@@ -142,7 +146,7 @@ var anno5 =  Anno.chain([{
 <script type="text/javascript">
 var anno6 = new Anno({
   target: 'pre:eq(5)',
-  content: "You can set up handlers for the duration of the Anno.",
+  content: "You can set up handlers for the just duration of the Anno. (Try clicking the code above)",
   onShow: function (anno, $target, $annoElem) {
     var handler = function(){ alert('Hello!'); }
     $target[0].addEventListener('click', handler)
