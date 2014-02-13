@@ -34,7 +34,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Powerful step-by-step guides, interactive tutorials or just plain ol’ annotations.</p>
+              <p>Interactive step-by-step guides for web apps.</p>
 <p>Anno.js is built to be absurdly extensible, but still works great out of the box (and looks damn fine doing it). </p>
 <h2 id="the-mit-license-mit-">The MIT License (MIT)</h2>
 
@@ -67,8 +67,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Anno</span></span>
-  <span class="hljs-property">@version</span>: <span class="hljs-string">'1.4.7'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Anno</span></span></pre></div></div>
             
         </li>
         
@@ -79,8 +78,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>@version: BreakingAPIChange.NewCompatibleFeatures.Bugfix </p>
-<h2 id="constructing-an-anno-object">Constructing an Anno object</h2>
+              <h2 id="creating-an-anno-object">Creating an Anno object</h2>
 
             </div>
             
@@ -94,14 +92,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>An Anno object represents a single annotation on your page.  Each Anno has a <code>target</code> jQuery selector
-and a <code>content</code> string. For example:</p>
+and a <code>content</code> string as well as many other properties. For example:</p>
 <pre><code>  pizzaAnno = <span class="hljs-keyword">new</span> Anno({
-    <span class="hljs-attribute">target</span>: <span class="hljs-string">'.pizza-list'</span>,
+    <span class="hljs-attribute">target</span>: <span class="hljs-string">'#pizza-list'</span>,
     <span class="hljs-attribute">content</span>: <span class="hljs-string">'Choose your pizza from the list below.'</span>
   })
   pizzaAnno.show()
-</code></pre><p>This creates a plain Anno object and overrides the <code>target</code> and <code>content</code> properties.  It uses defaults
-for everything else.</p>
+</code></pre><p>This constructor lets you override these properties and uses defaults for anything you don’t specify.</p>
 
             </div>
             
@@ -125,13 +122,16 @@ for everything else.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Note, you can customize <em>anything</em> in your Anno object by overriding the method or property when you construct it.
-In addition to <code>target</code> and <code>content</code>, I usually like to specify <code>buttons</code> and <code>position</code>.  You might
-also like to try specifying <code>onShow</code> or <code>onHide</code> callbacks, <code>className</code> or maybe <code>overlayElem()</code>.  </p>
-<p>Read on to find out more.</p>
-<h2 id="making-step-by-step-tours-using-chaining">Making step-by-step tours using chaining</h2>
+              <p>In practise, I usually like to specify <code>buttons</code> and <code>position</code>. You may also want to override <code>onShow</code> 
+and <code>onHide</code> callbacks, <code>className</code> and even <code>overlayElem()</code> for complete control.</p>
+<p>If you find yourself setting the same property on every Anno object you create, you can
+set default values at the top of your script that will apply to every Anno object from then onwards. </p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@setDefaults</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> key,val <span class="hljs-keyword">of</span> options
+      <span class="hljs-attribute">Anno</span>::[key] = val</pre></div></div>
             
         </li>
         
@@ -142,28 +142,9 @@ also like to try specifying <code>onShow</code> or <code>onHide</code> callbacks
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Naturally, you can chain Anno objects together to make a sequential tour. For example: </p>
-<pre><code>  deliveryAnno = <span class="hljs-keyword">new</span> Anno({
-    <span class="hljs-attribute">target</span>: <span class="hljs-string">'#address-form'</span>,
-    <span class="hljs-attribute">content</span>: <span class="hljs-string">"Enter your address and we'll deliver your pizza"</span>
-    <span class="hljs-attribute">position</span>: <span class="hljs-string">'left'</span>
-  })
-  pizzaAnno.chainTo(deliveryAnno)
-</code></pre><p>The <code>pizzaAnno</code> object now has a <code>_chainNext</code> property and will switch to the 
-<code>deliveryAnno</code> when you click Next.</p>
+              <h2 id="making-a-step-by-step-tour">Making a step-by-step tour</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">chainTo</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
-    <span class="hljs-keyword">if</span> obj?
-      <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@_chainNext</span>? <span class="hljs-comment"># this is the end of the chain, add obj to the end.  </span>
-        <span class="hljs-property">@_chainNext</span> = <span class="hljs-keyword">if</span> obj <span class="hljs-keyword">instanceof</span> Anno <span class="hljs-keyword">then</span> obj <span class="hljs-keyword">else</span> <span class="hljs-keyword">new</span> Anno(obj)
-        <span class="hljs-property">@_chainNext</span>._chainPrev = <span class="hljs-keyword">this</span>
-      <span class="hljs-keyword">else</span> <span class="hljs-comment"># pass the obj further along</span>
-        <span class="hljs-property">@_chainNext</span>.chainTo(obj)
-    <span class="hljs-keyword">else</span>
-      <span class="hljs-built_in">console</span>.error <span class="hljs-string">"Can't chainTo a null object."</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></pre></div></div>
             
         </li>
         
@@ -174,12 +155,22 @@ also like to try specifying <code>onShow</code> or <code>onHide</code> callbacks
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Anything that starts with an underscore is probably a bad idea to change. By all means read 
-these, but don’t come crying to me if you overwrote something and your entire website blew up.</p>
+              <p>Anno objects can be chained together to make a sequential tour.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_chainNext</span>: <span class="hljs-literal">null</span> 
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">chainTo</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span> 
+    <span class="hljs-keyword">if</span> obj?
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@_chainNext</span>? <span class="hljs-comment"># this is the end of the chain, add obj to the end.  </span>
+        <span class="hljs-property">@_chainNext</span> = <span class="hljs-keyword">if</span> obj <span class="hljs-keyword">instanceof</span> Anno <span class="hljs-keyword">then</span> obj <span class="hljs-keyword">else</span> <span class="hljs-keyword">new</span> Anno(obj)
+        <span class="hljs-property">@_chainNext</span>._chainPrev = <span class="hljs-keyword">this</span>
+      <span class="hljs-keyword">else</span> <span class="hljs-comment"># pass the obj further along</span>
+        <span class="hljs-property">@_chainNext</span>.chainTo(obj)
+    <span class="hljs-keyword">else</span>
+      <span class="hljs-built_in">console</span>.error <span class="hljs-string">"Can't chainTo a null object."</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+
+  <span class="hljs-attribute">_chainNext</span>: <span class="hljs-literal">null</span> 
   <span class="hljs-attribute">_chainPrev</span>: <span class="hljs-literal">null</span></pre></div></div>
             
         </li>
@@ -191,16 +182,14 @@ these, but don’t come crying to me if you overwrote something and your entire 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>You can also make long Anno chains without having to write <code>chainTo</code> every time using
-<code>Anno.chain()</code>. We can rewrite the two step example above like this:</p>
-<pre><code> annoTour = Anno.chain([
+              <p>Long Anno chains can also be made using the <code>Anno.chain()</code> shorthand. </p>
+<pre><code> <span class="hljs-reserved">var</span> annoTour = Anno.chain([
    {
      <span class="hljs-attribute">target</span>: <span class="hljs-string">'.pizza-list'</span>,
      <span class="hljs-attribute">content</span>: <span class="hljs-string">'Choose your pizza from the list below.'</span>
-   }, 
-   {
+   }, {
      <span class="hljs-attribute">target</span>: <span class="hljs-string">'#address-form'</span>,
-     <span class="hljs-attribute">content</span>: <span class="hljs-string">"Enter your address and we'll deliver your pizza"</span>
+     <span class="hljs-attribute">content</span>: <span class="hljs-string">"Enter your address and we'll deliver your pizza"</span>,
      <span class="hljs-attribute">position</span>: <span class="hljs-string">'left'</span>
    }
  ])
@@ -269,14 +258,9 @@ we’ve just chained another one onto it anonymously.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>If you find yourself setting the same property on every Anno object you create, you can
-set default values at the top of your script that will apply to every Anno object from then onwards. </p>
+              <h2 id="hiding-and-showing-annotations">Hiding and showing annotations</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@setDefaults</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
-    <span class="hljs-keyword">for</span> key,val <span class="hljs-keyword">of</span> options
-      <span class="hljs-attribute">Anno</span>::[key] = val</pre></div></div>
             
         </li>
         
@@ -287,32 +271,16 @@ set default values at the top of your script that will apply to every Anno objec
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <h2 id="hiding-and-showing-annotations">Hiding and showing annotations</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
               <p><code>anno.show()</code> displays your annotation on top of a nice overlay and executes a callback.
 All methods used here can be overridden in the same way we changed the <code>content</code> property.</p>
 <p>Animations are all done with 300ms CSS transitions, so you can change your UI without touching any javascript.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">start</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-property">@show</span>()
-
-  <span class="hljs-attribute">show</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-comment"># TODO warn if this Anno has already been shown.</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">show</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-comment"># TODO warn if this Anno has already been shown.</span>
     $target = <span class="hljs-property">@targetFn</span>()
     <span class="hljs-keyword">if</span> <span class="hljs-property">@_annoElem</span>? <span class="hljs-keyword">then</span> <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Anno elem for '<span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>' has already been generated.  Did you call show() twice?"</span>
     <span class="hljs-property">@_annoElem</span> = <span class="hljs-property">@annoElem</span>()
-    lastButton = <span class="hljs-property">@_annoElem</span>.find(<span class="hljs-string">'button'</span>).last()
 
     <span class="hljs-property">@showOverlay</span>()
     <span class="hljs-property">@emphasiseTarget</span>()
@@ -327,6 +295,7 @@ All methods used here can be overridden in the same way we changed the <code>con
     <span class="hljs-title">$target</span>.<span class="hljs-title">scrollintoview</span><span class="hljs-params">()</span>
     <span class="hljs-title">setTimeout</span> <span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.scrollintoview())</span> , 300 #<span class="hljs-title">TODO</span> <span class="hljs-title">fix</span> <span class="hljs-title">jumpiness</span>
 
+    <span class="hljs-title">lastButton</span> = @<span class="hljs-title">_annoElem</span>.<span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-string">'button'</span>)</span>.<span class="hljs-title">last</span><span class="hljs-params">()</span>
     <span class="hljs-title">if</span> @<span class="hljs-title">rightArrowClicksLastButton</span> 
       <span class="hljs-title">lastButton</span>.<span class="hljs-title">keydown</span><span class="hljs-params">( (evt) -&gt; <span class="hljs-keyword">if</span> evt.keyCode <span class="hljs-keyword">is</span> <span class="hljs-number">39</span> <span class="hljs-keyword">then</span> $(<span class="hljs-keyword">this</span>).click()  )</span> # <span class="hljs-title">right</span> <span class="hljs-title">arrow</span>    
     <span class="hljs-title">if</span> @<span class="hljs-title">autoFocusLastButton</span>
@@ -335,10 +304,29 @@ All methods used here can be overridden in the same way we changed the <code>con
     @<span class="hljs-title">_returnFromOnShow</span> = @<span class="hljs-title">onShow</span><span class="hljs-params">(<span class="hljs-keyword">this</span>, $target, <span class="hljs-property">@_annoElem</span>)</span>
     <span class="hljs-title">return</span> <span class="hljs-title">this</span>
 
-  <span class="hljs-title">rightArrowClicksLastButton</span>: <span class="hljs-title">true</span>
-  <span class="hljs-title">autoFocusLastButton</span>: <span class="hljs-title">true</span>
+  <span class="hljs-title">start</span>: <span class="hljs-params">()</span> -&gt;</span> <span class="hljs-property">@show</span>() <span class="hljs-comment"># alias because `tour.start()` sounds nicer than `tour.show()`</span>
 
-</span></pre></div></div>
+  <span class="hljs-attribute">rightArrowClicksLastButton</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attribute">autoFocusLastButton</span>: <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>The <code>onShow</code> callback does nothing by default, but can be very useful when overridden (e.g. to register a click 
+listener on the target element.)  Whatever value you return from the <code>onShow</code> function will get passed to the 
+<code>onHide</code> callback.  This can be used to unbind event listeners.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">onShow</span>: <span class="hljs-function"><span class="hljs-params">(anno, $target, $annoElem)</span> -&gt;</span> 
+
+  _returnFromOnShow = <span class="hljs-literal">null</span></pre></div></div>
             
         </li>
         
@@ -349,40 +337,6 @@ All methods used here can be overridden in the same way we changed the <code>con
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>The <code>onShow</code> callback is incredibly useful; by default, it does nothing, but you can override it to set 
-up click listeners, adjust your page html and generally provide lots of interactivity.  </p>
-<p>The most common use of this method is to register a click listener on the target element.  Whatever 
-value you return from the <code>onShow</code> function will get passed to the <code>onHide</code> callback.  You can use this 
-to unbind event listeners.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">onShow</span>: <span class="hljs-function"><span class="hljs-params">(anno, $target, $annoElem)</span> -&gt;</span> <span class="hljs-comment"># Both `$target` and `$annoElem` are already jQuery objects</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <p>Note: whatever you return from your <code>onShow</code> function will be passed into the <code>onHide</code> function as the fourth argument.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  _returnFromOnShow = <span class="hljs-literal">null</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-17">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
               <p>Hiding is done in two stages so that you can re-use one overlay element for a long chain of Anno’s.</p>
 
             </div>
@@ -390,23 +344,9 @@ to unbind event listeners.</p>
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">hide</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-property">@hideAnno</span>()
     <span class="hljs-property">@hideOverlay</span>()
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p><code>hideAnno()</code> hides the Anno element and restores the <code>target</code> element, leaving the overlay behind.
-It also calls the <code>onHide</code> listener and passes in the result of the <code>onShow</code> method.</p>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">hideAnno</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+  <span class="hljs-attribute">hideAnno</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-property">@deemphasiseTarget</span>()
 
     <span class="hljs-keyword">if</span> <span class="hljs-property">@_annoElem</span>? 
@@ -427,24 +367,23 @@ It also calls the <code>onHide</code> listener and passes in the result of the <
         </li>
         
         
-        <li id="section-19">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p><code>switchTo</code> hides the current Anno and displays the next one in the chain without animating out the old overlay.
-Note: <code>otherAnno.show()</code> will probably replace the overlay, but it won’t do a weird fade flicker.</p>
+              <p><code>switchTo</code> displays another Anno and reuses the old overlay.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">switchTo</span>: <span class="hljs-function"><span class="hljs-params">(otherAnno)</span> -&gt;</span> 
     <span class="hljs-keyword">if</span> otherAnno?
-      <span class="hljs-property">@hideAnno</span>() <span class="hljs-comment"># TODO: prevent this calling `hideAnno()` if the current Anno isn't currently shown. </span>
+      <span class="hljs-property">@hideAnno</span>() <span class="hljs-comment"># TODO: prevent this call to `hideAnno()` if the current Anno isn't shown</span>
       otherAnno.show()
     <span class="hljs-keyword">else</span> 
       <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Can't switchTo a null object. Hiding completely instead. "</span>
-      <span class="hljs-property">@hide</span>() <span class="hljs-comment"># end of the line, need to remove the overlay too</span>
+      <span class="hljs-property">@hide</span>() <span class="hljs-comment"># this recovers from a programmer mistake by removing the overlay too</span>
 
   <span class="hljs-attribute">switchToChainNext</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-property">@switchTo</span> <span class="hljs-property">@_chainNext</span>
 
@@ -453,24 +392,24 @@ Note: <code>otherAnno.show()</code> will probably replace the overlay, but it wo
         </li>
         
         
-        <li id="section-20">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <h2 id="customizing-anno-and-contents">Customizing Anno and contents</h2>
+              <h2 id="customizing-target-and-content">Customizing target and content</h2>
 
             </div>
             
         </li>
         
         
-        <li id="section-21">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Specify a <code>target</code> jQuery selector to link your annotation to the DOM.</p>
 
@@ -481,19 +420,19 @@ Note: <code>otherAnno.show()</code> will probably replace the overlay, but it wo
         </li>
         
         
-        <li id="section-22">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p><code>targetFn()</code> returns the first DOM element it can find matching your <code>target</code> selector (wrapped as a jQuery object). </p>
+              <p><code>targetFn()</code> is used internally to return the first element matching your <code>target</code> selector (wrapped as a jQuery object). </p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">targetFn</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> <span class="hljs-property">@target</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-      r = $(<span class="hljs-property">@target</span>).filter(<span class="hljs-string">':not(.anno-placeholder)'</span>)
+      r = $(<span class="hljs-property">@target</span>).filter(<span class="hljs-string">':not(.anno-placeholder)'</span>) <span class="hljs-comment"># .anno-placeholder is a clone to prevent text wrapping</span>
       <span class="hljs-keyword">if</span> r.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-built_in">console</span>.error <span class="hljs-string">"Couldn't find Anno.target '<span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>'."</span>
       <span class="hljs-keyword">if</span> r.length &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Anno target '<span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>' matched <span class="hljs-subst">#{r.length}</span> elements. Targeting the first one."</span>
       r.first()
@@ -512,20 +451,17 @@ Note: <code>otherAnno.show()</code> will probably replace the overlay, but it wo
         </li>
         
         
-        <li id="section-23">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p><code>annoElem()</code> generates the jQuery object that will be inserted into the DOM.  It relies on 
-<code>@contentElem()</code> and <code>buttonsElem()</code> to generate the interesting bits. </p>
-<p>This method is ripe for overriding. Just copy the code below and tinker with the HTML. For example
-you could add some extra <code>div</code>s to display the current step number (by calling <code>chainIndex() + 1</code>).</p>
+              <p><code>annoElem()</code> generates the jQuery object that will be inserted into the DOM.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">annoElem</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> 
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">annoElem</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-comment"># TODO: should `annoElem()` encapsulate the re-use of one object?</span>
     <span class="hljs-property">@_annoElem</span> = $(<span class="hljs-string">"""&lt;div class='anno anno-hidden <span class="hljs-subst">#{<span class="hljs-property">@className</span>}</span>'&gt;
                 &lt;div class='anno-inner'&gt;  &lt;div class='anno-arrow'&gt;&lt;/div&gt;  &lt;/div&gt;
               &lt;/div&gt;"""</span>)
@@ -534,9 +470,54 @@ you could add some extra <code>div</code>s to display the current step number (b
       append( <span class="hljs-property">@buttonsElem</span>() ) <span class="hljs-comment"># these a jquery elements, not HTML strings.</span>
     <span class="hljs-keyword">return</span> <span class="hljs-property">@_annoElem</span> <span class="hljs-comment"># NB: returning the original pointer each time breaks button click events...</span>
 
-  <span class="hljs-attribute">_annoElem</span>: <span class="hljs-literal">null</span>
+  <span class="hljs-attribute">_annoElem</span>: <span class="hljs-literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>CSS classes can be included, e.g. .anno-width-150, 175, 200, 250 (default 300)</p>
 
-  <span class="hljs-class">className: '' # <span class="hljs-title">TODO</span> <span class="hljs-title">useful</span> <span class="hljs-title">classes</span> .<span class="hljs-title">anno</span>-<span class="hljs-title">width</span>-150, 175, 200, 250 (<span class="hljs-title">default</span> 300)</span></pre></div></div>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class">className: ''</span>
+
+  <span class="hljs-attribute">content</span>: <span class="hljs-string">'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Override this instead of <code>content</code> if you don’t know the content in advance</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">contentFn</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-property">@content</span> 
+
+  <span class="hljs-attribute">contentElem</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> $(<span class="hljs-string">"&lt;div class='anno-content'&gt;"</span>+<span class="hljs-property">@contentFn</span>()+<span class="hljs-string">"&lt;/div&gt;"</span>) <span class="hljs-comment"># TODO: evaluate how easy it would be to change Anno content while its displayed.</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h2 id="semi-transparent-overlay-and-other-effects">Semi-transparent overlay and other effects</h2>
+
+            </div>
             
         </li>
         
@@ -546,104 +527,6 @@ you could add some extra <code>div</code>s to display the current step number (b
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
-              </div>
-              <p><code>contentElem()</code> is called by <code>annoElem()</code> to produce a jQuery object.  </p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">contentElem</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> $(<span class="hljs-string">"&lt;div class='anno-content'&gt;"</span>+<span class="hljs-property">@contentFn</span>()+<span class="hljs-string">"&lt;/div&gt;"</span>) <span class="hljs-comment"># TODO: evaluate how easy it would be to change Anno content while its displayed.</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-25">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
-              </div>
-              <p>Most of the time it will suffice to override the <code>content</code> property when you construct your Anno.<br>However, if you want to generate the content when <code>showAnno()</code> is called (perhaps the text you display
-depends on an earlier step) you can override <code>contentFn()</code> instead.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">contentFn</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-property">@content</span>
-  <span class="hljs-attribute">content</span>: <span class="hljs-string">'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-26">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
-              </div>
-              <p><code>buttonsElem()</code> produces the HTML for all those buttons (as a jQuery object).  Just like <code>contentElem()</code>
-above, it delegates to <code>buttonFn()</code>.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">buttonsElem</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> $(<span class="hljs-string">"&lt;div class='anno-btn-container'&gt;&lt;/div&gt;"</span>).
-      append (b.buttonElem(<span class="hljs-keyword">this</span>) <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> <span class="hljs-property">@buttonsFn</span>())</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
-              </div>
-              <p><code>buttonsFn()</code> returns a list of <code>AnnoButton</code> objects based on whatever you put in the <code>buttons</code> parameter.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">buttonsFn</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> 
-    <span class="hljs-keyword">if</span> <span class="hljs-property">@buttons</span> <span class="hljs-keyword">instanceof</span> Array
-      <span class="hljs-property">@buttons</span>.map <span class="hljs-function"><span class="hljs-params">(b)</span> -&gt;</span> <span class="hljs-keyword">new</span> AnnoButton(b)
-    <span class="hljs-keyword">else</span> 
-      [<span class="hljs-keyword">new</span> AnnoButton(<span class="hljs-property">@buttons</span>)] <span class="hljs-comment"># in the else branch `@buttons` is a single hash</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-28">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
-              </div>
-              <p>By default, Anno will construct a single button for you, using defaults provided by the <code>AnnoButton</code> class.
-You can supply a single object, a list of objects or even a list of <code>AnnoButtons</code>.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">buttons</span>:  [ {} ]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <h2 id="semi-transparent-overlay-and-other-effects">Semi-transparent overlay and other effects</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               
             </div>
@@ -666,10 +549,6 @@ You can supply a single object, a list of objects or even a list of <code>AnnoBu
     $(<span class="hljs-string">'.anno-overlay'</span>).addClass <span class="hljs-string">'anno-hidden'</span>
     setTimeout <span class="hljs-function"><span class="hljs-params">(() -&gt; $(<span class="hljs-string">'.anno-overlay'</span>).remove())</span>, 300
 
-
-
-
-
   <span class="hljs-title">emphasiseTarget</span>: <span class="hljs-params">($target = <span class="hljs-property">@targetFn</span>())</span> -&gt;</span>
     <span class="hljs-keyword">if</span> $target.attr(<span class="hljs-string">'style'</span>)? <span class="hljs-keyword">then</span> _oldTargetCSS = $target.attr(<span class="hljs-string">'style'</span>)
 
@@ -684,11 +563,11 @@ You can supply a single object, a list of objects or even a list of <code>AnnoBu
         </li>
         
         
-        <li id="section-31">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>if switching to position absolute has caused a dimension collapse, manually set H/W.</p>
 
@@ -702,11 +581,11 @@ You can supply a single object, a list of objects or even a list of <code>AnnoBu
         </li>
         
         
-        <li id="section-32">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>if switching to position absolute has caused a position change, manually set it too</p>
 
@@ -736,11 +615,11 @@ You can supply a single object, a list of objects or even a list of <code>AnnoBu
         </li>
         
         
-        <li id="section-33">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <h2 id="positioning">Positioning</h2>
 
@@ -749,20 +628,37 @@ You can supply a single object, a list of objects or even a list of <code>AnnoBu
         </li>
         
         
-        <li id="section-34">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p><code>positionAnnoElem()</code> sets the CSS of the Anno element so that it appears next to your target in a sensible way.
-It positions the Anno element based on a string from <code>positionFn()</code>. It can also use a hash containing any
-of the properties <code>top</code>, <code>left</code>, <code>right</code> or <code>bottom</code>.</p>
-<p>Must be called after DOM insertion.</p>
+              <p>The <code>position</code> property decides where your annotation will be displayed. You should supply
+any of <code>top</code>, <code>left</code>, <code>bottom</code>, <code>right</code>, <code>center-top</code>, <code>center-left</code>, <code>center-bottom</code> or <code>center-right</code>.</p>
+<p>Alternatively, you can supply a hash of CSS attributes to set. (e.g. <code>{ top: &#39;10px&#39;, left: &#39;57px&#39; }</code>). This
+is useful if you have a large <code>target</code> element and you want to point the arrow at something specific.</p>
+<p>You may omit the <code>position</code> attribute entirely and Anno will use its best guess, however, this is not recommended
+(and you’ll get a warning on the console as punishment).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">positionAnnoElem</span>: <span class="hljs-function"><span class="hljs-params">(annoEl = <span class="hljs-property">@_annoElem</span>)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">position</span>: <span class="hljs-literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p><code>positionAnnoElem()</code> sets the CSS of the Anno element so that it appears next to your target in a sensible way.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">positionAnnoElem</span>: <span class="hljs-function"><span class="hljs-params">(annoEl = <span class="hljs-property">@_annoElem</span>)</span> -&gt;</span> <span class="hljs-comment"># Must be called after DOM insertion.</span>
     pos = <span class="hljs-property">@positionFn</span>()
 
     $targetEl = <span class="hljs-property">@targetFn</span>()
@@ -793,44 +689,26 @@ of the properties <code>top</code>, <code>left</code>, <code>right</code> or <co
         <span class="hljs-keyword">else</span> 
           <span class="hljs-built_in">console</span>.error <span class="hljs-string">"Unrecognised position: '<span class="hljs-subst">#{pos}</span>'"</span>
 
-
-
     <span class="hljs-keyword">return</span> annoEl</pre></div></div>
             
         </li>
         
         
-        <li id="section-35">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p><code>positionFn()</code> simply returns whatever you put in the <code>position</code> property (see below for options).<br>If you left it blank, <code>positionFn()</code> will try to guess which side of your target you would like your
-annotation to be displayed on (based on <code>Anno.preferredPositions</code>). </p>
-<p>Must be called after DOM insertion.</p>
+              <p><code>positionFn()</code> returns the <code>position</code> property or tries to guess one if you left it blank. </p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">positionFn</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> 
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">positionFn</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-comment"># Must be called after DOM insertion.</span>
     <span class="hljs-keyword">if</span> <span class="hljs-property">@position</span>? 
-      <span class="hljs-property">@position</span>
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@_annoElem</span>?</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-36">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
-              </div>
-              <p>time to guess!!</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      $target = <span class="hljs-property">@targetFn</span>()
+      <span class="hljs-keyword">return</span> <span class="hljs-property">@position</span>
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@_annoElem</span>?
+      $target = <span class="hljs-property">@targetFn</span>()
 
       $container = $target.closest(<span class="hljs-string">':scrollable'</span>)
       $container = $(<span class="hljs-string">'body'</span>) <span class="hljs-keyword">if</span> $container.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
@@ -844,7 +722,7 @@ annotation to be displayed on (based on <code>Anno.preferredPositions</code>). <
       targetBounds.bottom = targetBounds.top + $target.outerHeight()
 
       viewBounds = 
-        <span class="hljs-attribute">w</span>: $container.width() <span class="hljs-keyword">or</span> $container.width()
+        <span class="hljs-attribute">w</span>: $container.width() <span class="hljs-keyword">or</span> $container.width() <span class="hljs-comment"># TODO: what is this???</span>
         <span class="hljs-attribute">h</span>: $container.height() <span class="hljs-keyword">or</span> $container.height()
 
       annoBounds = 
@@ -864,58 +742,35 @@ annotation to be displayed on (based on <code>Anno.preferredPositions</code>). <
       <span class="hljs-keyword">else</span>
         <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Anno: guessing position:'<span class="hljs-subst">#{allowed[<span class="hljs-number">0</span>]}</span>' for '<span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>'. "</span>+
           <span class="hljs-string">"Possible Anno.preferredPositions: [<span class="hljs-subst">#{allowed}</span>]."</span>
-      <span class="hljs-property">@position</span> = allowed[<span class="hljs-number">0</span>] <span class="hljs-comment"># store this value for later - saves recomputing.</span></pre></div></div>
+      <span class="hljs-keyword">return</span> <span class="hljs-property">@position</span> = allowed[<span class="hljs-number">0</span>] <span class="hljs-comment"># store this value for later - saves recomputing.</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-37">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>When there are several different positions that the Anno element could by displayed, <code>positionFn()</code> chooses
-the first one available in <code>Anno.preferredPositions</code>.  Feel free to override this if you like your annotations 
-to appear on top by default.</p>
+the first one available in <code>Anno.preferredPositions</code>.  </p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@preferredPositions</span> = [<span class="hljs-string">'bottom'</span>, <span class="hljs-string">'right'</span>, <span class="hljs-string">'left'</span>, <span class="hljs-string">'top'</span>,  
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@preferredPositions</span> = [<span class="hljs-string">'bottom'</span>, <span class="hljs-string">'right'</span>, <span class="hljs-string">'left'</span>, <span class="hljs-string">'top'</span>,  <span class="hljs-comment"># TODO: would it ever guess center-*?</span>
           <span class="hljs-string">'center-bottom'</span>, <span class="hljs-string">'center-right'</span>, <span class="hljs-string">'center-left'</span>, <span class="hljs-string">'center-top'</span>] <span class="hljs-comment"># TODO order these based on research.</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-38">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>The <code>position</code> property decides where your annotation will be displayed. You should supply
-any of <code>top</code>, <code>left</code>, <code>bottom</code>, <code>right</code>, <code>center-top</code>, <code>center-left</code>, <code>center-bottom</code> or <code>center-right</code>.</p>
-<p>Alternatively, you can supply a hash of CSS attributes to set. (e.g. <code>{ top: &#39;10px&#39;, left: &#39;57px&#39; }</code>). This
-is useful if you have a large <code>target</code> element and you want to point the arrow at something specific.</p>
-<p>You may omit the <code>position</code> attribute entirely and Anno will use its best guess, however, this is not recommended
-(and you’ll get a warning on the console as punishment).</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">position</span>: <span class="hljs-literal">null</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-39">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
-              </div>
-              <p>If you manually positioned your annoElem (by supplying CSS <code>left</code> and <code>top</code> attributes), <code>arrowPositionFn()</code> 
-will attempt to guess which way you want to the arrow to point.  If you’d rather not leave it to chance,
-simply override the <code>arrowPosition</code> when you construct your Anno object.</p>
+              <p><code>arrowPositionFn()</code> returns which way the arrow should point. (Normally just the opposite of the anno position.)</p>
 
             </div>
             
@@ -945,14 +800,13 @@ simply override the <code>arrowPosition</code> when you construct your Anno obje
         </li>
         
         
-        <li id="section-40">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              <p><code>arrowPosition</code> definitively decides which direction you want the arrow to point.  The only reason you should 
-ever need to override this is if you’ve supplied a CSS hash as the <code>position</code> property.</p>
+              <p>Override this if you’ve supplied a CSS hash as the <code>position</code> property. Can be any of <code>top</code>, <code>left</code>, etc.</p>
 
             </div>
             
@@ -961,35 +815,97 @@ ever need to override this is if you’ve supplied a CSS hash as the <code>posit
         </li>
         
         
-        <li id="section-41">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <h1 id="buttons">Buttons</h1>
+              <h2 id="customizing-buttons">Customizing Buttons</h2>
 
             </div>
             
         </li>
         
         
-        <li id="section-42">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>By default, Annotations have a single button, filled with default values from the <code>AnnoButton</code> class.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">buttons</span>:  [ {} ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>returns a list of <code>AnnoButton</code> objects</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">buttonsFn</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> 
+    <span class="hljs-keyword">if</span> <span class="hljs-property">@buttons</span> <span class="hljs-keyword">instanceof</span> Array
+      <span class="hljs-property">@buttons</span>.map <span class="hljs-function"><span class="hljs-params">(b)</span> -&gt;</span> <span class="hljs-keyword">new</span> AnnoButton(b)
+    <span class="hljs-keyword">else</span> 
+      [<span class="hljs-keyword">new</span> AnnoButton(<span class="hljs-property">@buttons</span>)] <span class="hljs-comment"># in the else branch `@buttons` is a single hash</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p><code>buttonsElem()</code> produces the HTML for all those buttons (as a jQuery object).  </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">buttonsElem</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> $(<span class="hljs-string">"&lt;div class='anno-btn-container'&gt;&lt;/div&gt;"</span>).
+      append (b.buttonElem(<span class="hljs-keyword">this</span>) <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> <span class="hljs-property">@buttonsFn</span>())</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <h1 id="annobutton">AnnoButton</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AnnoButton</span></span>
-  <span class="hljs-property">@version</span>: <span class="hljs-string">'1.1.0'</span>
 
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
     <span class="hljs-keyword">for</span> key,val <span class="hljs-keyword">of</span> options
       <span class="hljs-keyword">this</span>[key]=val
-
 
   <span class="hljs-attribute">buttonElem</span>: <span class="hljs-function"><span class="hljs-params">(anno)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> $(<span class="hljs-string">"&lt;button class='anno-btn'&gt;&lt;/button&gt;"</span>).
@@ -1008,15 +924,14 @@ ever need to override this is if you’ve supplied a CSS hash as the <code>posit
         </li>
         
         
-        <li id="section-43">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p><code>click</code> is called when your button is clicked.  Note, the <code>this</code> keyword is bound to the parent
-Anno object.  If you really want to access <code>AnnoButton</code> properties, you could always use CoffeeScript’s 
-fat arrow.</p>
+Anno object. </p>
 
             </div>
             
@@ -1029,11 +944,11 @@ fat arrow.</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>These are some handy presets that you can use by adding <code>AnnoButton.NextButton</code> to your Anno object’s 
 <code>buttons</code> list.</p>
