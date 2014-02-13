@@ -96,7 +96,7 @@ var anno2 = Anno.chain([{
 var anno3 = new Anno({
   target: 'pre:eq(2)',
   position: 'center-top',
-  content: "You don't have to use the default buttons. Click anywhere to hide.",
+  content: "The buttons are completely customizable.",
   buttons: []
 })
 </script>
@@ -106,7 +106,7 @@ var anno3 = new Anno({
 var anno4 = new Anno({
   target: 'h2#buttons ~ p:eq(1) button:first',
   position:'top',
-  content: "Alternatively, you can have loads of buttons!",
+  content: "Anno.js provides defaults, but you can easily make your own:",
   autoFocusLastButton:false,
   buttons: [
     {
@@ -146,7 +146,7 @@ var anno5 =  Anno.chain([{
 <script type="text/javascript">
 var anno6 = new Anno({
   target: 'pre:eq(5)',
-  content: "You can set up handlers for the duration of the Anno.",
+  content: "You can set up handlers for the just duration of the Anno. (Try clicking the code above)",
   onShow: function (anno, $target, $annoElem) {
     var handler = function(){ alert('Hello!'); }
     $target[0].addEventListener('click', handler)
