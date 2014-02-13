@@ -60,30 +60,30 @@ var anno1 = new Anno({
 <h2 id="slightly-more">Size &amp; Positioning</h2>
 <script type="text/javascript">
 var anno2 = Anno.chain([{
-  target: 'pre:eq(1)', // second block of code
+  target  : 'pre:eq(1)', // second block of code
   position: 'top',
-  content: 'You can specify where you want each anno to appear.'
+  content : 'You can specify where you want each anno to appear.'
 }, {
-  target: 'pre:eq(1)', 
+  target  : 'pre:eq(1)', 
   position: 'left',
-  content: "Use 'top', 'left', 'bottom' and 'right', just like CSS.",
+  content : "Use 'top', 'left', 'bottom' and 'right', just like CSS.",
 }, {
-  target: 'pre:eq(1)',
+  target  : 'pre:eq(1)',
   position: 'center-bottom',
-  content: "You can also use 'center-bottom', 'center-right' etc"
+  content : "You can also use 'center-bottom', 'center-right' etc"
 }, {
-  target: 'pre:eq(1)',
+  target  : 'pre:eq(1)',
   position: 'right',
   className: 'anno-width-200', // 150,175,200,250 (default 300)
-  content: 'Add CSS classes to customize each annotation.'
+  content : 'Add CSS classes to customize each annotation.'
 }, {
-  target: 'pre:eq(1)',
+  target  : 'pre:eq(1)',
   position: {
     top: '44em',
     left: '14em'
   },
   arrowPosition: 'center-left',
-  content: 'You can even specify precise <code>top</code> and <code>left</code> values.'
+  content : 'You can even specify precise <code>top</code> and <code>left</code> values.'
 } ])
 </script>
 <p><button type="button" class="btn btn-primary" onclick="anno2.show()">anno2.show()</button>
@@ -94,10 +94,10 @@ var anno2 = Anno.chain([{
 <h2 id="buttons">Buttons</h2>
 <script type="text/javascript">
 var anno3 = new Anno({
-  target: 'pre:eq(2)',
+  target  : 'pre:eq(2)',
   position: 'center-top',
-  content: "Anno buttons are completely customizable; you can even have none!",
-  buttons: []
+  content : "Anno buttons are completely customizable; you can even have none!",
+  buttons : []
 })
 </script>
 <p><button type="button" class="btn btn-primary" onclick="anno3.show()">anno3.show()</button></p>
