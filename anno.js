@@ -161,7 +161,10 @@ Anno = (function() {
       this._annoElem.addClass('anno-hidden');
       setTimeout((function(_this) {
         return function() {
-          _this._annoElem.remove();
+          var _ref;
+          if ((_ref = _this._annoElem) != null) {
+            _ref.remove();
+          }
           return _this._annoElem = null;
         };
       })(this), 300);
@@ -478,7 +481,7 @@ Anno = (function() {
       } else {
         r = pos.t < 0 ? 'center-bottom' : 'center-top';
       }
-      console.warn("Guessing arrowPosition='" + r + "' for " + this.target + ". Include this in your constructor for consistency.");
+      console.warn("Guessing arrowPosition:'" + r + "' for " + this.target + ". Include this in your constructor for consistency.");
       return r;
     }
   };

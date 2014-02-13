@@ -187,7 +187,7 @@ Hiding is done in two stages so that you can re-use one overlay element for a lo
         if @_annoElem? 
           @_annoElem.addClass('anno-hidden')
           setTimeout () => 
-            @_annoElem.remove() # this method causes hideAnno to get called twice sometimes -> bad.
+            @_annoElem?.remove() # this method causes hideAnno to get called twice sometimes -> bad.
             @_annoElem = null
           , 300
 
@@ -455,7 +455,7 @@ the first one available in `Anno.preferredPositions`.
             r = if pos.l < 0 then 'center-right' else 'center-left'
           else
             r = if pos.t < 0 then 'center-bottom' else 'center-top'
-          console.warn "Guessing arrowPosition='#{r}' for #{@target}. Include this in your constructor for consistency."
+          console.warn "Guessing arrowPosition:'#{r}' for #{@target}. Include this in your constructor for consistency."
           return r
 
 Override this if you've supplied a CSS hash as the `position` property. Can be any of `top`, `left`, etc.
