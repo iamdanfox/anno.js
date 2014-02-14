@@ -121,7 +121,7 @@ Anno = (function() {
         return _this._annoElem.removeClass('anno-hidden');
       };
     })(this)), 10);
-    $(this._annoElem, $target).scrollintoview();
+    this._annoElem.add($target).scrollintoview();
     if (this.rightArrowClicksLastButton) {
       lastButton.keydown(function(evt) {
         if (evt.keyCode === 39) {

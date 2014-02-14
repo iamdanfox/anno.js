@@ -72,10 +72,10 @@
 
 	var twodims = function(d1, d2){
 		return {
-			top:    Math.min(d1.top,    d2.top),
-			bottom: Math.max(d1.bottom, d2.bottom),
-			left:   Math.min(d1.left,   d2.left),
-			right:  Math.max(d1.right,  d2.right)
+			top:    Math.max(d1.top,    d2.top),
+			bottom: Math.min(d1.bottom, d2.bottom),
+			left:   Math.max(d1.left,   d2.left),
+			right:  Math.min(d1.right,  d2.right)
 		}
 	};
 
@@ -97,6 +97,7 @@
 			if (options.direction.y === true) dirStr = dirStr ? "both" : "vertical";
 
 			var els = this;
+			console.debug('scrollintoview', els.length)
 
 			// TODO: check something about common ancestors.
 			var scroller = els.eq(0).closest(":scrollable(" + dirStr + ")");
@@ -105,26 +106,31 @@
 			if (scroller.length > 0)
 			{
 				scroller = scroller.eq(0);
-
-				// TODO: take into account border differences too.
-				var e = dimensions(els.eq(0));
-				for (i=1;i<els.length;i++){
-					e.rect = twodims( e.rect, dimensions(els.eq(i)).rect  );
-				}
+				var scrollerdims = dimensions(scroller)
 
 				var dim = {
-					e: e,
+					es:[],
+					rels:[],
 					s: dimensions(scroller)
-				};
+				}
+				var rel ={}
+				for (i=0;i<els.length;i++){
+					var e = dimensions(els.eq(i)) 
+					dim.es.push(e)
+					dim.rels.push({
+						top: e.rect.top - (dim.s.rect.top + dim.s.border.top),
+						bottom: dim.s.rect.bottom - dim.s.border.bottom - dim.s.scrollbar.bottom - e.rect.bottom,
+						left: e.rect.left - (dim.s.rect.left + dim.s.border.left),
+						right: dim.s.rect.right - dim.s.border.right - dim.s.scrollbar.right - e.rect.right
+					})
+				}
 
-				var rel = {
-					top: dim.e.rect.top - (dim.s.rect.top + dim.s.border.top),
-					bottom: dim.s.rect.bottom - dim.s.border.bottom - dim.s.scrollbar.bottom - dim.e.rect.bottom,
-					left: dim.e.rect.left - (dim.s.rect.left + dim.s.border.left),
-					right: dim.s.rect.right - dim.s.border.right - dim.s.scrollbar.right - dim.e.rect.right
-				};
+				console.debug(dim)
 
-				// TODO: try computing lots of different `rel` objects, then taking twodims of them
+				var rel = dim.rels[0]
+				for (i=0;i<dim.rels.length;i++) rel = twodims(rel, dim.rels[i]) // take union of all rels
+
+				console.debug('final',rel)
 
 				var animOptions = {};
 

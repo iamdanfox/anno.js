@@ -177,7 +177,7 @@ Animations are all done with 300ms CSS transitions, so you can change your UI wi
 
         setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
         
-        $(@_annoElem, $target).scrollintoview()
+        @_annoElem.add($target).scrollintoview()
 
         if @rightArrowClicksLastButton 
           lastButton.keydown( (evt) -> if evt.keyCode is 39 then $(this).click()  ) # right arrow    
