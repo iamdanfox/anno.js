@@ -562,7 +562,7 @@ listener on the target element.)  Whatever value you return from the <code>onSho
     setTimeout <span class="hljs-function"><span class="hljs-params">(() -&gt; $(<span class="hljs-string">'.anno-overlay'</span>).remove())</span>, 300
 
   <span class="hljs-title">emphasiseTarget</span>: <span class="hljs-params">($target = <span class="hljs-property">@targetFn</span>())</span> -&gt;</span>
-    <span class="hljs-keyword">if</span> $target.attr(<span class="hljs-string">'style'</span>)? <span class="hljs-keyword">then</span> _oldTargetCSS = $target.attr(<span class="hljs-string">'style'</span>)
+    <span class="hljs-keyword">if</span> $target.attr(<span class="hljs-string">'style'</span>)? <span class="hljs-keyword">then</span> <span class="hljs-property">@_oldTargetCSS</span> = $target.attr(<span class="hljs-string">'style'</span>)
 
     $target.closest<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">':scrollable'</span>)</span>.<span class="hljs-title">on</span> '<span class="hljs-title">mousewheel</span>', <span class="hljs-params">(evt)</span> -&gt;</span>  <span class="hljs-comment"># TODO: register &amp; remove a specific listener ... would this ruin existing jQuery scroll functions?</span>
       evt.preventDefault()
