@@ -293,7 +293,7 @@ Semi-transparent overlay and other effects
         setTimeout (() -> $('.anno-overlay').remove()), 300
 
       emphasiseTarget: ($target = @targetFn()) ->
-        if $target.attr('style')? then _oldTargetCSS = $target.attr('style')
+        if $target.attr('style')? then @_oldTargetCSS = $target.attr('style')
 
         $target.closest(':scrollable').on 'mousewheel', (evt) ->  # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
           evt.preventDefault()

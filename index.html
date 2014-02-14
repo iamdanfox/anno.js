@@ -210,6 +210,37 @@ $('#myModal').on('shown.bs.modal', function(){
 <p><button class="btn btn-primary" id="modalbutton" onclick="$('#myModal').modal('show')">$('#myModal').modal('show')</button></p>
 
 
+<h2 id="scrolling-inside-divs">Scrolling inside divs</h2>
+
+<div style="border:1px solid #aaa;overflow-y:scroll;border-radius:4px;margin:10px 0;">
+  <div style="height:240px;width:170%;position:relative;">
+    <div style="background:#ccc;height:70px;width:70px;position:absolute;left:20px;top:40px;text-align:center;line-height:70px;" id="box1"><code>#box1</code></div>
+    <div style="background:#bbb;height:70px;width:70px;position:absolute;right:20px;top:40px;text-align:center;line-height:70px;" id="box2"><code>#box2</code></div>
+    <div style="width:400px;margin:10px auto;">
+      This is a scrollable div, with <code>overflow-y:scroll</code>. Lorem ipsum dolor 
+      sit amet, consectetur adipisicing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var anno8 = Anno.chain([{
+  target: '#box1',
+  position: 'center-right',
+  content: "Guide your users through nested scrolling panels..."
+},{
+  target: '#box2',
+  position:'center-left',
+  content: "...without confusing them.",
+  buttons: [AnnoButton.BackButton, AnnoButton.DoneButton]
+}])
+</script>
+<p><button class="btn btn-primary" id="modalbutton" onclick="anno8.show()">anno8.show()</button></p>
 
 
     </div>

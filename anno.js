@@ -277,12 +277,12 @@ Anno = (function() {
   };
 
   Anno.prototype.emphasiseTarget = function($target) {
-    var ppos, tpos, _oldTargetCSS;
+    var ppos, tpos;
     if ($target == null) {
       $target = this.targetFn();
     }
     if ($target.attr('style') != null) {
-      _oldTargetCSS = $target.attr('style');
+      this._oldTargetCSS = $target.attr('style');
     }
     $target.closest(':scrollable').on('mousewheel', function(evt) {
       evt.preventDefault();
