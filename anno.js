@@ -336,69 +336,42 @@ Anno = (function() {
   Anno.prototype.position = null;
 
   Anno.prototype.positionAnnoElem = function(annoEl) {
-    var $targetEl, offset, pos;
+    var $targetEl, invert, leftize, opts, pos;
     if (annoEl == null) {
       annoEl = this._annoElem;
     }
     pos = this.positionFn();
     $targetEl = this.targetFn();
-    offset = $targetEl.position();
-    switch (pos) {
-      case 'top':
-      case 'bottom':
-        annoEl.css({
-          left: offset.left + 'px'
-        });
-        break;
-      case 'center-top':
-      case 'center-bottom':
-        annoEl.css({
-          left: offset.left + ($targetEl.outerWidth() / 2 - annoEl.outerWidth() / 2) + 'px'
-        });
-        break;
-      case 'left':
-      case 'right':
-        annoEl.css({
-          top: offset.top + 'px'
-        });
-        break;
-      case 'center-left':
-      case 'center-right':
-        annoEl.css({
-          top: offset.top + ($targetEl.outerHeight() / 2 - annoEl.outerHeight() / 2) + 'px'
-        });
-    }
-    switch (pos) {
-      case 'top':
-      case 'center-top':
-        annoEl.css({
-          top: offset.top - annoEl.outerHeight() + 'px'
-        });
-        break;
-      case 'bottom':
-      case 'center-bottom':
-        annoEl.css({
-          top: offset.top + $targetEl.outerHeight() + 'px'
-        });
-        break;
-      case 'left':
-      case 'center-left':
-        annoEl.css({
-          left: offset.left - annoEl.outerWidth() + 'px'
-        });
-        break;
-      case 'right':
-      case 'center-right':
-        annoEl.css({
-          left: offset.left + $targetEl.outerWidth() + 'px'
-        });
-        break;
-      default:
-        if ((pos.left != null) || (pos.right != null) || (pos.top != null) || (pos.bottom != null)) {
-          annoEl.css(pos);
-        } else {
-          console.error("Unrecognised position: '" + pos + "'");
-        }
+    invert = function(p) {
+      return {
+        'center-top': 'center-bottom',
+        'center-left': 'center-right',
+        'center-right': 'center-left',
+        'center-bottom': 'center-top',
+        'top': 'bottom',
+        'left': 'right',
+        'right': 'left',
+        'bottom': 'top'
+      }[p];
+    };
+    leftize = function(p) {
+      return {
+        'top': 'left top',
+        'bottom': 'left bottom',
+        'right': 'right top',
+        'left': 'left top'
+      }[p] || p;
+    };
+    if (typeof pos === 'string') {
+      opts = {
+        my: leftize(invert(pos).replace('-', ' ')),
+        at: leftize(pos.replace('-', ' ')),
+        of: $targetEl,
+        collision: 'none'
+      };
+      annoEl.position(opts);
+    } else {
+      annoEl.css(pos);
     }
     return annoEl;
   };

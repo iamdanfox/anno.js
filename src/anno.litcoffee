@@ -351,35 +351,40 @@ If you omit the `position` attribute entirely, Anno will use its best guess.
 `positionAnnoElem()` sets the CSS of the Anno element so that it appears next to your target in a sensible way.
 
       positionAnnoElem: (annoEl = @_annoElem) -> # Must be called after DOM insertion.
-        pos = @positionFn()
 
+        pos = @positionFn()
         $targetEl = @targetFn()
 
-        offset = $targetEl.position() 
-        switch pos 
-          when 'top', 'bottom'
-            annoEl.css(left: offset.left+'px')
-          when 'center-top', 'center-bottom'
-            annoEl.css(left: offset.left+($targetEl.outerWidth()/2 - annoEl.outerWidth()/2)+'px')
-          when 'left', 'right'
-            annoEl.css(top: offset.top+'px')
-          when 'center-left', 'center-right'
-            annoEl.css(top: offset.top+($targetEl.outerHeight()/2 - annoEl.outerHeight()/2)+'px')
+        invert = (p) ->
+          return {
+            'center-top': 'center-bottom'
+            'center-left':'center-right'
+            'center-right':'center-left'
+            'center-bottom':'center-top'
+            'top':'bottom' 
+            'left':'right'
+            'right':'left'
+            'bottom':'top'
+          }[p]
+        leftize = (p) -> 
+          return {
+            'top' : 'left top'
+            'bottom' : 'left bottom'
+            'right' : 'right top'
+            'left' : 'left top'
+          }[p] or p
 
-        switch pos 
-          when 'top', 'center-top'
-            annoEl.css( top: offset.top-annoEl.outerHeight()+'px')
-          when 'bottom', 'center-bottom'
-            annoEl.css( top: offset.top+$targetEl.outerHeight()+'px')
-          when 'left', 'center-left'
-            annoEl.css(left: offset.left-annoEl.outerWidth()+'px')
-          when 'right', 'center-right'
-            annoEl.css(left: offset.left+$targetEl.outerWidth()+'px')
-          else 
-            if pos.left? or pos.right? or pos.top? or pos.bottom?
-             annoEl.css(pos)
-            else 
-              console.error "Unrecognised position: '#{pos}'"
+        if typeof pos is 'string'
+          # uses jQuery UI position magic (http://api.jqueryui.com/position/)
+          # TODO: doesn't handle the 20px animated slidein
+          opts = 
+            my : leftize(invert(pos).replace('-',' '))
+            at : leftize(pos.replace('-',' '))
+            of : $targetEl
+            collision: 'none'
+          annoEl.position(opts)
+        else 
+          annoEl.css(pos)
 
         return annoEl
 
