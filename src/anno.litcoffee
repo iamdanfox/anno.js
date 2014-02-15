@@ -306,6 +306,7 @@ Semi-transparent overlay and other effects
 
           # if switching to position absolute has caused a dimension collapse, manually set H/W.
           if $target.outerWidth() isnt @_placeholder.outerWidth() 
+            # Find the current inline style on $target and make an undo function using that value
             ((a) => @_undoEmphasise.push ($t) -> $t.css width:a )($target.prop('style').width)
             $target.css('width', @_placeholder.outerWidth())
           if $target.outerHeight() isnt @_placeholder.outerHeight() 
