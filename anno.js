@@ -281,56 +281,126 @@ Anno = (function() {
     if ($target == null) {
       $target = this.targetFn();
     }
-    if ($target.attr('style') != null) {
-      this._oldTargetCSS = $target.attr('style');
-    }
     $target.closest(':scrollable').on('mousewheel', function(evt) {
       evt.preventDefault();
       return evt.stopPropagation();
     });
+    this._undoEmphasise.push(function($t) {
+      return $t.closest(':scrollable').off('mousewheel');
+    });
     if ($target.css('position') === 'static') {
       $target.after(this._placeholder = $target.clone().addClass('anno-placeholder'));
+      this._undoEmphasise.push((function(_this) {
+        return function($t) {
+          var _ref;
+          return (_ref = _this._placeholder) != null ? _ref.remove() : void 0;
+        };
+      })(this));
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function($t) {
+            return $t.css({
+              position: a
+            });
+          });
+        };
+      })(this))($target.prop('style').position);
       $target.css({
         position: 'absolute'
       });
       if ($target.outerWidth() !== this._placeholder.outerWidth()) {
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                width: a
+              });
+            });
+          };
+        })(this))($target.prop('style').width);
         $target.css('width', this._placeholder.outerWidth());
       }
       if ($target.outerHeight() !== this._placeholder.outerHeight()) {
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                height: a
+              });
+            });
+          };
+        })(this))($target.prop('style').height);
         $target.css('height', this._placeholder.outerHeight());
       }
       ppos = this._placeholder.position();
       tpos = $target.position();
       if (tpos.top !== ppos.top) {
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                top: a
+              });
+            });
+          };
+        })(this))($target.prop('style').top);
         $target.css('top', ppos.top);
       }
       if (tpos.left !== ppos.left) {
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                left: a
+              });
+            });
+          };
+        })(this))($target.prop('style').left);
         $target.css('left', ppos.left);
       }
     }
     if ($target.css('background') === 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box') {
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function($t) {
+            return $t.css({
+              background: a
+            });
+          });
+        };
+      })(this))($target.prop('style').background);
       $target.css({
         background: 'white'
       });
     }
+    ((function(_this) {
+      return function(a) {
+        return _this._undoEmphasise.push(function($t) {
+          return $t.css({
+            zIndex: a
+          });
+        });
+      };
+    })(this))($target.prop('style').zIndex);
     $target.css({
       zIndex: '1001'
     });
     return $target;
   };
 
-  Anno.prototype._oldTargetCSS = '';
+  Anno.prototype._undoEmphasise = [];
 
   Anno.prototype._placeholder = null;
 
   Anno.prototype.deemphasiseTarget = function() {
-    var $target, _ref;
-    if ((_ref = this._placeholder) != null) {
-      _ref.remove();
-    }
+    var $target, fn, _i, _len, _ref;
     $target = this.targetFn();
-    $target.closest(':scrollable').off('mousewheel');
-    return $target.attr('style', this._oldTargetCSS);
+    _ref = this._undoEmphasise;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      fn = _ref[_i];
+      fn($target);
+    }
+    return $target;
   };
 
   Anno.prototype.position = null;
