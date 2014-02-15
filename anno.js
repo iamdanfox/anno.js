@@ -290,68 +290,98 @@ Anno = (function() {
     });
     if ($target.css('position') === 'static') {
       $target.after(this._placeholder = $target.clone().addClass('anno-placeholder'));
-      this._undoEmphasise.push(function($t) {
-        var _ref;
-        return (_ref = this._placeholder) != null ? _ref.remove() : void 0;
-      });
-      this._undoEmphasise.push(function($t) {
-        return $t.css({
-          position: ''
-        });
-      });
+      this._undoEmphasise.push((function(_this) {
+        return function($t) {
+          var _ref;
+          return (_ref = _this._placeholder) != null ? _ref.remove() : void 0;
+        };
+      })(this));
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function($t) {
+            return $t.css({
+              position: a
+            });
+          });
+        };
+      })(this))($target.prop('style').position);
       $target.css({
         position: 'absolute'
       });
       if ($target.outerWidth() !== this._placeholder.outerWidth()) {
-        this._undoEmphasise.push(function($t) {
-          return $t.css({
-            width: ''
-          });
-        });
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                width: a
+              });
+            });
+          };
+        })(this))($target.prop('style').width);
         $target.css('width', this._placeholder.outerWidth());
       }
       if ($target.outerHeight() !== this._placeholder.outerHeight()) {
-        this._undoEmphasise.push(function($t) {
-          return $t.css({
-            height: ''
-          });
-        });
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                height: a
+              });
+            });
+          };
+        })(this))($target.prop('style').height);
         $target.css('height', this._placeholder.outerHeight());
       }
       ppos = this._placeholder.position();
       tpos = $target.position();
       if (tpos.top !== ppos.top) {
-        this._undoEmphasise.push(function($t) {
-          return $t.css({
-            top: ''
-          });
-        });
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                top: a
+              });
+            });
+          };
+        })(this))($target.prop('style').top);
         $target.css('top', ppos.top);
       }
       if (tpos.left !== ppos.left) {
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                left: a
+              });
+            });
+          };
+        })(this))($target.prop('style').left);
         $target.css('left', ppos.left);
-        this._undoEmphasise.push(function($t) {
-          return $t.css({
-            left: ''
-          });
-        });
       }
     }
     if ($target.css('background') === 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box') {
-      this._undoEmphasise.push(function($t) {
-        return $t.css({
-          background: ''
-        });
-      });
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function($t) {
+            return $t.css({
+              background: a
+            });
+          });
+        };
+      })(this))($target.prop('style').background);
       $target.css({
         background: 'white'
       });
     }
-    this._undoEmphasise.push(function($t) {
-      return $t.css({
-        zIndex: ''
-      });
-    });
+    ((function(_this) {
+      return function(a) {
+        return _this._undoEmphasise.push(function($t) {
+          return $t.css({
+            zIndex: a
+          });
+        });
+      };
+    })(this))($target.prop('style').zIndex);
     $target.css({
       zIndex: '1001'
     });

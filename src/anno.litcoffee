@@ -300,33 +300,33 @@ Semi-transparent overlay and other effects
 
         if $target.css('position')  is 'static'
           $target.after(@_placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
-          @_undoEmphasise.push ($t) -> @_placeholder?.remove()
-          @_undoEmphasise.push ($t) -> $t.css( position: '')
+          @_undoEmphasise.push ($t) => @_placeholder?.remove()
+          ((a) => @_undoEmphasise.push ($t) -> $t.css position:a )($target.prop('style').position)
           $target.css( position:'absolute' )
 
           # if switching to position absolute has caused a dimension collapse, manually set H/W.
           if $target.outerWidth() isnt @_placeholder.outerWidth() 
-            @_undoEmphasise.push ($t) -> $t.css width:'' # doesn't reset inlines correctly
+            ((a) => @_undoEmphasise.push ($t) -> $t.css width:a )($target.prop('style').width)
             $target.css('width', @_placeholder.outerWidth())
           if $target.outerHeight() isnt @_placeholder.outerHeight() 
-            @_undoEmphasise.push ($t) -> $t.css height:''
+            ((a) => @_undoEmphasise.push ($t) -> $t.css height:a )($target.prop('style').height)
             $target.css('height', @_placeholder.outerHeight())
 
           # if switching to position absolute has caused a position change, manually set it too
           ppos = @_placeholder.position()
           tpos = $target.position()
           if tpos.top  isnt ppos.top 
-            @_undoEmphasise.push ($t) -> $t.css top:''
+            ((a) => @_undoEmphasise.push ($t) -> $t.css top:a )($target.prop('style').top)
             $target.css('top', ppos.top)   
           if tpos.left isnt ppos.left
+            ((a) => @_undoEmphasise.push ($t) -> $t.css left:a )($target.prop('style').left)
             $target.css('left', ppos.left) 
-            @_undoEmphasise.push ($t) -> $t.css left:''
 
         if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
-          @_undoEmphasise.push ($t) -> $t.css background:''
+          ((a) => @_undoEmphasise.push ($t) -> $t.css background:a )($target.prop('style').background)
           $target.css( background: 'white')
 
-        @_undoEmphasise.push ($t) -> $t.css zIndex:''
+        ((a) => @_undoEmphasise.push ($t) -> $t.css zIndex:a )($target.prop('style').zIndex)
         $target.css( zIndex:'1001' ) 
 
         return $target
