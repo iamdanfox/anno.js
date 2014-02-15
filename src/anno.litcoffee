@@ -296,35 +296,37 @@ Semi-transparent overlay and other effects
         $target.closest(':scrollable').on 'mousewheel', (evt) ->  # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
           evt.preventDefault()
           evt.stopPropagation()
-        @_undoEmphasise.push ($t) => $t.closest(':scrollable').off('mousewheel')
+        @_undoEmphasise.push ($t) -> $t.closest(':scrollable').off('mousewheel')
 
         if $target.css('position')  is 'static'
           $target.after(@_placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
-          @_undoEmphasise.push ($t) => @_placeholder?.remove()
-          @_undoEmphasise.push ($t) => $t.css( position: 'static')
+          @_undoEmphasise.push ($t) -> @_placeholder?.remove()
+          @_undoEmphasise.push ($t) -> $t.css( position: '')
           $target.css( position:'absolute' )
 
           # if switching to position absolute has caused a dimension collapse, manually set H/W.
           if $target.outerWidth() isnt @_placeholder.outerWidth() 
-            ((a) => @_undoEmphasise.push ($t) => $t.css width:a )(@_placeholder.css('width')) # not a true reset...
+            @_undoEmphasise.push ($t) -> $t.css width:'' # doesn't reset inlines correctly
             $target.css('width', @_placeholder.outerWidth())
           if $target.outerHeight() isnt @_placeholder.outerHeight() 
-            ((a) => @_undoEmphasise.push ($t) => $t.css height:a )(@_placeholder.css('height'))
+            @_undoEmphasise.push ($t) -> $t.css height:''
             $target.css('height', @_placeholder.outerHeight())
 
           # if switching to position absolute has caused a position change, manually set it too
           ppos = @_placeholder.position()
           tpos = $target.position()
-          ((a) => @_undoEmphasise.push ($t) => $t.css top:a )($target.css('top'))
-          $target.css('top', ppos.top)   if tpos.top  isnt ppos.top 
-          ((a) => @_undoEmphasise.push ($t) => $t.css left:a )($target.css('left'))
-          $target.css('left', ppos.left) if tpos.left isnt ppos.left
+          if tpos.top  isnt ppos.top 
+            @_undoEmphasise.push ($t) -> $t.css top:''
+            $target.css('top', ppos.top)   
+          if tpos.left isnt ppos.left
+            $target.css('left', ppos.left) 
+            @_undoEmphasise.push ($t) -> $t.css left:''
 
         if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
-          ((a) => @_undoEmphasise.push ($t) => $t.css background:a )($target.css('background'))
+          @_undoEmphasise.push ($t) -> $t.css background:''
           $target.css( background: 'white')
 
-        ((a) => @_undoEmphasise.push ($t) => $t.css zIndex:a )($target.css('zIndex'))
+        @_undoEmphasise.push ($t) -> $t.css zIndex:''
         $target.css( zIndex:'1001' ) 
 
         return $target

@@ -285,103 +285,73 @@ Anno = (function() {
       evt.preventDefault();
       return evt.stopPropagation();
     });
-    this._undoEmphasise.push((function(_this) {
-      return function($t) {
-        return $t.closest(':scrollable').off('mousewheel');
-      };
-    })(this));
+    this._undoEmphasise.push(function($t) {
+      return $t.closest(':scrollable').off('mousewheel');
+    });
     if ($target.css('position') === 'static') {
       $target.after(this._placeholder = $target.clone().addClass('anno-placeholder'));
-      this._undoEmphasise.push((function(_this) {
-        return function($t) {
-          var _ref;
-          return (_ref = _this._placeholder) != null ? _ref.remove() : void 0;
-        };
-      })(this));
-      this._undoEmphasise.push((function(_this) {
-        return function($t) {
-          return $t.css({
-            position: 'static'
-          });
-        };
-      })(this));
+      this._undoEmphasise.push(function($t) {
+        var _ref;
+        return (_ref = this._placeholder) != null ? _ref.remove() : void 0;
+      });
+      this._undoEmphasise.push(function($t) {
+        return $t.css({
+          position: ''
+        });
+      });
       $target.css({
         position: 'absolute'
       });
       if ($target.outerWidth() !== this._placeholder.outerWidth()) {
-        ((function(_this) {
-          return function(a) {
-            return _this._undoEmphasise.push(function($t) {
-              return $t.css({
-                width: a
-              });
-            });
-          };
-        })(this))(this._placeholder.css('width'));
+        this._undoEmphasise.push(function($t) {
+          return $t.css({
+            width: ''
+          });
+        });
         $target.css('width', this._placeholder.outerWidth());
       }
       if ($target.outerHeight() !== this._placeholder.outerHeight()) {
-        ((function(_this) {
-          return function(a) {
-            return _this._undoEmphasise.push(function($t) {
-              return $t.css({
-                height: a
-              });
-            });
-          };
-        })(this))(this._placeholder.css('height'));
+        this._undoEmphasise.push(function($t) {
+          return $t.css({
+            height: ''
+          });
+        });
         $target.css('height', this._placeholder.outerHeight());
       }
       ppos = this._placeholder.position();
       tpos = $target.position();
-      ((function(_this) {
-        return function(a) {
-          return _this._undoEmphasise.push(function($t) {
-            return $t.css({
-              top: a
-            });
-          });
-        };
-      })(this))($target.css('top'));
       if (tpos.top !== ppos.top) {
+        this._undoEmphasise.push(function($t) {
+          return $t.css({
+            top: ''
+          });
+        });
         $target.css('top', ppos.top);
       }
-      ((function(_this) {
-        return function(a) {
-          return _this._undoEmphasise.push(function($t) {
-            return $t.css({
-              left: a
-            });
-          });
-        };
-      })(this))($target.css('left'));
       if (tpos.left !== ppos.left) {
         $target.css('left', ppos.left);
+        this._undoEmphasise.push(function($t) {
+          return $t.css({
+            left: ''
+          });
+        });
       }
     }
     if ($target.css('background') === 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box') {
-      ((function(_this) {
-        return function(a) {
-          return _this._undoEmphasise.push(function($t) {
-            return $t.css({
-              background: a
-            });
-          });
-        };
-      })(this))($target.css('background'));
+      this._undoEmphasise.push(function($t) {
+        return $t.css({
+          background: ''
+        });
+      });
       $target.css({
         background: 'white'
       });
     }
-    ((function(_this) {
-      return function(a) {
-        return _this._undoEmphasise.push(function($t) {
-          return $t.css({
-            zIndex: a
-          });
-        });
-      };
-    })(this))($target.css('zIndex'));
+    this._undoEmphasise.push(function($t) {
+      return $t.css({
+        zIndex: ''
+      });
+    });
     $target.css({
       zIndex: '1001'
     });
