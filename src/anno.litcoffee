@@ -293,43 +293,49 @@ Semi-transparent overlay and other effects
         setTimeout (() -> $('.anno-overlay').remove()), 300
 
       emphasiseTarget: ($target = @targetFn()) ->
-        if $target.attr('style')? then @_oldTargetCSS = $target.attr('style')
-
         $target.closest(':scrollable').on 'mousewheel', (evt) ->  # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
           evt.preventDefault()
           evt.stopPropagation()
+        @_undoEmphasise.push ($t) => $t.closest(':scrollable').off('mousewheel')
 
         if $target.css('position')  is 'static'
           $target.after(@_placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
+          @_undoEmphasise.push ($t) => @_placeholder?.remove()
+          @_undoEmphasise.push ($t) => $t.css( position: 'static')
           $target.css( position:'absolute' )
 
           # if switching to position absolute has caused a dimension collapse, manually set H/W.
           if $target.outerWidth() isnt @_placeholder.outerWidth() 
+            ((a) => @_undoEmphasise.push ($t) => $t.css width:a )(@_placeholder.css('width')) # not a true reset...
             $target.css('width', @_placeholder.outerWidth())
           if $target.outerHeight() isnt @_placeholder.outerHeight() 
+            ((a) => @_undoEmphasise.push ($t) => $t.css height:a )(@_placeholder.css('height'))
             $target.css('height', @_placeholder.outerHeight())
 
           # if switching to position absolute has caused a position change, manually set it too
           ppos = @_placeholder.position()
           tpos = $target.position()
+          ((a) => @_undoEmphasise.push ($t) => $t.css top:a )($target.css('top'))
           $target.css('top', ppos.top)   if tpos.top  isnt ppos.top 
+          ((a) => @_undoEmphasise.push ($t) => $t.css left:a )($target.css('left'))
           $target.css('left', ppos.left) if tpos.left isnt ppos.left
 
         if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
+          ((a) => @_undoEmphasise.push ($t) => $t.css background:a )($target.css('background'))
           $target.css( background: 'white')
 
+        ((a) => @_undoEmphasise.push ($t) => $t.css zIndex:a )($target.css('zIndex'))
         $target.css( zIndex:'1001' ) 
 
         return $target
 
-      _oldTargetCSS: ''
+      _undoEmphasise: [] # a list of functions to undo the effects of emphasiseTarget()
       _placeholder: null
 
       deemphasiseTarget: () ->
-        @_placeholder?.remove()
         $target = @targetFn()
-        $target.closest(':scrollable').off('mousewheel')
-        return $target.attr('style',@_oldTargetCSS)
+        fn($target) for fn in @_undoEmphasise
+        return $target
 
 
 Positioning

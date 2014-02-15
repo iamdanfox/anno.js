@@ -281,56 +281,126 @@ Anno = (function() {
     if ($target == null) {
       $target = this.targetFn();
     }
-    if ($target.attr('style') != null) {
-      this._oldTargetCSS = $target.attr('style');
-    }
     $target.closest(':scrollable').on('mousewheel', function(evt) {
       evt.preventDefault();
       return evt.stopPropagation();
     });
+    this._undoEmphasise.push((function(_this) {
+      return function($t) {
+        return $t.closest(':scrollable').off('mousewheel');
+      };
+    })(this));
     if ($target.css('position') === 'static') {
       $target.after(this._placeholder = $target.clone().addClass('anno-placeholder'));
+      this._undoEmphasise.push((function(_this) {
+        return function($t) {
+          var _ref;
+          return (_ref = _this._placeholder) != null ? _ref.remove() : void 0;
+        };
+      })(this));
+      this._undoEmphasise.push((function(_this) {
+        return function($t) {
+          return $t.css({
+            position: 'static'
+          });
+        };
+      })(this));
       $target.css({
         position: 'absolute'
       });
       if ($target.outerWidth() !== this._placeholder.outerWidth()) {
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                width: a
+              });
+            });
+          };
+        })(this))(this._placeholder.css('width'));
         $target.css('width', this._placeholder.outerWidth());
       }
       if ($target.outerHeight() !== this._placeholder.outerHeight()) {
+        ((function(_this) {
+          return function(a) {
+            return _this._undoEmphasise.push(function($t) {
+              return $t.css({
+                height: a
+              });
+            });
+          };
+        })(this))(this._placeholder.css('height'));
         $target.css('height', this._placeholder.outerHeight());
       }
       ppos = this._placeholder.position();
       tpos = $target.position();
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function($t) {
+            return $t.css({
+              top: a
+            });
+          });
+        };
+      })(this))($target.css('top'));
       if (tpos.top !== ppos.top) {
         $target.css('top', ppos.top);
       }
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function($t) {
+            return $t.css({
+              left: a
+            });
+          });
+        };
+      })(this))($target.css('left'));
       if (tpos.left !== ppos.left) {
         $target.css('left', ppos.left);
       }
     }
     if ($target.css('background') === 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box') {
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function($t) {
+            return $t.css({
+              background: a
+            });
+          });
+        };
+      })(this))($target.css('background'));
       $target.css({
         background: 'white'
       });
     }
+    ((function(_this) {
+      return function(a) {
+        return _this._undoEmphasise.push(function($t) {
+          return $t.css({
+            zIndex: a
+          });
+        });
+      };
+    })(this))($target.css('zIndex'));
     $target.css({
       zIndex: '1001'
     });
     return $target;
   };
 
-  Anno.prototype._oldTargetCSS = '';
+  Anno.prototype._undoEmphasise = [];
 
   Anno.prototype._placeholder = null;
 
   Anno.prototype.deemphasiseTarget = function() {
-    var $target, _ref;
-    if ((_ref = this._placeholder) != null) {
-      _ref.remove();
-    }
+    var $target, fn, _i, _len, _ref;
     $target = this.targetFn();
-    $target.closest(':scrollable').off('mousewheel');
-    return $target.attr('style', this._oldTargetCSS);
+    _ref = this._undoEmphasise;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      fn = _ref[_i];
+      fn($target);
+    }
+    return $target;
   };
 
   Anno.prototype.position = null;
