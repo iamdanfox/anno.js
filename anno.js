@@ -5,8 +5,14 @@ var Anno, AnnoButton,
 Anno = (function() {
   var _returnFromOnShow;
 
-  function Anno(options) {
-    var key, val;
+  function Anno(arg) {
+    var key, options, others, val;
+    if (arg.__proto__ === Array.prototype) {
+      options = arg.shift();
+      others = arg;
+    } else {
+      options = arg;
+    }
     if (options instanceof Anno) {
       console.warn('Anno constructor parameter is already an Anno object.');
     }
@@ -23,6 +29,10 @@ Anno = (function() {
       val = options[key];
       this[key] = val;
     }
+    if ((others != null ? others.length : void 0) > 0) {
+      this.chainTo(new Anno(others));
+    }
+    return;
   }
 
   Anno.setDefaults = function(options) {
@@ -54,12 +64,8 @@ Anno = (function() {
   Anno.prototype._chainPrev = null;
 
   Anno.chain = function(array) {
-    var head;
-    head = new Anno(array.shift());
-    if (array.length >= 1) {
-      head.chainTo(Anno.chain(array));
-    }
-    return head;
+    console.warn('Anno.chain([...]) is deprecated.  Use `new Anno([...])` instead.');
+    return new Anno(array);
   };
 
   Anno.prototype.chainSize = function() {
