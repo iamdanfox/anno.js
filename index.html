@@ -22,6 +22,10 @@
       h2 {
         margin-top:40px;
       }
+
+      .hljs-keyword{
+        color:#008;
+      }
     </style>
 
 
@@ -243,6 +247,33 @@ var anno8 = Anno.chain([{
 <p><button class="btn btn-primary" id="modalbutton" onclick="anno8.show()">anno8.show()</button></p>
 
 
+<h2 id="unclickable-target">Unclickable target</h2>
+
+<div style="border:1px solid #aaa;overflow-y:scroll;border-radius:4px;margin:10px 0;padding:20px;" id="region9">
+  <p><button class="btn btn-default" id="button1" onclick="$(this).next('span').stop().fadeIn(100).fadeOut(1500)">#button1</button> 
+    <span style="background:#dff0d8;padding:8px 10px;display:none;"><code>#button1</code> clicked!</span></p>
+  <p><button class="btn btn-default" id="button2" onclick="$(this).next('span').stop().fadeIn(100).fadeOut(1500)">#button2</button> 
+    <span style="background:#dff0d8;padding:8px 10px;display:none;"><code>#button2</code> clicked!</span></p>
+</div>
+<script type="text/javascript">
+var anno9 = new Anno({
+  target: '#region9',
+  content: "<code>#button1</code> is disabled, but <code>#button2</code> still works.",
+  className: 'anno-width-400',
+  onShow: function (anno, $target, $annoElem) {
+    var handler = function(e){ 
+      if(e.target.id === 'button1') e.stopPropagation() // filters out #button1
+    }
+    $target[0].addEventListener('click', handler, true) // `true` is essential
+    return handler
+  }, 
+  onHide: function(anno, $target, $annoElem, handler) {
+    $target[0].removeEventListener('click', handler, true)
+  }
+})
+</script>
+<p><button class="btn btn-primary" id="modalbutton" onclick="anno9.show()">anno9.show()</button></p>
+
     </div>
     </div>
 
@@ -258,8 +289,9 @@ var anno8 = Anno.chain([{
     <script type="text/javascript">
     $(function(){
 
+      hljs.configure({languages:['js']})
       $('.container script:not(.invisible)').each(function(i,item){
-        $pre = $('<pre>'+item.innerHTML+'</pre>')
+        $pre = $('<pre>'+item.innerHTML.replace(/>/g,'&gt;').replace(/</g,'&lt;')+'</pre>')
         hljs.highlightBlock($pre[0])
         $(item).after($pre)
       })
