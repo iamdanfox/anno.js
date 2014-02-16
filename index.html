@@ -22,6 +22,10 @@
       h2 {
         margin-top:40px;
       }
+
+      .hljs-keyword{
+        color:#008;
+      }
     </style>
 
 
@@ -258,8 +262,9 @@ var anno8 = Anno.chain([{
     <script type="text/javascript">
     $(function(){
 
+      hljs.configure({languages:['js']})
       $('.container script:not(.invisible)').each(function(i,item){
-        $pre = $('<pre>'+item.innerHTML+'</pre>')
+        $pre = $('<pre>'+item.innerHTML.replace(/>/g,'&gt;').replace(/</g,'&lt;')+'</pre>')
         hljs.highlightBlock($pre[0])
         $(item).after($pre)
       })
