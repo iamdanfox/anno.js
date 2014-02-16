@@ -310,22 +310,22 @@ Semi-transparent overlay and other effects
         @_undoEmphasise.push ($t) -> $t.closest(':scrollable').off('mousewheel')
 
         if $target.css('position')  is 'static'
-          $target.after(@_placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
-          @_undoEmphasise.push ($t) => @_placeholder?.remove()
+          $target.after(placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
+          ((a) => @_undoEmphasise.push () -> a.remove())(placeholder)
           ((a) => @_undoEmphasise.push ($t) -> $t.css position:a )($target.prop('style').position)
           $target.css( position:'absolute' )
 
           # if switching to position absolute has caused a dimension collapse, manually set H/W.
-          if $target.outerWidth() isnt @_placeholder.outerWidth() 
+          if $target.outerWidth() isnt placeholder.outerWidth() 
             # Find the current inline style on $target and make an undo function using that value
             ((a) => @_undoEmphasise.push ($t) -> $t.css width:a )($target.prop('style').width)
-            $target.css('width', @_placeholder.outerWidth())
-          if $target.outerHeight() isnt @_placeholder.outerHeight() 
+            $target.css('width', placeholder.outerWidth())
+          if $target.outerHeight() isnt placeholder.outerHeight() 
             ((a) => @_undoEmphasise.push ($t) -> $t.css height:a )($target.prop('style').height)
-            $target.css('height', @_placeholder.outerHeight())
+            $target.css('height', placeholder.outerHeight())
 
           # if switching to position absolute has caused a position change, manually set it too
-          ppos = @_placeholder.position()
+          ppos = placeholder.position()
           tpos = $target.position()
           if tpos.top  isnt ppos.top 
             ((a) => @_undoEmphasise.push ($t) -> $t.css top:a )($target.prop('style').top)
@@ -344,7 +344,6 @@ Semi-transparent overlay and other effects
         return $target
 
       _undoEmphasise: [] # a list of functions to undo the effects of emphasiseTarget()
-      _placeholder: null
 
       deemphasiseTarget: () ->
         $target = @targetFn()
