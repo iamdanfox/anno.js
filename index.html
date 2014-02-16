@@ -63,7 +63,7 @@ var anno1 = new Anno({
 
 <h2 id="slightly-more">Size &amp; Positioning</h2>
 <script type="text/javascript">
-var anno2 = Anno.chain([{
+var anno2 = new Anno([{
   target  : 'pre:eq(1)', // second block of code
   position: 'top',
   content : 'You can specify where you want each anno to appear.'
@@ -88,7 +88,7 @@ var anno2 = Anno.chain([{
   },
   arrowPosition: 'center-left',
   content : 'You can even specify precise <code>top</code> and <code>left</code> values.'
-} ])
+}])
 </script>
 <p><button type="button" class="btn btn-primary" onclick="anno2.show()">anno2.show()</button>
   <button type="button" class="btn btn-primary" onclick="anno2.chainIndex(3).show()">anno2.chainIndex(3).show()</button></p>
@@ -132,7 +132,7 @@ var anno4 = new Anno({
 
 
 <script type="text/javascript">
-var anno5 =  Anno.chain([{
+var anno5 =  new Anno([{
   target: 'pre:eq(4)',
   position:'left',
   content: "There are a few default buttons that you can use.",
@@ -233,7 +233,7 @@ $('#myModal').on('shown.bs.modal', function(){
 </div>
 
 <script type="text/javascript">
-var anno8 = Anno.chain([{
+var anno8 = new Anno([{
   target: '#box1',
   position: 'center-right',
   content: "Guide your users through nested scrolling panels..."
