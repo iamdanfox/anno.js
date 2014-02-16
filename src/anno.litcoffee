@@ -46,8 +46,16 @@ and a `content` string as well as many other properties. For example:
 ```
 This constructor lets you override these properties and uses defaults for anything you don't specify.
 
-      constructor: (options) ->
-        if options instanceof Anno
+You can supply either a single object, or a list of objects.
+
+      constructor: (arg) ->
+        if arg.__proto__ is Array.prototype
+          options = arg.shift() # remove the first element from arg.
+          others = arg
+        else 
+          options = arg
+
+        if options instanceof Anno # first argument is an object
           console.warn 'Anno constructor parameter is already an Anno object.'
         if not options?
           console.warn "new Anno() created with no options.  It's recommended to supply at least target and content." 
@@ -56,6 +64,11 @@ This constructor lets you override these properties and uses defaults for anythi
         
         for key,val of options
           this[key]=val
+        
+        if others?.length > 0
+          @chainTo( new Anno(others) )
+
+        return
 
 In practise, I usually like to specify `buttons` and `position`. You may also want to override `onShow` 
 and `onHide` callbacks, `className` and even `overlayElem()` for complete control.
@@ -70,7 +83,7 @@ set default values at the top of your script that will apply to every Anno objec
 Making a step-by-step tour
 --------------------------
 
-Anno objects can be chained together to make a sequential tour.
+Individual Anno objects can be chained together to make a sequential tour.
 
       chainTo: (obj) -> 
         if obj?
@@ -86,9 +99,9 @@ Anno objects can be chained together to make a sequential tour.
       _chainNext: null 
       _chainPrev: null
 
-Long Anno chains can also be made using the `Anno.chain()` shorthand. 
+Long Anno chains can also be made by passing a list to the constructor:
 ```
- var annoTour = Anno.chain([
+ var annoTour = new Anno([
    {
      target: '.pizza-list',
      content: 'Choose your pizza from the list below.'
@@ -103,10 +116,8 @@ Note, the `annoTour` variable still only points to the single Anno object (for `
 we've just chained another one onto it anonymously.
 
       @chain: (array) ->
-        head = new Anno( array.shift() )
-        if array.length >= 1 # array is now the tail.
-          head.chainTo( Anno.chain(array) ) 
-        return head
+        console.warn 'Anno.chain([...]) is deprecated.  Use `new Anno([...])` instead.'
+        return new Anno(array)
       
       chainSize: () -> 
         if @_chainNext? then @_chainNext.chainSize() else 1+@chainIndex()
