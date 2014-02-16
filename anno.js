@@ -283,7 +283,7 @@ Anno = (function() {
   };
 
   Anno.prototype.emphasiseTarget = function($target) {
-    var ppos, tpos;
+    var placeholder, ppos, tpos;
     if ($target == null) {
       $target = this.targetFn();
     }
@@ -295,13 +295,14 @@ Anno = (function() {
       return $t.closest(':scrollable').off('mousewheel');
     });
     if ($target.css('position') === 'static') {
-      $target.after(this._placeholder = $target.clone().addClass('anno-placeholder'));
-      this._undoEmphasise.push((function(_this) {
-        return function($t) {
-          var _ref;
-          return (_ref = _this._placeholder) != null ? _ref.remove() : void 0;
+      $target.after(placeholder = $target.clone().addClass('anno-placeholder'));
+      ((function(_this) {
+        return function(a) {
+          return _this._undoEmphasise.push(function() {
+            return a.remove();
+          });
         };
-      })(this));
+      })(this))(placeholder);
       ((function(_this) {
         return function(a) {
           return _this._undoEmphasise.push(function($t) {
@@ -314,7 +315,7 @@ Anno = (function() {
       $target.css({
         position: 'absolute'
       });
-      if ($target.outerWidth() !== this._placeholder.outerWidth()) {
+      if ($target.outerWidth() !== placeholder.outerWidth()) {
         ((function(_this) {
           return function(a) {
             return _this._undoEmphasise.push(function($t) {
@@ -324,9 +325,9 @@ Anno = (function() {
             });
           };
         })(this))($target.prop('style').width);
-        $target.css('width', this._placeholder.outerWidth());
+        $target.css('width', placeholder.outerWidth());
       }
-      if ($target.outerHeight() !== this._placeholder.outerHeight()) {
+      if ($target.outerHeight() !== placeholder.outerHeight()) {
         ((function(_this) {
           return function(a) {
             return _this._undoEmphasise.push(function($t) {
@@ -336,9 +337,9 @@ Anno = (function() {
             });
           };
         })(this))($target.prop('style').height);
-        $target.css('height', this._placeholder.outerHeight());
+        $target.css('height', placeholder.outerHeight());
       }
-      ppos = this._placeholder.position();
+      ppos = placeholder.position();
       tpos = $target.position();
       if (tpos.top !== ppos.top) {
         ((function(_this) {
@@ -395,8 +396,6 @@ Anno = (function() {
   };
 
   Anno.prototype._undoEmphasise = [];
-
-  Anno.prototype._placeholder = null;
 
   Anno.prototype.deemphasiseTarget = function() {
     var $target, fn, _i, _len, _ref;
