@@ -120,6 +120,9 @@
 .anno.anno-hidden {
   opacity: 0;
 }
+.anno.anno-width-400 {
+  width: 400px;
+}
 .anno.anno-width-250 {
   width: 250px;
 }
