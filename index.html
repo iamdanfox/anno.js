@@ -57,7 +57,7 @@ var anno1 = new Anno({
   content: 'This is an annotation'
 })
 </script>
-<p><button type="button" class="btn btn-primary" onclick="anno1.show()">anno1.show()</button></p>
+<p><button type="button" class="btn btn-primary" onclick="demoBtnClick();anno1.show()">anno1.show()</button></p>
 
 
 
@@ -90,8 +90,8 @@ var anno2 = new Anno([{
   content : 'You can even specify precise <code>top</code> and <code>left</code> values.'
 }])
 </script>
-<p><button type="button" class="btn btn-primary" onclick="anno2.show()">anno2.show()</button>
-  <button type="button" class="btn btn-primary" onclick="anno2.chainIndex(3).show()">anno2.chainIndex(3).show()</button></p>
+<p><button type="button" class="btn btn-primary" onclick="demoBtnClick();anno2.show()">anno2.show()</button>
+  <button type="button" class="btn btn-primary" onclick="demoBtnClick();anno2.chainIndex(3).show()">anno2.chainIndex(3).show()</button></p>
 
 
 
@@ -104,7 +104,7 @@ var anno3 = new Anno({
   buttons : []
 })
 </script>
-<p><button type="button" class="btn btn-primary" onclick="anno3.show()">anno3.show()</button></p>
+<p><button type="button" class="btn btn-primary" onclick="demoBtnClick();anno3.show()">anno3.show()</button></p>
 
 <script type="text/javascript">
 var anno4 = new Anno({
@@ -128,7 +128,7 @@ var anno4 = new Anno({
   ]
 })
 </script>
-<p><button type="button" class="btn btn-primary" onclick="anno4.show()">anno4.show()</button></p>
+<p><button type="button" class="btn btn-primary" onclick="demoBtnClick();anno4.show()">anno4.show()</button></p>
 
 
 <script type="text/javascript">
@@ -144,7 +144,7 @@ var anno5 =  new Anno([{
   buttons: [AnnoButton.BackButton]
 }])
 </script>
-<p><button type="button" class="btn btn-primary" onclick="anno5.show()">anno5.show()</button></p>
+<p><button type="button" class="btn btn-primary" onclick="demoBtnClick();anno5.show()">anno5.show()</button></p>
 
 <h2>onShow, onHide</h2>
 <script type="text/javascript">
@@ -162,7 +162,7 @@ var anno6 = new Anno({
   }
 })
 </script>
-<p><button type="button" class="btn btn-primary" onclick="anno6.show()">anno6.show()</button></p>
+<p><button type="button" class="btn btn-primary" onclick="demoBtnClick();anno6.show()">anno6.show()</button></p>
 
 
 
@@ -211,7 +211,7 @@ $('#myModal').on('shown.bs.modal', function(){
 })
 </script>
 <!-- Button trigger modal -->
-<p><button class="btn btn-primary" id="modalbutton" onclick="$('#myModal').modal('show')">$('#myModal').modal('show')</button></p>
+<p><button class="btn btn-primary" id="modalbutton" onclick="demoBtnClick();$('#myModal').modal('show')">$('#myModal').modal('show')</button></p>
 
 
 <h2 id="scrolling-inside-divs">Scrolling inside divs</h2>
@@ -244,7 +244,7 @@ var anno8 = new Anno([{
   buttons: [AnnoButton.BackButton, AnnoButton.DoneButton]
 }])
 </script>
-<p><button class="btn btn-primary" id="modalbutton" onclick="anno8.show()">anno8.show()</button></p>
+<p><button class="btn btn-primary" id="modalbutton" onclick="demoBtnClick();anno8.show()">anno8.show()</button></p>
 
 
 <h2 id="unclickable-target">Unclickable target</h2>
@@ -272,7 +272,7 @@ var anno9 = new Anno({
   }
 })
 </script>
-<p><button class="btn btn-primary" id="modalbutton" onclick="anno9.show()">anno9.show()</button></p>
+<p><button class="btn btn-primary" id="modalbutton" onclick="demoBtnClick();anno9.show()">anno9.show()</button></p>
 
     </div>
     </div>
@@ -309,6 +309,13 @@ var anno9 = new Anno({
 
       ga('create', 'UA-48159148-1', 'iamdanfox.github.io');
       ga('send', 'pageview');
+
+      var demoBtnClicks = 0;
+      function demoBtnClick(){
+        demoBtnClicks++
+        ga('set', 'DemoBtnClicks', demoBtnClicks)
+        return true
+      }
 
     </script>
   </body>
