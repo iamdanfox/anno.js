@@ -18,6 +18,8 @@
   position: relative;
   background: #ffffff;
   -webkit-box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
 }
 .anno .anno-inner .anno-content {
   padding: 15px 20px;
