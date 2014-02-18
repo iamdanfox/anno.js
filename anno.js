@@ -366,7 +366,8 @@ Anno = (function() {
         $target.css('left', ppos.left);
       }
     }
-    if ($target.css('background') === 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box') {
+    if ($target.css('backgroundColor') === 'rgba(0, 0, 0, 0)' || $target.css('backgroundColor') === 'transparent') {
+      console.warn("Anno.js target '" + this.target + "' has a transparent background; filling it white temporarily.");
       ((function(_this) {
         return function(a) {
           return _this._undoEmphasise.push(function($t) {

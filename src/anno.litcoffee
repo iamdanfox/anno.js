@@ -334,7 +334,8 @@ Semi-transparent overlay and other effects
             ((a) => @_undoEmphasise.push ($t) -> $t.css left:a )($target.prop('style').left)
             $target.css('left', ppos.left) 
 
-        if $target.css('background') is 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
+        if $target.css('backgroundColor') is 'rgba(0, 0, 0, 0)' or $target.css('backgroundColor') is 'transparent'
+          console.warn "Anno.js target '#{@target}' has a transparent bg; filling it white temporarily."
           ((a) => @_undoEmphasise.push ($t) -> $t.css background:a )($target.prop('style').background)
           $target.css( background: 'white')
 
