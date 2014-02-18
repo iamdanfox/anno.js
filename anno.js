@@ -287,6 +287,7 @@ Anno = (function() {
     if ($target == null) {
       $target = this.targetFn();
     }
+    this._undoEmphasise = [];
     $target.closest(':scrollable').on('mousewheel', function(evt) {
       evt.preventDefault();
       return evt.stopPropagation();
@@ -367,7 +368,7 @@ Anno = (function() {
       }
     }
     if ($target.css('backgroundColor') === 'rgba(0, 0, 0, 0)' || $target.css('backgroundColor') === 'transparent') {
-      console.warn("Anno.js target '" + this.target + "' has a transparent background; filling it white temporarily.");
+      console.warn("Anno.js target '" + this.target + "' has a transparent bg; filling it white temporarily.");
       ((function(_this) {
         return function(a) {
           return _this._undoEmphasise.push(function($t) {
