@@ -1,4 +1,4 @@
-/* Anno.js version 1.1.2 */
+/* Anno.js by @iamdanfox */
 
 @blue: #11A2DC;
 
@@ -36,6 +36,11 @@
   transition: all @duration cubic-bezier(0.680, 0, 0.265, 1);
 }
 
+.box-shadow (@shadows){
+  -webkit-box-shadow: @shadows;
+  -moz-box-shadow: @shadows;
+  box-shadow: @shadows;
+}
 
 @padh:15px;
 @padv:20px;
@@ -58,7 +63,7 @@
   .anno-inner {
     position:relative;
     background: @innerBackground;
-    -webkit-box-shadow: 0 5px 20px 0px rgba(0,0,0,0.35); // TODO: make this cross browser.
+    .box-shadow(0 5px 20px 0px rgba(0,0,0,0.35));
 
     .anno-content{
       padding: @padh @padv;
