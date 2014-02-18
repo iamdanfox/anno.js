@@ -5,7 +5,7 @@ Anno.js lets you add powerful step-by-step guides to your web-apps. **[See demo!
 
 [![Screencast of a single annotation](screencast.gif)](http://iamdanfox.github.io/anno.js/)
 
-Anno.js is built to be absurdly extensible and can handle complex interactions easily.
+**Anno.js is built to be extensible.** The source is about 500 lines of literate coffeescript; you can [read the annotated source][3] in just a few minutes!
 
 Usage
 -----
@@ -30,3 +30,4 @@ For better performance, you can host the files yourself. Clone the repo or [down
 
 [1]: http://iamdanfox.github.io/anno.js/
 [2]: https://github.com/iamdanfox/anno.js/archive/gh-pages.zip
+[3]: http://iamdanfox.github.io/anno.js/docco/anno.html
