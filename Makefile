@@ -13,7 +13,7 @@ anno.min.js: anno.js scrollintoview/jquery.scrollintoview.js
 	uglifyjs anno.js scrollintoview/jquery.scrollintoview.js --compress --mangle > anno.min.js
 
 anno.min.css: anno.css
-	cleancss anno.css > anno.min.css
+	lessc --clean-css anno.css > anno.min.css
 
 gzip: anno.min.js anno.min.css
 	gzip --to-stdout --best --keep anno.min.js > anno.min.js.gz
