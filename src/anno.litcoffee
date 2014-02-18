@@ -304,12 +304,13 @@ Semi-transparent overlay and other effects
         setTimeout (() -> $('.anno-overlay').remove()), 300
 
       emphasiseTarget: ($target = @targetFn()) ->
+        @_undoEmphasise = [] # crucial.
         $target.closest(':scrollable').on 'mousewheel', (evt) ->  # TODO: register & remove a specific listener ... would this ruin existing jQuery scroll functions?
           evt.preventDefault()
           evt.stopPropagation()
         @_undoEmphasise.push ($t) -> $t.closest(':scrollable').off('mousewheel')
 
-        if $target.css('position')  is 'static'
+        if $target.css('position') is 'static'
           $target.after(placeholder = $target.clone().addClass('anno-placeholder')) # ensures that the jquery :first selector in targetFn works.
           ((a) => @_undoEmphasise.push () -> a.remove())(placeholder)
           ((a) => @_undoEmphasise.push ($t) -> $t.css position:a )($target.prop('style').position)
