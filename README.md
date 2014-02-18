@@ -14,13 +14,13 @@ Include the following in your HTML page:
 
 ```html
 <!-- get jQuery from somewhere; personally, I like the Google CDN: -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 ```
 ```html
-<script src="//iamdanfox.github.io/anno.js/anno.js" type="text/javascript"></script>
-<script src="//iamdanfox.github.io/anno.js/scrollintoview/jquery.scrollintoview.min.js" type="text/javascript"></script>
+<script src="http://iamdanfox.github.io/anno.js/anno.js" type="text/javascript"></script>
+<script src="http://iamdanfox.github.io/anno.js/scrollintoview/jquery.scrollintoview.min.js" type="text/javascript"></script>
 
-<link href="//iamdanfox.github.io/anno.js/anno.css" rel="stylesheet" type="text/css" />
+<link href="http://iamdanfox.github.io/anno.js/anno.css" rel="stylesheet" type="text/css" />
 ```
 
 After including `anno.js` you can define your annotations ([see examples][1]).
