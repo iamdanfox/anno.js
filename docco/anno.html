@@ -578,9 +578,9 @@ listener on the target element.)  Whatever value you return from the <code>onSho
     <span class="hljs-property">@_undoEmphasise</span>.push <span class="hljs-function"><span class="hljs-params">($t)</span> -&gt;</span> $t.closest(<span class="hljs-string">':scrollable'</span>).<span class="hljs-literal">off</span>(<span class="hljs-string">'mousewheel'</span>)
 
     <span class="hljs-keyword">if</span> $target.css(<span class="hljs-string">'position'</span>)  <span class="hljs-keyword">is</span> <span class="hljs-string">'static'</span>
-      $target.after(<span class="hljs-property">@_placeholder</span> = $target.clone().addClass(<span class="hljs-string">'anno-placeholder'</span>)) <span class="hljs-comment"># ensures that the jquery :first selector in targetFn works.</span>
-      <span class="hljs-property">@_undoEmphasise</span>.push <span class="hljs-function"><span class="hljs-params">($t)</span> =&gt;</span> <span class="hljs-property">@_placeholder</span>?.remove()
-      <span class="hljs-function"><span class="hljs-params">((a) =&gt; <span class="hljs-property">@_undoEmphasise</span>.push ($t) -&gt; $t.css position:a )($target.prop(<span class="hljs-string">'style'</span>).position)</span>
+      $target.after(placeholder = $target.clone().addClass(<span class="hljs-string">'anno-placeholder'</span>)) <span class="hljs-comment"># ensures that the jquery :first selector in targetFn works.</span>
+      <span class="hljs-function"><span class="hljs-params">((a) =&gt; <span class="hljs-property">@_undoEmphasise</span>.push () -&gt; a.remove())(placeholder)</span>
+      <span class="hljs-params">((a) =&gt; <span class="hljs-property">@_undoEmphasise</span>.push ($t) -&gt; $t.css position:a )($target.prop(<span class="hljs-string">'style'</span>).position)</span>
       <span class="hljs-title">$target</span>.<span class="hljs-title">css</span><span class="hljs-params">( position:<span class="hljs-string">'absolute'</span> )</span>
 
 </span></pre></div></div>
@@ -598,7 +598,7 @@ listener on the target element.)  Whatever value you return from the <code>onSho
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> $target.outerWidth() <span class="hljs-keyword">isnt</span> <span class="hljs-property">@_placeholder</span>.outerWidth()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> $target.outerWidth() <span class="hljs-keyword">isnt</span> placeholder.outerWidth()</pre></div></div>
             
         </li>
         
@@ -614,10 +614,10 @@ listener on the target element.)  Whatever value you return from the <code>onSho
             </div>
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-function"><span class="hljs-params">((a) =&gt; <span class="hljs-property">@_undoEmphasise</span>.push ($t) -&gt; $t.css width:a )($target.prop(<span class="hljs-string">'style'</span>).width)</span>
-        <span class="hljs-title">$target</span>.<span class="hljs-title">css</span><span class="hljs-params">(<span class="hljs-string">'width'</span>, <span class="hljs-property">@_placeholder</span>.outerWidth())</span>
-      <span class="hljs-title">if</span> <span class="hljs-title">$target</span>.<span class="hljs-title">outerHeight</span><span class="hljs-params">()</span> <span class="hljs-title">isnt</span> @<span class="hljs-title">_placeholder</span>.<span class="hljs-title">outerHeight</span><span class="hljs-params">()</span> 
+        <span class="hljs-title">$target</span>.<span class="hljs-title">css</span><span class="hljs-params">(<span class="hljs-string">'width'</span>, placeholder.outerWidth())</span>
+      <span class="hljs-title">if</span> <span class="hljs-title">$target</span>.<span class="hljs-title">outerHeight</span><span class="hljs-params">()</span> <span class="hljs-title">isnt</span> <span class="hljs-title">placeholder</span>.<span class="hljs-title">outerHeight</span><span class="hljs-params">()</span> 
         <span class="hljs-params">((a) =&gt; <span class="hljs-property">@_undoEmphasise</span>.push ($t) -&gt; $t.css height:a )($target.prop(<span class="hljs-string">'style'</span>).height)</span>
-        <span class="hljs-title">$target</span>.<span class="hljs-title">css</span><span class="hljs-params">(<span class="hljs-string">'height'</span>, <span class="hljs-property">@_placeholder</span>.outerHeight())</span>
+        <span class="hljs-title">$target</span>.<span class="hljs-title">css</span><span class="hljs-params">(<span class="hljs-string">'height'</span>, placeholder.outerHeight())</span>
 
 </span></pre></div></div>
             
@@ -634,7 +634,7 @@ listener on the target element.)  Whatever value you return from the <code>onSho
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      ppos = <span class="hljs-property">@_placeholder</span>.position()
+            <div class="content"><div class='highlight'><pre>      ppos = placeholder.position()
       tpos = $target.position()
       <span class="hljs-keyword">if</span> tpos.top  <span class="hljs-keyword">isnt</span> ppos.top 
         <span class="hljs-function"><span class="hljs-params">((a) =&gt; <span class="hljs-property">@_undoEmphasise</span>.push ($t) -&gt; $t.css top:a )($target.prop(<span class="hljs-string">'style'</span>).top)</span>
@@ -653,7 +653,6 @@ listener on the target element.)  Whatever value you return from the <code>onSho
     <span class="hljs-title">return</span> <span class="hljs-title">$target</span>
 
   <span class="hljs-title">_undoEmphasise</span>: [] # <span class="hljs-title">a</span> <span class="hljs-title">list</span> <span class="hljs-title">of</span> <span class="hljs-title">functions</span> <span class="hljs-title">to</span> <span class="hljs-title">undo</span> <span class="hljs-title">the</span> <span class="hljs-title">effects</span> <span class="hljs-title">of</span> <span class="hljs-title">emphasiseTarget</span><span class="hljs-params">()</span>
-  <span class="hljs-title">_placeholder</span>: <span class="hljs-title">null</span>
 
   <span class="hljs-title">deemphasiseTarget</span>: <span class="hljs-params">()</span> -&gt;</span>
     $target = <span class="hljs-property">@targetFn</span>()
