@@ -110,8 +110,8 @@ Anno = (function() {
       console.warn("Anno elem for '" + this.target + "' has already been generated.  Did you call show() twice?");
     }
     this._annoElem = this.annoElem();
-    this.showOverlay();
     this.emphasiseTarget();
+    this.showOverlay();
     $target.after(this._annoElem);
     this._annoElem.addClass('anno-target-' + this.arrowPositionFn());
     this.positionAnnoElem();
@@ -119,7 +119,7 @@ Anno = (function() {
       return function() {
         return _this._annoElem.removeClass('anno-hidden');
       };
-    })(this)), 10);
+    })(this)), 50);
     $target.scrollintoview();
     setTimeout(((function(_this) {
       return function() {
@@ -157,24 +157,21 @@ Anno = (function() {
 
   Anno.prototype.hide = function() {
     this.hideAnno();
-    this.hideOverlay();
+    setTimeout(this.hideOverlay, 50);
     return this;
   };
 
   Anno.prototype.hideAnno = function() {
-    this.deemphasiseTarget();
     if (this._annoElem != null) {
       this._annoElem.addClass('anno-hidden');
-      setTimeout((function(_this) {
-        return function() {
-          var _ref;
-          if ((_ref = _this._annoElem) != null) {
-            _ref.remove();
-          }
-          return _this._annoElem = null;
-        };
-      })(this), 300);
+      this.deemphasiseTarget();
       this.onHide(this, this.targetFn(), this._annoElem, this._returnFromOnShow);
+      (function(annoEl) {
+        return setTimeout((function() {
+          return annoEl.remove();
+        }), 300);
+      })(this._annoElem);
+      this._annoElem = null;
     } else {
       console.warn("Can't hideAnno() for '" + this.target + "' when @_annoElem is null.  Did you call hideAnno() twice?");
     }
@@ -250,11 +247,11 @@ Anno = (function() {
   };
 
   Anno.prototype.showOverlay = function() {
-    var e;
+    var $e;
     if ($('.anno-overlay').length === 0) {
-      $('body').append(e = this.overlayElem().addClass('anno-hidden'));
+      $('body').append($e = this.overlayElem().addClass('anno-hidden'));
       return setTimeout((function() {
-        return e.removeClass('anno-hidden');
+        return $e.removeClass('anno-hidden');
       }), 10);
     } else {
       return $('.anno-overlay').replaceWith(this.overlayElem());

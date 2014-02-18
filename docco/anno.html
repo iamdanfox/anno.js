@@ -274,23 +274,23 @@ All methods used here can be overridden in the same way we changed the <code>con
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">show</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> <span class="hljs-comment"># TODO warn if this Anno has already been shown.</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">show</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> 
     $target = <span class="hljs-property">@targetFn</span>()
     <span class="hljs-keyword">if</span> <span class="hljs-property">@_annoElem</span>? <span class="hljs-keyword">then</span> <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Anno elem for '<span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>' has already been generated.  Did you call show() twice?"</span>
     <span class="hljs-property">@_annoElem</span> = <span class="hljs-property">@annoElem</span>()
 
-    <span class="hljs-property">@showOverlay</span>()
     <span class="hljs-property">@emphasiseTarget</span>()
+    <span class="hljs-property">@showOverlay</span>()
     
-    $target.after(<span class="hljs-property">@_annoElem</span>) <span class="hljs-comment"># insert into DOM</span>
+    $target.after(<span class="hljs-property">@_annoElem</span>) <span class="hljs-comment"># insert into DOM # TODO warn if already inserted once</span>
     
     <span class="hljs-property">@_annoElem</span>.addClass(<span class="hljs-string">'anno-target-'</span>+<span class="hljs-property">@arrowPositionFn</span>())
     <span class="hljs-property">@positionAnnoElem</span>()
 
-    setTimeout <span class="hljs-function"><span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.removeClass(<span class="hljs-string">'anno-hidden'</span>))</span>, 10 # <span class="hljs-title">hack</span> <span class="hljs-title">to</span> <span class="hljs-title">make</span> <span class="hljs-title">Chrome</span> <span class="hljs-title">render</span> <span class="hljs-title">the</span> <span class="hljs-title">opacity</span>:0 <span class="hljs-title">state</span>.
-      
+    setTimeout <span class="hljs-function"><span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.removeClass(<span class="hljs-string">'anno-hidden'</span>))</span>, 50
+
     <span class="hljs-title">$target</span>.<span class="hljs-title">scrollintoview</span><span class="hljs-params">()</span>
-    <span class="hljs-title">setTimeout</span> <span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.scrollintoview())</span> , 300 #<span class="hljs-title">TODO</span> <span class="hljs-title">fix</span> <span class="hljs-title">jumpiness</span>
+    <span class="hljs-title">setTimeout</span> <span class="hljs-params">(() =&gt; <span class="hljs-property">@_annoElem</span>.scrollintoview())</span> , 300
 
     <span class="hljs-title">lastButton</span> = @<span class="hljs-title">_annoElem</span>.<span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-string">'button'</span>)</span>.<span class="hljs-title">last</span><span class="hljs-params">()</span>
     <span class="hljs-title">if</span> @<span class="hljs-title">rightArrowClicksLastButton</span> 
@@ -340,26 +340,26 @@ listener on the target element.)  Whatever value you return from the <code>onSho
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">hide</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-property">@hideAnno</span>()
-    <span class="hljs-property">@hideOverlay</span>()
+    setTimeout <span class="hljs-property">@hideOverlay</span>, <span class="hljs-number">50</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
 
   <span class="hljs-attribute">hideAnno</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    <span class="hljs-property">@deemphasiseTarget</span>()
-
     <span class="hljs-keyword">if</span> <span class="hljs-property">@_annoElem</span>? 
       <span class="hljs-property">@_annoElem</span>.addClass(<span class="hljs-string">'anno-hidden'</span>)
-      setTimeout <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> 
-        <span class="hljs-property">@_annoElem</span>?.remove() <span class="hljs-comment"># this method causes hideAnno to get called twice sometimes -&gt; bad.</span>
-        <span class="hljs-property">@_annoElem</span> = <span class="hljs-literal">null</span>
-      , <span class="hljs-number">300</span>
-
+      <span class="hljs-property">@deemphasiseTarget</span>()
       <span class="hljs-property">@onHide</span>(<span class="hljs-keyword">this</span>, <span class="hljs-property">@targetFn</span>(), <span class="hljs-property">@_annoElem</span>, <span class="hljs-property">@_returnFromOnShow</span>)
-    <span class="hljs-keyword">else</span>
-      <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Can't hideAnno() for '<span class="hljs-subst">#{<span class="hljs-property">@target</span>}</span>' when @_annoElem is null.  Did you call hideAnno() twice?"</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+      <span class="hljs-function"><span class="hljs-params">((annoEl) -&gt; 
+        setTimeout (() -&gt; annoEl.remove()), <span class="hljs-number">300</span>
+      )(<span class="hljs-property">@_annoElem</span>)</span> # <span class="hljs-title">captures</span> @<span class="hljs-title">_annoElem</span> <span class="hljs-title">in</span> <span class="hljs-title">the</span> <span class="hljs-title">timeout</span> <span class="hljs-title">function</span> <span class="hljs-title">only</span>
 
-  <span class="hljs-attribute">onHide</span>: <span class="hljs-function"><span class="hljs-params">(anno, $target, $annoElem, returnFromOnShow)</span> -&gt;</span></pre></div></div>
+      @<span class="hljs-title">_annoElem</span> = <span class="hljs-title">null</span>
+    <span class="hljs-title">else</span>
+      <span class="hljs-title">console</span>.<span class="hljs-title">warn</span> "<span class="hljs-title">Can</span>'<span class="hljs-title">t</span> <span class="hljs-title">hideAnno</span><span class="hljs-params">()</span> <span class="hljs-title">for</span> '#{@<span class="hljs-title">target</span>}' <span class="hljs-title">when</span> @<span class="hljs-title">_annoElem</span> <span class="hljs-title">is</span> <span class="hljs-title">null</span>.  <span class="hljs-title">Did</span> <span class="hljs-title">you</span> <span class="hljs-title">call</span> <span class="hljs-title">hideAnno</span><span class="hljs-params">()</span> <span class="hljs-title">twice</span>?"
+
+    <span class="hljs-title">return</span> <span class="hljs-title">this</span>
+
+  <span class="hljs-title">onHide</span>: <span class="hljs-params">(anno, $target, $annoElem, returnFromOnShow)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -555,8 +555,8 @@ listener on the target element.)  Whatever value you return from the <code>onSho
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">showOverlay</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">if</span> $(<span class="hljs-string">'.anno-overlay'</span>).length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
-      $(<span class="hljs-string">'body'</span>).append(e = <span class="hljs-property">@overlayElem</span>().addClass <span class="hljs-string">'anno-hidden'</span>) <span class="hljs-comment"># TODO: write about pointer-events: none</span>
-      setTimeout <span class="hljs-function"><span class="hljs-params">(() -&gt; e.removeClass <span class="hljs-string">'anno-hidden'</span>)</span>, 10
+      $(<span class="hljs-string">'body'</span>).append($e = <span class="hljs-property">@overlayElem</span>().addClass <span class="hljs-string">'anno-hidden'</span>) <span class="hljs-comment"># TODO: write about pointer-events: none</span>
+      setTimeout <span class="hljs-function"><span class="hljs-params">(() -&gt; $e.removeClass <span class="hljs-string">'anno-hidden'</span>)</span>, 10
     <span class="hljs-title">else</span>
       <span class="hljs-title">$</span><span class="hljs-params">(<span class="hljs-string">'.anno-overlay'</span>)</span>.<span class="hljs-title">replaceWith</span> @<span class="hljs-title">overlayElem</span><span class="hljs-params">()</span> 
 
@@ -564,7 +564,7 @@ listener on the target element.)  Whatever value you return from the <code>onSho
     $(<span class="hljs-string">"&lt;div class='anno-overlay <span class="hljs-subst">#{<span class="hljs-property">@overlayClassName</span>}</span>'&gt;&lt;/div&gt;"</span>).
       click<span class="hljs-function"><span class="hljs-params">( (evt) =&gt; <span class="hljs-property">@overlayClick</span>.call(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">this</span>, evt) )</span>
 
-  <span class="hljs-title">overlayClassName</span>: '' # <span class="hljs-title">TODO</span> <span class="hljs-title">talk</span> <span class="hljs-title">about</span> .<span class="hljs-title">anno</span>-<span class="hljs-title">hidden</span>
+  <span class="hljs-title">overlayClassName</span>: '' # .<span class="hljs-title">anno</span>-<span class="hljs-title">hidden</span> <span class="hljs-title">is</span> <span class="hljs-title">automatically</span> <span class="hljs-title">added</span> <span class="hljs-title">to</span> <span class="hljs-title">the</span> <span class="hljs-title">HTML</span>, <span class="hljs-title">then</span> <span class="hljs-title">removed</span> <span class="hljs-title">to</span> <span class="hljs-title">give</span> <span class="hljs-title">the</span> <span class="hljs-title">fade</span> <span class="hljs-title">in</span> <span class="hljs-title">effect</span>
   <span class="hljs-title">overlayClick</span>: <span class="hljs-params">(anno, evt)</span> -&gt;</span> anno.hide()
 
   <span class="hljs-attribute">hideOverlay</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
@@ -820,7 +820,7 @@ the first one available in <code>Anno.preferredPositions</code>.  </p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <p><code>arrowPositionFn()</code> returns which way the arrow should point. (Normally just the opposite of the anno position.)</p>
+              <p><code>arrowPositionFn()</code> returns which way the arrow should point. This is normally just the opposite of the anno position.  May only be called after DOM insertion.</p>
 
             </div>
             

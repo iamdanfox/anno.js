@@ -145,23 +145,23 @@ All methods used here can be overridden in the same way we changed the `content`
 
 Animations are all done with 300ms CSS transitions, so you can change your UI without touching any javascript.
 
-      show: () -> # TODO warn if this Anno has already been shown.
+      show: () -> 
         $target = @targetFn()
         if @_annoElem? then console.warn "Anno elem for '#{@target}' has already been generated.  Did you call show() twice?"
         @_annoElem = @annoElem()
 
-        @showOverlay()
         @emphasiseTarget()
+        @showOverlay()
         
-        $target.after(@_annoElem) # insert into DOM
+        $target.after(@_annoElem) # insert into DOM # TODO warn if already inserted once
         
         @_annoElem.addClass('anno-target-'+@arrowPositionFn())
         @positionAnnoElem()
 
-        setTimeout (() => @_annoElem.removeClass('anno-hidden')), 10 # hack to make Chrome render the opacity:0 state.
-          
+        setTimeout (() => @_annoElem.removeClass('anno-hidden')), 50
+
         $target.scrollintoview()
-        setTimeout (() => @_annoElem.scrollintoview()) , 300 #TODO fix jumpiness
+        setTimeout (() => @_annoElem.scrollintoview()) , 300
 
         lastButton = @_annoElem.find('button').last()
         if @rightArrowClicksLastButton 
@@ -189,20 +189,20 @@ Hiding is done in two stages so that you can re-use one overlay element for a lo
 
       hide: () ->
         @hideAnno()
-        @hideOverlay()
+        setTimeout @hideOverlay, 50
         return this
 
       hideAnno: () ->
-        @deemphasiseTarget()
-
         if @_annoElem? 
           @_annoElem.addClass('anno-hidden')
-          setTimeout () => 
-            @_annoElem?.remove() # this method causes hideAnno to get called twice sometimes -> bad.
-            @_annoElem = null
-          , 300
-
+          @deemphasiseTarget()
           @onHide(this, @targetFn(), @_annoElem, @_returnFromOnShow)
+
+          ((annoEl) -> 
+            setTimeout (() -> annoEl.remove()), 300
+          )(@_annoElem) # captures @_annoElem in the timeout function only
+
+          @_annoElem = null
         else
           console.warn "Can't hideAnno() for '#{@target}' when @_annoElem is null.  Did you call hideAnno() twice?"
 
@@ -287,8 +287,8 @@ Semi-transparent overlay and other effects
 
       showOverlay: () ->
         if $('.anno-overlay').length is 0
-          $('body').append(e = @overlayElem().addClass 'anno-hidden') # TODO: write about pointer-events: none
-          setTimeout (() -> e.removeClass 'anno-hidden'), 10
+          $('body').append($e = @overlayElem().addClass 'anno-hidden') # TODO: write about pointer-events: none
+          setTimeout (() -> $e.removeClass 'anno-hidden'), 10
         else
           $('.anno-overlay').replaceWith @overlayElem() 
 
@@ -296,7 +296,7 @@ Semi-transparent overlay and other effects
         $("<div class='anno-overlay #{@overlayClassName}'></div>").
           click( (evt) => @overlayClick.call(this, this, evt) )
 
-      overlayClassName: '' # TODO talk about .anno-hidden
+      overlayClassName: '' # .anno-hidden is automatically added to the HTML, then removed to give the fade in effect
       overlayClick: (anno, evt) -> anno.hide()
 
       hideOverlay: () ->
@@ -454,7 +454,7 @@ the first one available in `Anno.preferredPositions`.
               'center-bottom', 'center-right', 'center-left', 'center-top'] # TODO order these based on research.
 
 
-`arrowPositionFn()` returns which way the arrow should point. (Normally just the opposite of the anno position.)
+`arrowPositionFn()` returns which way the arrow should point. This is normally just the opposite of the anno position.  May only be called after DOM insertion.
 
       arrowPositionFn: () -> 
         if @arrowPosition? 
