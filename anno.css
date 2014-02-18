@@ -48,11 +48,17 @@
   font-weight: bold;
   font-size: 12px;
   color: #ffffff;
-  -webkit-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
-  -moz-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
-  -ms-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
-  -o-transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
-  transition: all 200ms cubic-bezier(0.68, 0, 0.265, 1);
+  -webkit-transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
+  -moz-transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
+  -ms-transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
+  -o-transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
+  transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
+}
+.anno .anno-inner .anno-btn-container .anno-btn:hover {
+  background: #0f91c4;
+}
+.anno .anno-inner .anno-btn-container .anno-btn:active {
+  background: #0d7fad;
 }
 .anno .anno-inner .anno-btn-container .anno-btn.anno-btn-low-importance {
   background: none;

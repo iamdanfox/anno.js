@@ -83,7 +83,15 @@
         border:none;
         .rounded-corners(0px);
         .font(bold, 12px, white);
-        .transition-all(200ms);
+        .transition-all(150ms);
+
+        &:hover {
+          background: darken(@blue, 5%);
+        }
+
+        &:active {
+          background: darken(@blue, 10%);
+        }
 
         &.anno-btn-low-importance {
           background:none;
