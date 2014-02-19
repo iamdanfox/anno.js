@@ -20,6 +20,9 @@ gzip: anno.min.js anno.min.css
 	gzip --to-stdout --best --keep anno.min.css > anno.min.css.gz
 	@echo "\x1b[0;32m`wc -c anno.min.js.gz anno.min.css.gz`\x1b[0m" # switch to green, wc, switch back
 
+lint: src/anno.litcoffee
+	coffeelint src/anno.litcoffee
+
 clean:
 	rm -rf anno.* docco
 
