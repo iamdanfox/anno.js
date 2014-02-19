@@ -1,8 +1,13 @@
 {
   "name": "anno.js",
-  "main": "anno.js",
+  "main": [
+    "anno.js",
+    "anno.css",
+    "scrollintoview/jquery.scrollintoview.js"
+  ],
   "version": "0.2.0",
   "homepage": "https://github.com/iamdanfox/anno.js",
+  "repository": { "type": "git", "url": "git://github.com/iamdanfox/anno.js.git" },
   "authors": [
     "Dan Fox <iamdanfox@gmail.com>"
   ],
@@ -21,9 +26,24 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
+    "docco",
+    "index.html",
+    "screencast.gif",
+    "*.sublime*",
     "node_modules",
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3"
+  },
+  //"devDependencies": {
+    //"coffee-script": "*", // not sure these are appropriate. We don't need the repo (look into NPM)
+    //"less.js": "*",
+    // on NPM only:
+    //docco
+    //uglifyjs
+    //coffeelint
+  //}
 }
