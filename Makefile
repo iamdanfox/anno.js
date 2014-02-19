@@ -13,12 +13,15 @@ anno.min.js: anno.js scrollintoview/jquery.scrollintoview.js
 	uglifyjs anno.js scrollintoview/jquery.scrollintoview.js --compress --mangle > anno.min.js
 
 anno.min.css: anno.css
-	cleancss anno.css > anno.min.css
+	lessc --clean-css anno.css > anno.min.css
 
 gzip: anno.min.js anno.min.css
 	gzip --to-stdout --best --keep anno.min.js > anno.min.js.gz
 	gzip --to-stdout --best --keep anno.min.css > anno.min.css.gz
 	@echo "\x1b[0;32m`wc -c anno.min.js.gz anno.min.css.gz`\x1b[0m" # switch to green, wc, switch back
+
+lint: src/anno.litcoffee
+	coffeelint src/anno.litcoffee
 
 clean:
 	rm -rf anno.* docco
