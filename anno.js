@@ -17,12 +17,12 @@ Anno = (function() {
       console.warn('Anno constructor parameter is already an Anno object.');
     }
     if (options == null) {
-      console.warn("new Anno() created with no options.  It's recommended to supply at least target and content.");
+      console.warn("new Anno() created with no options. It's recommended" + " to supply at least target and content.");
     }
     for (key in options) {
       val = options[key];
       if (key === 'chainTo' || key === 'start' || key === 'show' || key === 'hide' || key === 'hideAnno' || key === 'chainSize' || key === 'chainIndex' || key === 'version') {
-        console.warn("Anno: Overriding '" + key + "' is not recommended.  Can you override a delegated function instead?");
+        console.warn(("Anno: Overriding '" + key + "' is not recommended. Can ") + "you override a delegated function instead?");
       }
     }
     for (key in options) {
@@ -64,7 +64,7 @@ Anno = (function() {
   Anno.prototype._chainPrev = null;
 
   Anno.chain = function(array) {
-    console.warn('Anno.chain([...]) is deprecated.  Use `new Anno([...])` instead.');
+    console.warn('Anno.chain([...]) is deprecated. Use ' + '`new Anno([...])` instead.');
     return new Anno(array);
   };
 
@@ -91,7 +91,7 @@ Anno = (function() {
             return curr;
           }
         } else {
-          return console.error("Couldn't switch to index '" + i + "'. Chain size is '" + u + "'");
+          return console.error(("Couldn't switch to index '" + i + "'. Chain size ") + ("is '" + u + "'"));
         }
       })(this, index, this.chainSize());
     } else {
@@ -107,7 +107,7 @@ Anno = (function() {
     var $target, lastButton;
     $target = this.targetFn();
     if (this._annoElem != null) {
-      console.warn("Anno elem for '" + this.target + "' has already been generated.  Did you call show() twice?");
+      console.warn(("Anno elem for '" + this.target + "' has already been ") + "generated.  Did you call show() twice?");
     }
     this._annoElem = this.annoElem();
     this.emphasiseTarget();
@@ -134,10 +134,8 @@ Anno = (function() {
         }
       });
     }
-    if (this.autoFocusLastButton) {
-      if ($target.find(':focus').length === 0) {
-        lastButton.focus();
-      }
+    if (this.autoFocusLastButton && $target.find(':focus').length === 0) {
+      lastButton.focus();
     }
     this._returnFromOnShow = this.onShow(this, $target, this._annoElem);
     return this;
@@ -173,7 +171,7 @@ Anno = (function() {
       })(this._annoElem);
       this._annoElem = null;
     } else {
-      console.warn("Can't hideAnno() for '" + this.target + "' when @_annoElem is null.  Did you call hideAnno() twice?");
+      console.warn(("Can't hideAnno() for '" + this.target + "' when @_annoElem ") + "is null.  Did you call hideAnno() twice?");
     }
     return this;
   };
@@ -185,7 +183,7 @@ Anno = (function() {
       this.hideAnno();
       return otherAnno.show();
     } else {
-      console.warn("Can't switchTo a null object. Hiding completely instead. ");
+      console.warn("Can't switchTo a null object. Hiding instead.");
       return this.hide();
     }
   };
@@ -208,12 +206,12 @@ Anno = (function() {
         console.error("Couldn't find Anno.target '" + this.target + "'.");
       }
       if (r.length > 1) {
-        console.warn("Anno target '" + this.target + "' matched " + r.length + " elements. Targeting the first one.");
+        console.warn(("Anno target '" + this.target + "' matched " + r.length + " ") + "elements. Targeting the first one.");
       }
       return r.first();
     } else if (this.target instanceof jQuery) {
       if (this.target.length > 1) {
-        console.warn("Anno jQuery target matched " + this.target.length + " elements. Targeting the first one.");
+        console.warn(("Anno jQuery target matched " + this.target.length + " ") + "elements. Targeting the first one.");
       }
       return this.target.first();
     } else if (this.target instanceof HTMLElement) {
@@ -221,13 +219,13 @@ Anno = (function() {
     } else if (typeof this.target === 'function') {
       return this.target();
     } else {
-      console.error("Unrecognised Anno.target. Please supply a jQuery selector string, a jQuery " + "object, a raw DOM element or a function returning a jQuery element. target:");
+      console.error("Unrecognised Anno.target. Please supply a jQuery " + "selector string, a jQuery object, a raw DOM element or a " + "function returning a jQuery element. target:");
       return console.error(this.target);
     }
   };
 
   Anno.prototype.annoElem = function() {
-    this._annoElem = $("<div class='anno anno-hidden " + this.className + "'>\n  <div class='anno-inner'>  <div class='anno-arrow'></div>  </div>\n</div>");
+    this._annoElem = $("<div class='anno anno-hidden " + this.className + "'>\n<div class='anno-inner'>  <div class='anno-arrow'></div>  </div>\n</div>");
     this._annoElem.find('.anno-inner').append(this.contentElem()).append(this.buttonsElem());
     return this._annoElem;
   };
@@ -290,8 +288,8 @@ Anno = (function() {
       return evt.stopPropagation();
     });
     this._undoEmphasise.push(function($t) {
-      return $t.closest(':scrollable').off('mousewheel');
-    });
+      return $t.closest(':scrollable');
+    }).off('mousewheel');
     if ($target.css('position') === 'static') {
       $target.after(placeholder = $target.clone().addClass('anno-placeholder'));
       ((function(_this) {
@@ -365,7 +363,7 @@ Anno = (function() {
       }
     }
     if ($target.css('backgroundColor') === 'rgba(0, 0, 0, 0)' || $target.css('backgroundColor') === 'transparent') {
-      console.warn("Anno.js target '" + this.target + "' has a transparent bg; filling it white temporarily.");
+      console.warn(("Anno.js target '" + this.target + "' has a transparent bg; ") + "filling it white temporarily.");
       ((function(_this) {
         return function(a) {
           return _this._undoEmphasise.push(function($t) {
@@ -520,9 +518,9 @@ Anno = (function() {
         return __indexOf.call(bad, p) < 0;
       });
       if (allowed.length === 0) {
-        console.error("Anno couldn't guess a position for '" + this.target + "'. Please supply one in the constructor.");
+        console.error(("Anno couldn't guess a position for '" + this.target + "'. ") + "Please supply one in the constructor.");
       } else {
-        console.warn(("Anno: guessing position:'" + allowed[0] + "' for '" + this.target + "'. ") + ("Possible Anno.preferredPositions: [" + allowed + "]."));
+        console.warn(("Anno: guessing position:'" + allowed[0] + "' for ") + ("'" + this.target + "'. Possible Anno.preferredPositions: [" + allowed + "]."));
       }
       return this.position = allowed[0];
     }
@@ -555,7 +553,7 @@ Anno = (function() {
       } else {
         r = pos.t < 0 ? 'center-bottom' : 'center-top';
       }
-      console.warn("Guessing arrowPosition:'" + r + "' for " + this.target + ". Include this in your constructor for consistency.");
+      console.warn(("Guessing arrowPosition:'" + r + "' for " + this.target + ". ") + "Include this in your constructor for consistency.");
       return r;
     }
   };
