@@ -1,0 +1,29 @@
+{
+  "name": "anno.js",
+  "main": "anno.js",
+  "version": "0.2.0",
+  "homepage": "https://github.com/iamdanfox/anno.js",
+  "authors": [
+    "Dan Fox <iamdanfox@gmail.com>"
+  ],
+  "description": "Better step-by-step guides for powerful web apps.",
+  "keywords": [
+    "demo",
+    "introduction",
+    "intro",
+    "annotation",
+    "anno",
+    "tour",
+    "welcome",
+    "onboard",
+    "tutorial"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
