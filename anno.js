@@ -288,8 +288,8 @@ Anno = (function() {
       return evt.stopPropagation();
     });
     this._undoEmphasise.push(function($t) {
-      return $t.closest(':scrollable');
-    }).off('mousewheel');
+      return $t.closest(':scrollable').off('mousewheel');
+    });
     if ($target.css('position') === 'static') {
       $target.after(placeholder = $target.clone().addClass('anno-placeholder'));
       ((function(_this) {

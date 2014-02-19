@@ -646,8 +646,8 @@ the fade in effect.</p>
     $target.closest<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">':scrollable'</span>)</span>.<span class="hljs-title">on</span> '<span class="hljs-title">mousewheel</span>', <span class="hljs-params">(evt)</span> -&gt;</span>
       evt.preventDefault()
       evt.stopPropagation()
-    <span class="hljs-property">@_undoEmphasise</span>.push <span class="hljs-function"><span class="hljs-params">($t)</span> -&gt;</span> $t.closest(<span class="hljs-string">':scrollable'</span>)
-      .<span class="hljs-literal">off</span>(<span class="hljs-string">'mousewheel'</span>)
+    <span class="hljs-property">@_undoEmphasise</span>.push <span class="hljs-function"><span class="hljs-params">($t)</span> -&gt;</span>
+      $t.closest(<span class="hljs-string">':scrollable'</span>).<span class="hljs-literal">off</span>(<span class="hljs-string">'mousewheel'</span>)
 
     <span class="hljs-keyword">if</span> $target.css(<span class="hljs-string">'position'</span>) <span class="hljs-keyword">is</span> <span class="hljs-string">'static'</span></pre></div></div>
             

@@ -342,8 +342,8 @@ the fade in effect.
         $target.closest(':scrollable').on 'mousewheel', (evt) ->
           evt.preventDefault()
           evt.stopPropagation()
-        @_undoEmphasise.push ($t) -> $t.closest(':scrollable')
-          .off('mousewheel')
+        @_undoEmphasise.push ($t) ->
+          $t.closest(':scrollable').off('mousewheel')
 
         if $target.css('position') is 'static'
           # ensures that the jquery :first selector in targetFn works.
