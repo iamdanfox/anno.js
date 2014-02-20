@@ -19,10 +19,7 @@
 }
 .anno .anno-inner {
   position: relative;
-  background: #ffffff;
-  -webkit-box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
-  -moz-box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
-  box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
+  border: 1px solid #bbbbbd;
 }
 .anno .anno-inner .anno-content {
   padding: 15px 20px;
@@ -30,17 +27,17 @@
   font-family: sans-serif;
   font-weight: normal;
   font-size: 15px;
-  color: #56565a;
+  color: #ddddde;
 }
 .anno .anno-inner .anno-btn-container {
   text-align: right;
+  padding: 0 20px 15px 0;
 }
 .anno .anno-inner .anno-btn-container .anno-btn {
-  margin: 0 20px 15px -10px;
   padding: 7px 14px;
   height: auto;
   width: auto;
-  background: #11a2dc;
+  background: rgba(154, 154, 156, 0.5);
   border: none;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
@@ -58,10 +55,10 @@
   transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
 }
 .anno .anno-inner .anno-btn-container .anno-btn:hover {
-  background: #0f91c4;
+  background: rgba(154, 154, 156, 0.65);
 }
 .anno .anno-inner .anno-btn-container .anno-btn:active {
-  background: #0d7fad;
+  background: rgba(154, 154, 156, 0.75);
 }
 .anno .anno-inner .anno-btn-container .anno-btn.anno-btn-low-importance {
   background: none;
@@ -72,14 +69,22 @@
 }
 .anno .anno-arrow {
   position: absolute;
-  border: 8px solid #ffffff;
+  border: 8px solid #78787b;
 }
 .anno.anno-target-center-bottom .anno-arrow,
 .anno.anno-target-bottom .anno-arrow {
   top: 100%;
   left: 20px;
   border-bottom: none;
-  border-color: #ffffff transparent;
+  border-color: #bbbbbd transparent;
+}
+.anno.anno-target-center-bottom .anno-inner,
+.anno.anno-target-bottom .anno-inner {
+  border-width: 0 0 1px 0;
+}
+.anno.anno-target-center-bottom .anno-inner .anno-content,
+.anno.anno-target-bottom .anno-inner .anno-content {
+  padding: 15px 0;
 }
 .anno.anno-target-center-bottom.anno-hidden,
 .anno.anno-target-bottom.anno-hidden {
@@ -90,7 +95,15 @@
   right: 100%;
   top: 15px;
   border-left: none;
-  border-color: transparent #ffffff;
+  border-color: transparent #bbbbbd;
+}
+.anno.anno-target-center-left .anno-inner,
+.anno.anno-target-left .anno-inner {
+  border-width: 0 0 0 1px;
+}
+.anno.anno-target-center-left .anno-inner .anno-content,
+.anno.anno-target-left .anno-inner .anno-content {
+  padding: 0 20px;
 }
 .anno.anno-target-center-left.anno-hidden,
 .anno.anno-target-left.anno-hidden {
@@ -101,7 +114,15 @@
   bottom: 100%;
   left: 20px;
   border-top: none;
-  border-color: #ffffff transparent;
+  border-color: #bbbbbd transparent;
+}
+.anno.anno-target-center-top .anno-inner,
+.anno.anno-target-top .anno-inner {
+  border-width: 1px 0 0 0;
+}
+.anno.anno-target-center-top .anno-inner .anno-content,
+.anno.anno-target-top .anno-inner .anno-content {
+  padding: 15px 0;
 }
 .anno.anno-target-center-top.anno-hidden,
 .anno.anno-target-top.anno-hidden {
@@ -112,7 +133,15 @@
   left: 100%;
   top: 15px;
   border-right: none;
-  border-color: transparent #ffffff;
+  border-color: transparent #bbbbbd;
+}
+.anno.anno-target-center-right .anno-inner,
+.anno.anno-target-right .anno-inner {
+  border-width: 0 1px 0 0;
+}
+.anno.anno-target-center-right .anno-inner .anno-content,
+.anno.anno-target-right .anno-inner .anno-content {
+  padding: 0 20px;
 }
 .anno.anno-target-center-right.anno-hidden,
 .anno.anno-target-right.anno-hidden {
@@ -154,7 +183,7 @@
   top: 0;
   left: 0;
   /*pointer-events:none; // allows clickthrough*/
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.8);
   -webkit-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
   -moz-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
   -ms-transition: all 300ms cubic-bezier(0.68, 0, 0.265, 1);
