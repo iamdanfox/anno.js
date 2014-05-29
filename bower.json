@@ -1,0 +1,41 @@
+{
+  "name": "anno.js",
+  "main": [
+    "anno.js",
+    "anno.css",
+    "scrollintoview/jquery.scrollintoview.js"
+  ],
+  "version": "0.2.0",
+  "homepage": "https://github.com/iamdanfox/anno.js",
+  "repository": { "type": "git", "url": "git://github.com/iamdanfox/anno.js.git" },
+  "authors": [
+    "Dan Fox <iamdanfox@gmail.com>"
+  ],
+  "description": "Better step-by-step guides for powerful web apps.",
+  "keywords": [
+    "demo",
+    "introduction",
+    "intro",
+    "annotation",
+    "anno",
+    "tour",
+    "welcome",
+    "onboard",
+    "tutorial"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "docco",
+    "index.html",
+    "screencast.gif",
+    "*.sublime*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "scrollintoview": "litera/jquery-scrollintoview#06834cf7fdba0e86cac84ed7761ea64a3a5fbec8"
+  }
+}

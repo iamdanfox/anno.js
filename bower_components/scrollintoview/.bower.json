@@ -1,0 +1,12 @@
+{
+  "name": "scrollintoview",
+  "homepage": "https://github.com/litera/jquery-scrollintoview",
+  "_release": "06834cf7fd",
+  "_resolution": {
+    "type": "commit",
+    "commit": "06834cf7fdba0e86cac84ed7761ea64a3a5fbec8"
+  },
+  "_source": "git://github.com/litera/jquery-scrollintoview.git",
+  "_target": "06834cf7fdba0e86cac84ed7761ea64a3a5fbec8",
+  "_originalSource": "litera/jquery-scrollintoview"
+}

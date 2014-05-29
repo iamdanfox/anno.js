@@ -9,8 +9,8 @@ anno.css: src/anno.less
 docco: src/*.litcoffee
 	docco -o ./docco src/*.litcoffee
 
-anno.min.js: anno.js scrollintoview/jquery.scrollintoview.js
-	uglifyjs anno.js scrollintoview/jquery.scrollintoview.js --compress --mangle > anno.min.js
+anno.min.js: anno.js bower_components/scrollintoview/jquery.scrollintoview.js
+	uglifyjs anno.js bower_components/scrollintoview/jquery.scrollintoview.js --compress --mangle > anno.min.js
 
 anno.min.css: anno.css
 	lessc --clean-css anno.css > anno.min.css
@@ -25,6 +25,3 @@ lint: src/anno.litcoffee
 
 clean:
 	rm -rf anno.* docco
-
-
-
