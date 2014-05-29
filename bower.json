@@ -36,7 +36,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.0.3",
     "scrollintoview": "litera/jquery-scrollintoview#06834cf7fdba0e86cac84ed7761ea64a3a5fbec8"
   }
 }
