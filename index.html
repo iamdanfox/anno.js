@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
   </head>
   <body>
-    
+
 
     <div class="jumbotron" style="text-align:center;">
       <h1>anno.js</h1>
@@ -69,7 +69,7 @@ var anno2 = new Anno([{
   position: 'top',
   content : 'You can specify where you want each anno to appear.'
 }, {
-  target  : 'pre:eq(1)', 
+  target  : 'pre:eq(1)',
   position: 'left',
   content : "Use 'top', 'left', 'bottom' and 'right', just like CSS.",
 }, {
@@ -156,7 +156,7 @@ var anno6 = new Anno({
     var handler = function(){ alert('Hello!'); }
     $target[0].addEventListener('click', handler)
     return handler
-  }, 
+  },
   onHide: function(anno, $target, $annoElem, returnFromOnShow) {
     var handler = returnFromOnShow
     $target[0].removeEventListener('click', handler)
@@ -222,7 +222,7 @@ $('#myModal').on('shown.bs.modal', function(){
     <div style="background:#ccc;height:70px;width:70px;position:absolute;left:20px;top:40px;text-align:center;line-height:70px;" id="box1"><code>#box1</code></div>
     <div style="background:#bbb;height:70px;width:70px;position:absolute;right:20px;top:40px;text-align:center;line-height:70px;" id="box2"><code>#box2</code></div>
     <div style="width:400px;margin:10px auto;">
-      This is a scrollable div, with <code>overflow-y:scroll</code>. Lorem ipsum dolor 
+      This is a scrollable div, with <code>overflow-y:scroll</code>. Lorem ipsum dolor
       sit amet, consectetur adipisicing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
       quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -251,9 +251,9 @@ var anno8 = new Anno([{
 <h2 id="unclickable-target">Unclickable target</h2>
 
 <div style="border:1px solid #aaa;overflow-y:scroll;border-radius:4px;margin:10px 0;padding:20px;" id="region9">
-  <p><button class="btn btn-default" id="button1" onclick="$(this).next('span').stop().fadeIn(100).fadeOut(1500)">#button1</button> 
+  <p><button class="btn btn-default" id="button1" onclick="$(this).next('span').stop().fadeIn(100).fadeOut(1500)">#button1</button>
     <span style="background:#dff0d8;padding:8px 10px;display:none;"><code>#button1</code> clicked!</span></p>
-  <p><button class="btn btn-default" id="button2" onclick="$(this).next('span').stop().fadeIn(100).fadeOut(1500)">#button2</button> 
+  <p><button class="btn btn-default" id="button2" onclick="$(this).next('span').stop().fadeIn(100).fadeOut(1500)">#button2</button>
     <span style="background:#dff0d8;padding:8px 10px;display:none;"><code>#button2</code> clicked!</span></p>
 </div>
 <script type="text/javascript">
@@ -262,12 +262,12 @@ var anno9 = new Anno({
   content: "<code>#button1</code> is disabled, but <code>#button2</code> still works.",
   className: 'anno-width-400',
   onShow: function (anno, $target, $annoElem) {
-    var handler = function(e){ 
+    var handler = function(e){
       if(e.target.id === 'button1') e.stopPropagation() // filters out #button1
     }
     $target[0].addEventListener('click', handler, true) // `true` is essential
     return handler
-  }, 
+  },
   onHide: function(anno, $target, $annoElem, handler) {
     $target[0].removeEventListener('click', handler, true)
   }
@@ -287,7 +287,7 @@ var anno9 = new Anno({
 
 
 <div class="jumbotron" style="margin:40px 0 0 0;">
-<p class="text-center">Keen to try it yourself? See <a href="https://github.com/iamdanfox/anno.js#usage">usage</a>.</p> 
+<p class="text-center">Keen to try it yourself? See <a href="https://github.com/iamdanfox/anno.js#usage">usage</a>.</p>
 <p class="text-center" style="opacity:0.7;">Read <a href="docco/anno.html">the literate coffeescript source</a>.</p>
 <p class="text-center" style="opacity:0.7;">made by <a href="http://twitter.com/iamdanfox">@iamdanfox</a></p>
 </div>
@@ -305,7 +305,7 @@ var anno9 = new Anno({
     <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
-    <script src="scrollintoview/jquery.scrollintoview.min.js" type="text/javascript"></script>
+    <script src="bower_components/scrollintoview/jquery.scrollintoview.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(function(){
 
