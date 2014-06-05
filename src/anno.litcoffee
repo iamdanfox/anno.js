@@ -349,53 +349,49 @@ the fade in effect.
           # ensures that the jquery :first selector in targetFn works.
           $target.after(placeholder = $target.clone()
             .addClass('anno-placeholder'))
-          ((a) => @_undoEmphasise.push () -> a.remove())(placeholder)
-          ((a) =>
-            @_undoEmphasise.push ($t) -> $t.css position:a
-          )($target.prop('style').position)
+          do (placeholder) => @_undoEmphasise.push () -> placeholder.remove()
+          startposition = $target.prop('style').position
+          do (startposition) =>
+            @_undoEmphasise.push ($t) -> $t.css position:startposition
           $target.css( position:'absolute' )
 
           # If switching to `position:absolute` has caused a dimension
           # collapse, manually set H/W.
           if $target.outerWidth() isnt placeholder.outerWidth()
             # Find $target's inline style, make an undo function
-            ((a) =>
-              @_undoEmphasise.push ($t) -> $t.css width:a
-            )($target.prop('style').width)
+            origwidth = $target.prop('style').width
+            do (origwidth) =>
+              @_undoEmphasise.push ($t) -> $t.css width:origwidth
             $target.css('width', placeholder.outerWidth())
           if $target.outerHeight() isnt placeholder.outerHeight()
-            ((a) =>
-              @_undoEmphasise.push ($t) -> $t.css height:a
-            )($target.prop('style').height)
+            origheight = $target.prop('style').height
+            do (origheight) =>
+              @_undoEmphasise.push ($t) -> $t.css height:origheight
             $target.css('height', placeholder.outerHeight())
 
           # If switching to `position:absolute` has caused a position change,
           # manually set it too
           ppos = placeholder.position()
           tpos = $target.position()
-          if tpos.top  isnt ppos.top
-            ((a) =>
-              @_undoEmphasise.push ($t) -> $t.css top:a
-            )($target.prop('style').top)
+          if tpos.top isnt ppos.top
+            origtop = $target.prop('style').top
+            do (origtop) => @_undoEmphasise.push ($t) -> $t.css top:origtop
             $target.css('top', ppos.top)
           if tpos.left isnt ppos.left
-            ((a) =>
-              @_undoEmphasise.push ($t) -> $t.css left:a
-            )($target.prop('style').left)
+            origleft = $target.prop('style').left
+            do (origleft) => @_undoEmphasise.push ($t) -> $t.css left:origleft
             $target.css('left', ppos.left)
 
         if $target.css('backgroundColor') is 'rgba(0, 0, 0, 0)' or
         $target.css('backgroundColor') is 'transparent'
           console.warn "Anno.js target '#{@target}' has a transparent bg; "+
             "filling it white temporarily."
-          ((a) =>
-            @_undoEmphasise.push ($t) -> $t.css background:a
-          )($target.prop('style').background)
+          origbg = $target.prop('style').background
+          do (origbg) => @_undoEmphasise.push ($t) -> $t.css background:origbg
           $target.css( background: 'white')
 
-        ((a) =>
-          @_undoEmphasise.push ($t) -> $t.css zIndex:a
-        )($target.prop('style').zIndex)
+        origzindex = $target.prop('style').zIndex
+        do (origzindex) => @_undoEmphasise.push ($t) -> $t.css zIndex:origzindex
         $target.css( zIndex:'1001' )
 
         return $target

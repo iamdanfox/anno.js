@@ -278,7 +278,7 @@ Anno = (function() {
   };
 
   Anno.prototype.emphasiseTarget = function($target) {
-    var placeholder, ppos, tpos;
+    var origbg, origheight, origleft, origtop, origwidth, origzindex, placeholder, ppos, startposition, tpos;
     if ($target == null) {
       $target = this.targetFn();
     }
@@ -292,100 +292,107 @@ Anno = (function() {
     });
     if ($target.css('position') === 'static') {
       $target.after(placeholder = $target.clone().addClass('anno-placeholder'));
-      ((function(_this) {
-        return function(a) {
+      (function(_this) {
+        return (function(placeholder) {
           return _this._undoEmphasise.push(function() {
-            return a.remove();
+            return placeholder.remove();
           });
-        };
-      })(this))(placeholder);
-      ((function(_this) {
-        return function(a) {
+        });
+      })(this)(placeholder);
+      startposition = $target.prop('style').position;
+      (function(_this) {
+        return (function(startposition) {
           return _this._undoEmphasise.push(function($t) {
             return $t.css({
-              position: a
+              position: startposition
             });
           });
-        };
-      })(this))($target.prop('style').position);
+        });
+      })(this)(startposition);
       $target.css({
         position: 'absolute'
       });
       if ($target.outerWidth() !== placeholder.outerWidth()) {
-        ((function(_this) {
-          return function(a) {
+        origwidth = $target.prop('style').width;
+        (function(_this) {
+          return (function(origwidth) {
             return _this._undoEmphasise.push(function($t) {
               return $t.css({
-                width: a
+                width: origwidth
               });
             });
-          };
-        })(this))($target.prop('style').width);
+          });
+        })(this)(origwidth);
         $target.css('width', placeholder.outerWidth());
       }
       if ($target.outerHeight() !== placeholder.outerHeight()) {
-        ((function(_this) {
-          return function(a) {
+        origheight = $target.prop('style').height;
+        (function(_this) {
+          return (function(origheight) {
             return _this._undoEmphasise.push(function($t) {
               return $t.css({
-                height: a
+                height: origheight
               });
             });
-          };
-        })(this))($target.prop('style').height);
+          });
+        })(this)(origheight);
         $target.css('height', placeholder.outerHeight());
       }
       ppos = placeholder.position();
       tpos = $target.position();
       if (tpos.top !== ppos.top) {
-        ((function(_this) {
-          return function(a) {
+        origtop = $target.prop('style').top;
+        (function(_this) {
+          return (function(origtop) {
             return _this._undoEmphasise.push(function($t) {
               return $t.css({
-                top: a
+                top: origtop
               });
             });
-          };
-        })(this))($target.prop('style').top);
+          });
+        })(this)(origtop);
         $target.css('top', ppos.top);
       }
       if (tpos.left !== ppos.left) {
-        ((function(_this) {
-          return function(a) {
+        origleft = $target.prop('style').left;
+        (function(_this) {
+          return (function(origleft) {
             return _this._undoEmphasise.push(function($t) {
               return $t.css({
-                left: a
+                left: origleft
               });
             });
-          };
-        })(this))($target.prop('style').left);
+          });
+        })(this)(origleft);
         $target.css('left', ppos.left);
       }
     }
     if ($target.css('backgroundColor') === 'rgba(0, 0, 0, 0)' || $target.css('backgroundColor') === 'transparent') {
       console.warn(("Anno.js target '" + this.target + "' has a transparent bg; ") + "filling it white temporarily.");
-      ((function(_this) {
-        return function(a) {
+      origbg = $target.prop('style').background;
+      (function(_this) {
+        return (function(origbg) {
           return _this._undoEmphasise.push(function($t) {
             return $t.css({
-              background: a
+              background: origbg
             });
           });
-        };
-      })(this))($target.prop('style').background);
+        });
+      })(this)(origbg);
       $target.css({
         background: 'white'
       });
     }
-    ((function(_this) {
-      return function(a) {
+    origzindex = $target.prop('style').zIndex;
+    (function(_this) {
+      return (function(origzindex) {
         return _this._undoEmphasise.push(function($t) {
           return $t.css({
-            zIndex: a
+            zIndex: origzindex
           });
         });
-      };
-    })(this))($target.prop('style').zIndex);
+      });
+    })(this)(origzindex);
     $target.css({
       zIndex: '1001'
     });
