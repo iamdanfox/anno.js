@@ -19,7 +19,7 @@
 }
 .anno .anno-inner {
   position: relative;
-  background: #ffffff;
+  background: white;
   -webkit-box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
   -moz-box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
   box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.35);
@@ -50,7 +50,7 @@
   font-family: sans-serif;
   font-weight: bold;
   font-size: 12px;
-  color: #ffffff;
+  color: white;
   -webkit-transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
   -moz-transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
   -ms-transition: all 150ms cubic-bezier(0.68, 0, 0.265, 1);
@@ -72,14 +72,14 @@
 }
 .anno .anno-arrow {
   position: absolute;
-  border: 8px solid #ffffff;
+  border: 8px solid white;
 }
 .anno.anno-target-center-bottom .anno-arrow,
 .anno.anno-target-bottom .anno-arrow {
   top: 100%;
   left: 20px;
   border-bottom: none;
-  border-color: #ffffff transparent;
+  border-color: white transparent;
 }
 .anno.anno-target-center-bottom.anno-hidden,
 .anno.anno-target-bottom.anno-hidden {
@@ -90,7 +90,7 @@
   right: 100%;
   top: 15px;
   border-left: none;
-  border-color: transparent #ffffff;
+  border-color: transparent white;
 }
 .anno.anno-target-center-left.anno-hidden,
 .anno.anno-target-left.anno-hidden {
@@ -101,7 +101,7 @@
   bottom: 100%;
   left: 20px;
   border-top: none;
-  border-color: #ffffff transparent;
+  border-color: white transparent;
 }
 .anno.anno-target-center-top.anno-hidden,
 .anno.anno-target-top.anno-hidden {
@@ -112,7 +112,7 @@
   left: 100%;
   top: 15px;
   border-right: none;
-  border-color: transparent #ffffff;
+  border-color: transparent white;
 }
 .anno.anno-target-center-right.anno-hidden,
 .anno.anno-target-right.anno-hidden {
