@@ -31,7 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 
-    class Anno
+    exports.Anno = class Anno
 
 Creating an Anno object
 -----------------------
@@ -578,7 +578,7 @@ the `AnnoButton` class.
 AnnoButton
 ==========
 
-    class AnnoButton
+    exports.AnnoButton = class AnnoButton
 
       constructor: (options) ->
         for key,val of options
