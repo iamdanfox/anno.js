@@ -1,10 +1,7 @@
 language: node_js
 node_js:
   - 0.10
-before_install:
-  - npm install coffee-script
-  - npm install less
-script: make
+script: make lint
 notifications:
-  on_success: change # only get emails when the build status changes on the given branch
+  on_success: never
   on_failure: change

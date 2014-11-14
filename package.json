@@ -1,0 +1,39 @@
+{
+  "name": "anno.js",
+  "version": "1.0.0",
+  "description": "Better step-by-step guides for powerful web apps.",
+  "main": "anno.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamdanfox/anno.js.git"
+  },
+  "keywords": [
+    "demo",
+    "introduction",
+    "intro",
+    "anno",
+    "tour",
+    "welcome",
+    "onboard",
+    "tutorial"
+  ],
+  "author": "@iamdanfox",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamdanfox/anno.js/issues"
+  },
+  "homepage": "https://github.com/iamdanfox/anno.js",
+  "dependencies": {},
+  "devDependencies": {
+    "coffee-loader": "^0.7.2",
+    "coffee-script": "^1.8.0",
+    "coffeelint": "^1.6.1",
+    "docco": "^0.6.3",
+    "less": "^2.0.0",
+    "uglifyjs": "^2.3.6",
+    "webpack": "^1.4.13"
+  }
+}

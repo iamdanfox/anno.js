@@ -1,0 +1,55 @@
+Unable to interpret argument clean-css - if it is a plugin (less-plugin-clean-css), make sure that it is installed under or at the same level as less
+
+usage: lessc [option option=parameter ...] <source> [destination]
+
+If source is set to `-' (dash or hyphen-minus), input is read from stdin.
+
+options:
+  -h, --help               Prints help (this message) and exit.
+  --include-path=PATHS     Sets include paths. Separated by `:'. Use `;' on Windows.
+  -M, --depends            Outputs a makefile import dependency list to stdout.
+  --no-color               Disables colorized output.
+  --no-ie-compat           Disables IE compatibility checks.
+  --no-js                  Disables JavaScript in less files
+  -l, --lint               Syntax check only (lint).
+  -s, --silent             Suppresses output of error messages.
+  --strict-imports         Forces evaluation of imports.
+  --insecure               Allows imports from insecure https hosts.
+  -v, --version            Prints version number and exit.
+  -x, --compress           Compresses output by removing some whitespaces.
+  --source-map[=FILENAME]  Outputs a v3 sourcemap to the filename (or output filename.map).
+  --source-map-rootpath=X  Adds this path onto the sourcemap filename and less file paths.
+  --source-map-basepath=X  Sets sourcemap base path, defaults to current working directory.
+  --source-map-less-inline Puts the less files into the map instead of referencing them.
+  --source-map-map-inline  Puts the map (and any less files) into the output css file.
+  --source-map-url=URL     Sets a custom URL to map file, for sourceMappingURL comment
+                           in generated CSS file.
+  -rp, --rootpath=URL      Sets rootpath for url rewriting in relative imports and urls
+                           Works with or without the relative-urls option.
+  -ru, --relative-urls     Re-writes relative urls to the base less file.
+  -sm=on|off               Turns on or off strict math, where in strict mode, math.
+  --strict-math=on|off     Requires brackets. This option may default to on and then
+                           be removed in the future.
+  -su=on|off               Allows mixed units, e.g. 1px+1em or 1px*1px which have units
+  --strict-units=on|off    that cannot be represented.
+  --global-var='VAR=VALUE' Defines a variable that can be referenced by the file.
+  --modify-var='VAR=VALUE' Modifies a variable already declared in the file.
+  --url-args='QUERYSTRING' Adds params into url tokens (e.g. 42, cb=42 or 'a=1&b=2')
+  --plugin=PLUGIN=OPTIONS  Loads a plugin. You can also omit the --plugin= if the plugin begins
+                           less-plugin. E.g. the clean css plugin is called less-plugin-clean-css
+                           once installed (npm install less-plugin-clean-css), use either with
+                           --plugin=less-plugin-clean-css or just --clean-css
+                           specify options afterwards e.g. --plugin=less-plugin-clean-css="advanced"
+                           or --clean-css="advanced"
+
+-------------------------- Deprecated ----------------
+  --line-numbers=TYPE      Outputs filename and line numbers.
+                           TYPE can be either 'comments', which will output
+                           the debug info within comments, 'mediaquery'
+                           that will output the information within a fake
+                           media query which is compatible with the SASS
+                           format, and 'all' which will do both.
+  --verbose                Be verbose.
+
+Report bugs to: http://github.com/less/less.js/issues
+Home page: <http://lesscss.org/>
