@@ -3,7 +3,7 @@ var webpack = require('webpack');
 module.exports = {
   entry: './src/anno.litcoffee',
   output: {
-    filename: './anno.js',
+    filename: './dist/anno.js',
     libraryTarget: 'umd',
   },
   externals: {
