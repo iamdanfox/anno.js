@@ -33,7 +33,6 @@
     "coffeelint": "^1.6.1",
     "docco": "^0.6.3",
     "less": "^2.0.0",
-    "uglifyjs": "^2.3.6",
     "webpack": "^1.4.13"
   }
 }
