@@ -558,7 +558,10 @@ Buttons
         return $("<button class='anno-btn'></button>").
           html( @textFn(anno) ).
           addClass( @className ).
-          click( (evt) => @click.call(anno, anno, evt) )
+          click( (evt) => { 
+            evt.preventDefault();
+            @click.call(anno, anno, evt)
+          })
 
       textFn: (anno) -> 
         if @text? then @text

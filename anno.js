@@ -531,6 +531,7 @@ AnnoButton = (function() {
   AnnoButton.prototype.buttonElem = function(anno) {
     return $("<button class='anno-btn'></button>").html(this.textFn(anno)).addClass(this.className).click((function(_this) {
       return function(evt) {
+        evt.preventDefault();
         return _this.click.call(anno, anno, evt);
       };
     })(this));
