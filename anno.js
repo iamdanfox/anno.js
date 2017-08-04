@@ -151,6 +151,22 @@ Anno = (function() {
 
   _returnFromOnShow = null;
 
+  Anno.prototype.onComplete = function(anno) {};
+
+  Anno.prototype.complete = function() {
+    this.hide();
+    this.onComplete(this);    
+    return this;
+  };
+  
+  Anno.prototype.onDismissed = function(anno) {};
+
+  Anno.prototype.dismissed = function() {
+    this.hide();
+    this.onDismissed(this);    
+    return this;
+  };
+
   Anno.prototype.hide = function() {
     this.hideAnno();
     this.hideOverlay();
@@ -291,7 +307,7 @@ Anno = (function() {
   Anno.prototype.overlayClassName = '';
 
   Anno.prototype.overlayClick = function(anno, evt) {
-    return anno.hide();
+    return this.dismissed();
   };
 
   Anno.prototype.hideOverlay = function() {
@@ -556,7 +572,7 @@ AnnoButton = (function() {
     if (anno._chainNext != null) {
       return anno.switchToChainNext();
     } else {
-      return anno.hide();
+      return anno.complete();
     }
   };
 
@@ -570,7 +586,7 @@ AnnoButton = (function() {
   AnnoButton.DoneButton = new AnnoButton({
     text: 'Done',
     click: function() {
-      return this.hide();
+      return this.complete();
     }
   });
 

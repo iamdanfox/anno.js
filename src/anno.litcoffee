@@ -204,6 +204,24 @@ Note: whatever you return from your `onShow` function will be passed into the `o
 
       _returnFromOnShow = null
 
+      onComplete: (anno) ->
+
+Complete is called when an anno chain reaches the end.
+
+      complete: () ->
+        @hide()
+        @onComplete(this)
+        return this
+
+Dismissed is called when a user effectively ends a tour by clicking on the overlay background.
+
+      onDismissed: (anno) ->
+
+      dismissed: () ->
+        @hide()
+        @onDismissed(this)
+        return this
+
 Hiding is done in two stages so that you can re-use one overlay element for a long chain of Anno's.
 
       hide: () ->
@@ -345,7 +363,8 @@ Semi-transparent overlay and other effects
           click( (evt) => @overlayClick.call(this, this, evt) )
 
       overlayClassName: '' # TODO talk about .anno-hidden
-      overlayClick: (anno, evt) -> anno.hide()
+
+      overlayClick: (anno, evt) -> anno.dismissed()
 
       hideOverlay: () ->
         $('.anno-overlay').addClass 'anno-hidden'
@@ -579,14 +598,14 @@ fat arrow.
         if anno._chainNext?
           anno.switchToChainNext()
         else
-          anno.hide()
+          anno.complete()
 
 These are some handy presets that you can use by adding `AnnoButton.NextButton` to your Anno object's 
 `buttons` list.
 
       @NextButton: new AnnoButton({ text: 'Next' , click: () -> @switchToChainNext()  })
 
-      @DoneButton: new AnnoButton({ text: 'Done' , click: () -> @hide()  })
+      @DoneButton: new AnnoButton({ text: 'Done' , click: () -> @complete()  })
 
       @BackButton: new AnnoButton(
           text: 'Back'
