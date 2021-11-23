@@ -555,7 +555,7 @@ Buttons
 
 
       buttonElem: (anno) ->
-        return $("<button class='anno-btn'></button>").
+        return $("<button class='anno-btn' type='button'></button>").
           html( @textFn(anno) ).
           addClass( @className ).
           click( (evt) => @click.call(anno, anno, evt) )
